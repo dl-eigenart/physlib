@@ -594,7 +594,7 @@ lemma eigenvalue_le_eigenvalue_compression
 
 /-- **Hylleraas–Undheim–MacDonald.** In ascending order, the `k`-th lowest Ritz value is an upper
 bound for the `k`-th lowest exact eigenvalue: `λ↑ₖ(T) ≤ μ↑ₖ(S)` for every `k < m`. -/
-theorem eigenvalue_ascending_le_ritz
+lemma eigenvalue_ascending_le_ritz
     (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
     (hA : A.IsSymmetric) (hm : finrank 𝕜 V = m)
     (hcomp : ∀ y : V, RCLike.re ⟪A y, y⟫_𝕜 = RCLike.re ⟪T y, y⟫_𝕜)
