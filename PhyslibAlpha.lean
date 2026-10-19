@@ -657,6 +657,7 @@ public import PhyslibAlpha.ProbabilisticTheory.Weight.Continuous
 public import PhyslibAlpha.ProbabilisticTheory.Weight.Extension
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Addition
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Basic
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SpinOrbit
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckart
 public import PhyslibAlpha.QuantumMechanics.Blackbody.RayleighJeans
 public import PhyslibAlpha.QuantumMechanics.HarmonicOscillator.LadderSystem
