@@ -663,6 +663,7 @@ public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanCoeffic
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanFormula
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.NormalizedBasis
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SpinOrbit
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Wigner3j
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckart
 public import PhyslibAlpha.QuantumMechanics.Blackbody.RayleighJeans
 public import PhyslibAlpha.QuantumMechanics.HarmonicOscillator.LadderSystem
