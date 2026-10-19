@@ -237,6 +237,7 @@ public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Construction
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Schur
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.TensorDecomposition
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.TensorHighestWeight
+public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.TensorIntertwiner
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Weights
 public import PhyslibAlpha.Mathematics.SubalgebraRestriction
 public import PhyslibAlpha.Mathematics.Sublinear
