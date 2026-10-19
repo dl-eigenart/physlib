@@ -133,6 +133,7 @@ public import PhyslibAlpha.Mathematics.Order.VectorLattice
 public import PhyslibAlpha.Mathematics.PartialDerivativeTest
 public import PhyslibAlpha.Mathematics.Probability.Kernel.Factorization
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.AngularMomentum
+public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.AngularMomentumAddition
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Basic
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.BivariateBasis
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Classification
