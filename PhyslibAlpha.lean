@@ -658,6 +658,7 @@ public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanFormula
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.NormalizedBasis
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ProjectionTheorem
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SelectionRules
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Wigner3j
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckart
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckartIrreducible
 public import PhyslibAlpha.QuantumMechanics.Blackbody.RayleighJeans
