@@ -234,6 +234,7 @@ public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Classification
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.ClebschGordan
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.CommutingActions
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Construction
+public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Schur
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.TensorDecomposition
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.TensorHighestWeight
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Weights
