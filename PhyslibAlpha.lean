@@ -226,8 +226,6 @@ public import PhyslibAlpha.Mathematics.PolynomialEval
 public import PhyslibAlpha.Mathematics.Probability.Kernel.Factorization
 public import PhyslibAlpha.Mathematics.RepresentationDual
 public import PhyslibAlpha.Mathematics.RepresentationProdMap
-public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.AngularMomentum
-public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.AngularMomentumAddition
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Basic
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.BivariateBasis
 public import PhyslibAlpha.Mathematics.RepresentationTheory.Sl2.Classification
@@ -651,6 +649,8 @@ public import PhyslibAlpha.ProbabilisticTheory.WStarAlgebra.TracePairingSurjecti
 public import PhyslibAlpha.ProbabilisticTheory.Weight.Basic
 public import PhyslibAlpha.ProbabilisticTheory.Weight.Continuous
 public import PhyslibAlpha.ProbabilisticTheory.Weight.Extension
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Addition
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Basic
 public import PhyslibAlpha.QuantumMechanics.Blackbody.RayleighJeans
 public import PhyslibAlpha.QuantumMechanics.HarmonicOscillator.LadderSystem
 public import PhyslibAlpha.QuantumMechanics.HarmonicOscillator.Vacuum
