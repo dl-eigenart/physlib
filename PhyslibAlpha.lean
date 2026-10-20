@@ -665,6 +665,7 @@ public import PhyslibAlpha.QuantumMechanics.AngularMomentum.CouplingSchemes
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.MultipoleSumRule
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.NormalizedBasis
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SixJ
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SixJSymmetry
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SpinOrbit
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Wigner3j
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckart
