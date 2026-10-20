@@ -675,6 +675,7 @@ public import PhyslibAlpha.QuantumMechanics.HilbertSpaces.FiniteTarget.Product
 public import PhyslibAlpha.QuantumMechanics.HilbertSpaces.FiniteTarget.ProductState
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.FineStructure
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.RadialFunctions
+public import PhyslibAlpha.QuantumMechanics.Hydrogen.RadialQuantization
 public import PhyslibAlpha.QuantumMechanics.QuantumHarmonicOscillator
 public import PhyslibAlpha.QuantumMechanics.StinespringDilation
 public import PhyslibAlpha.Relativity.Fermions.Dirac.MinimalDimension
