@@ -21,7 +21,9 @@ Die Modul-Docstrings behaupten mehr, als in Lean bewiesen ist:
 
 - **Aufgabe 1 (6j) erledigt** am 21.10.: Commit `4832a35` auf `pr/six-j-symmetry`
   (`sixJSymEdge_comp_map`, `sym2_map_perm_injective`), Build und Linter grün, nur Standardaxiome.
-- Aufgabe 2 (3j) offen.
+- **Aufgabe 2 (3j) erledigt** am 21.10.: Commit `840e0e1` auf `pr/wigner-3j` (`threeJR_perm`,
+  `perm_prodMap_injective`, `prodMap_ne_swap`); `pr/six-j-symmetry` darauf umgesetzt (`e6f3bc4`).
+  Build und alle Pflichtlinter grün.
 
 ## Aufgabe
 

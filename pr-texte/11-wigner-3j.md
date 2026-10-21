@@ -7,6 +7,7 @@ This PR defines the Wigner 3j symbol of a Regge square by Racah's formula, prove
 ## Main results
 
 - `threeJR_transpose`, `threeJR_swap_columns`, `threeJR_cycle_columns`, `threeJR_swap_rows`: the 3j symbol of a Regge square is invariant under transposition and cyclic column permutations, and changes by `(-1)^J` under a swap of two columns or of the last two rows.
+- `threeJR_perm`: permuting the rows by `σ` and the columns by `τ` multiplies the 3j symbol by `(sign σ · sign τ)^J`; with `threeJR_transpose` these are 72 distinct symmetries (`perm_prodMap_injective`, `prodMap_ne_swap`).
 - `cgCoefficient_eq_threeJR`: `⟨j₁ m₁ j₂ m₂ | J M⟩ = (-1)^(j₁ - j₂ + M) √(2J + 1) (j₁ j₂ J; m₁ m₂ -M)`.
 - `sum_wigner3j_mul_wigner3j`: `Σ_{m₁ m₂} (j₁ j₂ J; m₁ m₂ -M)(j₁ j₂ J'; m₁ m₂ -M') = δ_{JJ'} δ_{MM'}/(2J + 1)`.
 - `sum_wigner3j_mul_wigner3j_JM`: `Σ_{J M} (2J + 1)(j₁ j₂ J; m₁ m₂ -M)(j₁ j₂ J; m₁' m₂' -M) = δ_{m₁ m₁'} δ_{m₂ m₂'}`.
@@ -16,7 +17,7 @@ This PR defines the Wigner 3j symbol of a Regge square by Racah's formula, prove
 
 1. `Wigner3j.lean` §A The six-factorial sum: `sixSum` as a `finsum` over `ℤ` with `invFact` vanishing on negative arguments; check `sixSum_shift` and `sixSum_neg`, which carry all symmetry proofs.
 2. `Wigner3j.lean` §B Regge squares and the 3j symbol: the definition `threeJR` and the index convention of the square in the module docstring.
-3. `Wigner3j.lean` §C Symmetries: each proof reduces to one `sixSum` move plus a parity computation; `IsMagic` supplies the `omega` facts.
+3. `Wigner3j.lean` §C Symmetries: each proof reduces to one `sixSum` move plus a parity computation; `IsMagic` supplies the `omega` facts. Then the full group: `isMagic_perm`/`isMagic_transpose` keep squares magic with the same `J`; `threeJR_perm_columns` and `threeJR_perm` build every row/column permutation from the generators; `perm_prodMap_injective` and `prodMap_ne_swap` count 36 · 2 = 72 distinct symmetries.
 4. `Wigner3j.lean` §D Relation to the Clebsch-Gordan coefficients: the dictionary `regge` between `(m, n, k, l, α, β)` and `(j₁ j₂ J; m₁ m₂ -M)`, and the phase in `cgCoefficient_eq_threeJR`.
 5. `Wigner3j.lean` §E Orthogonality: `wigner3j` is `threeJR ∘ regge` with the selection rule `α + β = k + l`; both relations are transported from the Clebsch-Gordan orthogonality relations.
 6. `MultipoleSumRule.lean` §A The cyclic symmetry: the parameter change in `wigner3j_cycle`.
@@ -52,6 +53,15 @@ All declarations are in the namespace `PhyslibAlpha.Sl2`.
 | `threeJR_swap_columns` | lemma | Swapping the first two columns multiplies `threeJR` by `(-1)^J`. |
 | `threeJR_cycle_columns` | lemma | A cyclic permutation of the columns leaves `threeJR` unchanged. |
 | `threeJR_swap_rows` | lemma | Swapping the last two rows (`m ↦ -m`) multiplies `threeJR` by `(-1)^J`. |
+| `isMagic_iff` | lemma | `IsMagic R` unfolded: all row and column sums equal the common sum `J`. |
+| `isMagic_perm` | lemma | Permuting rows by `σ` and columns by `τ` keeps a square magic. |
+| `isMagic_transpose` | lemma | The transpose of a magic square is magic. |
+| `isMagic_perm_sum` | lemma | Row and column permutations do not change the sum `J`. |
+| `isMagic_transpose_sum` | lemma | Transposition does not change the sum `J`. |
+| `threeJR_perm_columns` | lemma | A column permutation `τ` multiplies `threeJR` by `sign(τ)^J`. |
+| `threeJR_perm` | lemma | Row permutation `σ` and column permutation `τ` multiply `threeJR` by `(sign σ · sign τ)^J`. |
+| `perm_prodMap_injective` | lemma | Distinct pairs `(σ, τ)` act differently on the nine entries of a `3 × 3` square. |
+| `prodMap_ne_swap` | lemma | Transposition is not a row and column permutation. |
 | `regge` | def | The Regge square of `(j₁ j₂ J; m₁ m₂ -M)` in the parameters `m, n, k, l, α, β` of `ClebschGordanCoefficients`. |
 | `isMagic_regge` | lemma | `regge m n k l α β` is magic for admissible parameters with `α + β = k + l`. |
 | `sixSum_regge_eq_racahSum` | lemma | The six-factorial sum of `regge` equals `racahSum` of `ClebschGordanFormula`. |
@@ -71,7 +81,7 @@ All declarations are in the namespace `PhyslibAlpha.Sl2`.
 ## Notes
 
 - All quantities use the parameters of `ClebschGordanCoefficients`: doubled spins `m = 2j₁`, `n = 2j₂` and natural-number offsets `k, l, α, β`; `wigner3j` is the 3j symbol with third projection `-M`.
-- The module docstring states that the four symmetries generate all 72 symmetries of the 3j symbol; this is not a Lean statement.
+- The group of order 72 is given by `threeJR_perm` together with `threeJR_transpose`; a single statement for the whole group is not formulated.
 - `invFact`, `neg_one_zpow_congr`, `neg_one_pow_mul_mul_zpow` and `neg_one_pow_mul_mul_zpow'` are auxiliary results about factorials and signs.
 
 ---
