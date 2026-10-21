@@ -78,3 +78,14 @@ Literaturangaben selbst prüfen (§2.1).
 **21.10., 20:45:** #1910 (08) und #1911 (09) offen. Stapel 10–14 auf das neue `pr/clebsch-gordan`
 (auf master `a945101`) umgesetzt, inkl. der neuen Symmetrie-Commits auf `pr/wigner-3j` und
 `pr/six-j-symmetry`. Lean-Dateien unverändert. Vor dem nächsten PR auf agents-pc bauen.
+
+## Koordination
+
+- **Philippe Kevorkian** (GitHub `KevorkianPhilippe`, per E-Mail, 21.10.): arbeitet außerhalb von physlib
+  an Penroses Binor-Kalkül in Dimension 2 (ε-Tensor, Symmetrisierer, Theta-/Tetraeder-Netzwerke,
+  normiertes 6j mit Orthogonalität und Biedenharn–Elliott, bisher Spins ≤ 1). Möchte auf unserer API
+  aufbauen, erster Schritt: SL(2)-invariante Bilinearform auf V(n) und ε ↔ `hwVec 1 1 1`.
+  Abgesprochen: Rekopplung/3j/6j/Symmetrien bei uns; Binor/Spin-Netzwerke, Biedenharn–Elliott,
+  Racah-Identitäten, 9j bei ihm. Brücke später: sein normiertes 6j = unser `sixJSym`.
+  **Zusage:** Daniel schreibt ihm, sobald die 6j-PRs (12a/12b, 14) offen sind. Fork-Branches nicht genannt.
+- Unsere `invForm` (#1911) ist die kontravariante Form, nicht die invariante – keine Dopplung.
