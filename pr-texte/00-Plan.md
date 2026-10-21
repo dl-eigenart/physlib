@@ -85,7 +85,9 @@ Literaturangaben selbst prüfen (§2.1).
   an Penroses Binor-Kalkül in Dimension 2 (ε-Tensor, Symmetrisierer, Theta-/Tetraeder-Netzwerke,
   normiertes 6j mit Orthogonalität und Biedenharn–Elliott, bisher Spins ≤ 1). Möchte auf unserer API
   aufbauen, erster Schritt: SL(2)-invariante Bilinearform auf V(n) und ε ↔ `hwVec 1 1 1`.
-  Abgesprochen: Rekopplung/3j/6j/Symmetrien bei uns; Binor/Spin-Netzwerke, Biedenharn–Elliott,
-  Racah-Identitäten, 9j bei ihm. Brücke später: sein normiertes 6j = unser `sixJSym`.
+  **Antwort verschickt 21.10.:** bei uns Rekopplung/3j/6j/Symmetrien und als Nächstes **9j-Symbole**
+  (Vier-Spin-Rekopplung, 9j als Summe über Produkte von 6j) und **Racahs geschlossene 6j-Formel**;
+  bei ihm Binor-/Spin-Netzwerk-Kalkül und **Biedenharn–Elliott** (in seinem Kalkül). Brücke später:
+  sein normiertes 6j = unser `sixJSym` (dann BE für alle Spins, Symmetrien übertragen sich).
   **Zusage:** Daniel schreibt ihm, sobald die 6j-PRs (12a/12b, 14) offen sind. Fork-Branches nicht genannt.
 - Unsere `invForm` (#1911) ist die kontravariante Form, nicht die invariante – keine Dopplung.
