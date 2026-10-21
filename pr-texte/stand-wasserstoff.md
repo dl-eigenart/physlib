@@ -312,3 +312,17 @@ Neue Datei `BoundStatesL2.lean` (in `PhyslibAlpha.lean` eingetragen), Commit lok
 `boundKappa_pos` (`k > 0`, `d ≥ 2`), `continuous_boundState`, `memHS_boundState`
 (über `integrable_sq_of_le_mul_exp` mit `g = L(‖y‖)·P(y)`, `c = κ`), `boundStateHS`
 (`SpaceDHilbertSpace.mk`). Commit lokal.
+
+### 2026-10-21 23:45: d) Lineare Unabhängigkeit in L² — erledigt; E3 a–d fertig
+Commit lokal 2130c40d (Branch `hydrogen-bound-states-l2`, 4 Commits über 7ad91892, nicht gepusht).
+- `IsPolyBounded.sum`; `boundStateMap_apply` (alle Terme haben `κ = boundKappa H n`, da
+  `(n-l)+l = n`); `continuous_boundStateMap`; `memHS_boundStateMap`;
+  `boundStateMapHS : (Π l, Harm_l) →ₗ[ℝ] SpaceDHilbertSpace d` (Linearität über `ext_iff`,
+  `coeFn_mk`, `Lp.coeFn_add/smul`); `boundStateMapHS_injective` (a.e. null + stetig ⇒ null, dann
+  `boundStateMap_injective`); `finrank_range_boundStateMapHS_three = (n+1)²`.
+- `check_pr.sh l2`: alles OK außer `theorem_lint` (bekannte Ursache: .olean von
+  `Time/ManifoldCurves.lean` fehlt auf Basis a46a93e9; BoundStatesL2.lean hat 0 `theorem`).
+  Axiome Standard, `sorry` 0.
+- Lean-Notiz: Die Null in `SpaceDHilbertSpace`-Funktionen erscheint als `{re := 0, im := 0}`;
+  `simp` erkennt sie nicht als `0`, Ausweg über `Complex.ext_iff` (Realteil).
+- Offen: Schritt e (schwache Eigenwertgleichung / Adjungierte), wartet auf Daniel.
