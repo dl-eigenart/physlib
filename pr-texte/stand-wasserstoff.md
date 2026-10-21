@@ -296,3 +296,14 @@ In der echten Umgebung getestet (Scratch-Datei):
   gleich ⇒ gleich), dann `boundStateMap_injective` aus E2.
 - Für κ > 0 (`boundKappa`) braucht es `0 < H.k` und `2 ≤ H.d` (wie `boundState_eigen`).
 Neue Datei geplant: `PhyslibAlpha/QuantumMechanics/Hydrogen/BoundStatesL2.lean`.
+
+### 2026-10-21 23:30: b) Integrierbarkeit (allgemein) — erledigt
+Neue Datei `BoundStatesL2.lean` (in `PhyslibAlpha.lean` eingetragen), Commit lokal.
+- §A `IsPolyBounded f` (`∃ C ≥ 0, k, |f y| ≤ C(1+‖y‖)^k`) mit `const`, `add`, `mul`, `pow`, `coord`,
+  `norm`, `toFun` (MvPolynomial), `polynomial_eval` (Polynom ∘ beschränkte Funktion).
+  Hinweis: `add`/`mul`/`pow` in der Form `fun y => f y + g y` — `f + g` passt im Modulsystem nicht
+  definitorisch (Instanz `Real.instAdd` nicht exponiert).
+- §B `one_add_pow_mul_exp_neg_le`: `(1+t)^m e^{-ct} ≤ e^c m!/c^m`;
+  `integrable_sq_of_le_mul_exp`: `|f| ≤ |g| e^{-c‖y‖}`, `g` polynomial beschränkt, `c > 0`
+  ⇒ `f²` integrierbar (Schranke durch `(1+‖y‖)^{-(d+1)}`, `integrable_one_add_norm`).
+- Datei elaboriert ohne Fehler/Warnungen.
