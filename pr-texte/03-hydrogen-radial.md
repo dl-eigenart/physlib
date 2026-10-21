@@ -1,6 +1,6 @@
 # feat(PhyslibAlpha): radial functions of the hydrogen atom
 
-Branch: `pr/hydrogen-radial` · Base: master, after the Laguerre PR is merged · Depends on: `pr/laguerre` (generalised Laguerre polynomials)
+Branch: `pr/hydrogen-radial` · Base: master, after the Laguerre PR is merged · Depends on: #1900 (generalised Laguerre polynomials)
 
 This PR defines the bound-state radial functions `u_{νl}(ρ) = ρ^(l+1) e^(-ρ/ν) L_{ν-l-1}^(2l+1)(2ρ/ν)` of the three-dimensional hydrogen atom in units of the Bohr radius, proves that they solve the radial Schrödinger equation, and computes the expectation values `⟨1/ρ⟩`, `⟨1/ρ²⟩`, `⟨1/ρ³⟩` and the density `|R_{ν0}(0)|²` at the origin. In physical units the eigenvalue is physlib's Bohr level `HydrogenAtom.energyLevel (ν - 1)` for `d = 3`. It builds on the generalised Laguerre polynomials of `PhyslibAlpha/Mathematics/SpecialFunctions/Laguerre.lean`: the radial equation follows from the Laguerre equation, and the moments reduce to the Laguerre integrals proved there.
 

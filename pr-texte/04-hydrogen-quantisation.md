@@ -1,6 +1,6 @@
 # feat(PhyslibAlpha): quantisation of the hydrogen levels
 
-Branch: `pr/hydrogen-quantisation` · Base: master, after the radial functions PR is merged · Depends on: `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it `pr/laguerre`
+Branch: `pr/hydrogen-quantisation` · Base: master, after the radial functions PR is merged · Depends on: `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it #1900
 
 This PR proves that the bound-state energies of hydrogen are discrete within the power series ansatz. If `u(ρ) = ρ^(l+1) e^(-κρ) Σ_k c_k ρ^k`, with an everywhere convergent series, `c_0 ≠ 0` and `κ > 0`, solves the radial equation `u'' = (l(l+1)/ρ² - 2/ρ + κ²) u` on `(0, ∞)` and is square integrable, then `κ = 1/ν` for a natural number `ν > l` and `u` is a multiple of `u_{νl}`. It builds on `radialU` and `eval_radialPoly` from the radial functions PR and on `laguerreCoeff` from the Laguerre PR.
 

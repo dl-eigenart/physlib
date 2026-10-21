@@ -1,6 +1,6 @@
 # feat(PhyslibAlpha): bound states of the d-dimensional hydrogen atom
 
-Branch: `pr/hydrogen-bound-states` · Base: master, after the radial functions PR is merged (parallel to the quantisation PR) · Depends on: `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it `pr/laguerre`
+Branch: `pr/hydrogen-bound-states` · Base: master, after the radial functions PR is merged (parallel to the quantisation PR) · Depends on: `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it #1900
 
 This PR gives explicit bound-state wave functions of physlib's `HydrogenAtom` in `d ≥ 2` dimensions and proves that, away from the nucleus, they are eigenfunctions of `-ℏ²/(2m) Δ - k/r` with the Bohr energies `HydrogenAtom.energyLevel`. The angular part is a homogeneous harmonic polynomial `P` of degree `l`, and the Laplacian of `f(‖y‖) P(y)` is reduced to `(f'' + (d - 1 + 2l) f'/r) P` without angular coordinates. The radial factor is `e^(-κr) L_N^(2l+d-2)(2κr)`. It builds on `hasDerivAt_eval_mul_exp` and `bohrRadius` from the radial functions PR and on `laguerre_ode` from the Laguerre PR.
 
