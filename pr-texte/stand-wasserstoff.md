@@ -307,3 +307,8 @@ Neue Datei `BoundStatesL2.lean` (in `PhyslibAlpha.lean` eingetragen), Commit lok
   `integrable_sq_of_le_mul_exp`: `|f| ≤ |g| e^{-c‖y‖}`, `g` polynomial beschränkt, `c > 0`
   ⇒ `f²` integrierbar (Schranke durch `(1+‖y‖)^{-(d+1)}`, `integrable_one_add_norm`).
 - Datei elaboriert ohne Fehler/Warnungen.
+
+### 2026-10-21 23:35: c) L² — erledigt
+`boundKappa_pos` (`k > 0`, `d ≥ 2`), `continuous_boundState`, `memHS_boundState`
+(über `integrable_sq_of_le_mul_exp` mit `g = L(‖y‖)·P(y)`, `c = κ`), `boundStateHS`
+(`SpaceDHilbertSpace.mk`). Commit lokal.
