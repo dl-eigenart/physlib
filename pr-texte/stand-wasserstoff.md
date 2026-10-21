@@ -24,14 +24,29 @@ Datei `PhyslibAlpha/QuantumMechanics/Hydrogen/PauliSpectrum.lean`.
   (`[Jx,Jy] = iJz`) ⇒ `J±/ℏ` verwenden.
 - `k = 0` braucht keine Extra-Annahme: dann folgt `(2j+1)² = 0`, Widerspruch, Eigenraum leer.
 
-### Rechenweg (Plan für die nächsten Schritte)
-1. Operatoren erhalten den Eigenraum `W` (aus `[H,L] = [H,A] = 0`); Einschränkung auf `W`,
-   dort `H = E`.
-2. `K = A/√(-2mE)`: `[K_i,K_{i+1}] = iℏ L_{i+2}`; `J± = (L ± K)/2`, `[J+,J-] = 0`,
-   beide `AngularMomentumRepresentation` (nach Division durch ℏ).
-3. `J+² - J-² = L·K = 0` (`Σ[L_i,K_i] = 0` ⇒ `L·K = K·L`).
-4. `K² = -(L² + ℏ²) - mk²/(2E)` ⇒ `2(J+² + J-²) = L² + K² = -ℏ² - mk²/(2E)`.
-5. Irreduzibler Teilraum von `W` für `J+`, dort `J+²/ℏ² = j(j+1)` (`Jsq_eq_smul`) ⇒
-   `ℏ²(2j+1)² = -mk²/(2E)` ⇒ `E = -mk²/(2ℏ²n²) = energyLevel (n-1)`, `n = 2j+1`.
-   Achtung: Schritt 5 braucht `J-²` auf demselben Vektor = `J+²`; das gibt 3. direkt.
-6. (Später) Dimension von `W` Vielfaches von `n²`.
+### 2026-10-21, Schritt 2: Beweis vollständig — E1 (d = 3) fertig
+Commits lokal auf `hydrogen-pauli`: 24438033 (Struktur), 5b157651 (Kern), 8d503b6c (Eigenraum, Linter).
+Kein `sorry`, `#print axioms exists_energyLevel` = [propext, Classical.choice, Quot.sound].
+`check_pr.sh pauli`: build_modules, build_alpha, runPhyslibAlphaLinters, theorem_lint,
+module_doc_lint, alphaFileImports, noAlphaImports, lint_style, alpha_python, codespell alle OK.
+
+Aufbau der Datei:
+- B: `kappa` (`κ = √(-2mE)`), `J i = (L i + A i/κ)/(2ℏ)`, `comm_J`, `plusRep`
+  (`AngularMomentumRepresentation`), `plusRep_Jsq`: `J² = (2ℏ)⁻²(-ℏ² - mk²/(2E)) • 1`.
+- C: `exists_Jsq_eigenvector` (primitiver Vektor, ohne Irreduzibilität),
+  `exists_energyLevel_of_H_eq` (Kern, `H = E • 1`), `mapsTo_eigenspace`, `restrictEigenspace`,
+  Hauptsatz `exists_energyLevel` (in `Theorems.txt` eingetragen, voll qualifiziert).
+
+Vereinfachung gegenüber dem Plan: `J₋` wird nicht gebraucht. Mit `[Lᵢ,Aᵢ] = 0` und `L·A = 0`
+ist `Σ(L+K)ᵢ² = L² + K²`, und das ist auf dem Eigenraum schon ein Skalar. `J₋` und
+`J₊² = J₋²` kommen erst für die Entartung (`n²`) ins Spiel.
+Lean-Notiz: Relationen auf dem Eigenraum gehen per `ext x; exact congr($(rel) (x : V))`
+(definitorisch); `simp` mit `restrict_apply`/`coe_restrict_apply` greift dort nicht.
+
+### Offen / nächste Schritte
+- `L·A = 0` für physlibs `𝐀(ε)` als Lemma in `LaplaceRungeLenzVector.lean` (gilt das für ε ≠ 0
+  exakt? prüfen), damit `PauliSystem` an physlibs Operatoren andockt.
+- E1-Zusatz: Dimension des Eigenraums Vielfaches von `n²` (braucht `J₋`, `J₊² = J₋²`, Tensorprodukt
+  zweier Spin-`j`-Darstellungen).
+- Dann E2 laut Auftrag.
+- PR-Text für `hydrogen-pauli` noch nicht geschrieben; Push wartet auf Daniels „ja“.
