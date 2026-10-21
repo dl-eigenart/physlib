@@ -208,3 +208,69 @@ Vor einem Push zu einem Commit zusammenfassen (wie bei den anderen PRs).
   `@[simp]`-Lemma F3). Axiome Standard.
 - Neue `@[simp]`: `angularMomentum_commutation_positionDotMomentum` (wie die übrigen
   `⁅𝐋, ·⁆ = 0`-Lemmata der Datei).
+
+## 2026-10-21 23:15: `lrl-angular-cyclic` gepusht
+Zu einem Commit bdf8396d zusammengefasst (Tree-Hash geprüft), auf `fork/lrl-angular-cyclic`
+(von origin/master 96a6bc5e). PR-Text schreibt die Cloud-Session.
+
+## Plan E3: Die Eigenfunktionen sind echte Zustände (noch kein Code)
+
+### Was physlib hat (Stand origin/master 96a6bc5e)
+- `SpaceDHilbertSpace d = Lp ℂ 2 volume`, `MemHS f := MemLp f 2`, `mk` für die Klasse.
+- `HydrogenAtom` erbt aus `SpaceDQuantumSystem`:
+  `hamiltonianOperator = kineticOperator + potentialOperator : Q.HS →ₗ.[ℂ] Q.HS`;
+  `kineticOperator = (2m)⁻¹ • momentumSqOperator` mit Domain `SchwartzSubmodule`,
+  `potentialOperator = 𝓜 (V)` mit Domain `{ψ | Vψ ∈ L²}` (selbstadjungiert).
+  Domain von `H` also `Schwartz ∩ {Vψ ∈ L²}` (für d ≥ 3 alle Schwartz-Funktionen, da
+  `1/r ∈ L²_loc`; für d = 2 nicht).
+- `Unbounded.lean`: `HasDenseDomain`, `IsSymmetric`, `IsEssentiallySelfAdjoint` (Abschluss
+  selbstadjungiert), Adjungierte `T†`. `SobolevSubmodule d s` (H^s).
+- TODOs in `Hydrogen/Basic.lean`: nicht wesentlich s.a. für d < 3, wesentlich s.a. für d ≥ 3,
+  Punktspektrum des Abschlusses = Bohr-Niveaus, kontinuierliches Spektrum [0,∞).
+- `hamiltonianCLM`/`potentialCLM` setzen `HasTemperateGrowth` voraus, gilt für `-k/r` nicht;
+  für Wasserstoff also nur `hamiltonianOperator` (und `hamiltonianRegCLM ε`) verwenden.
+
+### Problem
+`boundState H N l P = e^{-κr} L(2κr) P(y)` ist bei 0 nicht glatt (`e^{-κr}` hat einen Knick),
+also nicht Schwartz, also nicht im Domain von `H.hamiltonianOperator`. Ins Domain des Abschlusses
+käme man nur über eine Approximation, und „Abschluss = Adjungierte“ ist genau die offene TODO zur
+wesentlichen Selbstadjungiertheit (für d ≥ 3, Kato–Rellich: schwer).
+
+### Ziel von E3 (ehrlich erreichbar)
+(a) Die Bound States liegen in L²; die Familie zum Niveau n ist dort linear unabhängig
+    (in d = 3: `(n+1)²` unabhängige Zustände in `SpaceDHilbertSpace 3`).
+(b) Jeder Bound State ist Eigenvektor der **Adjungierten**:
+    `ψ ∈ (H.hamiltonianOperator)†.domain` und `H† ψ = E_n ψ`, d. h.
+    `⟪ψ, H φ⟫ = E_n ⟪ψ, φ⟫` für alle `φ` im Domain von `H`.
+    Mit der (separaten) TODO „wesentlich s.a. für d ≥ 3“ wird `H†` zum Abschluss, und dann folgt
+    „der Abschluss hat die Bohr-Niveaus als Eigenwerte“ (eine Richtung des Haupt-TODO) sofort.
+Nicht Teil von E3: Selbstadjungiertheit, Abschluss, Vollständigkeit (E4/E5).
+
+### Schritte
+1. **Machbarkeit Mathlib** (vor jedem Code): Polarkoordinaten für radiale Integranden
+   (`integral_fun_norm_addHaar`/`integrable_fun_norm_addHaar`), `∫ r^a e^{-cr}` (Gamma),
+   partielle Integration auf ℝ^d (`integral_bilinear_hasFDerivAt_right_eq_neg_left_of_integrable`
+   o. ä.), Adjungierten-Charakterisierung für `LinearPMap` (`mem_adjoint_domain_iff`,
+   `adjoint_apply_eq`), Maß auf `Space d` (= volume, Bezug zu `EuclideanSpace`). Ergebnis in
+   dieser Datei festhalten, dann Lemma-Liste anpassen.
+2. **Integrierbarkeit**: `Integrable (‖y‖^a · e^{-c‖y‖})` auf `Space d` für `c > 0`; Polynomschranke
+   `|P(y)| ≤ C (1 + ‖y‖)^l` für `MvPolynomial`-Auswertung und für das Laguerre-Polynom in `‖y‖`.
+3. **`MemHS (boundState …)`** (als ℂ-wertige Funktion), daraus `boundStateHS : … → SpaceDHilbertSpace d`.
+4. **Unabhängigkeit in L²**: Bound States sind stetig, a.e.-gleich stetige Funktionen sind gleich;
+   damit überträgt sich `boundStateMap_injective` (E2) auf `SpaceDHilbertSpace`; für d = 3 Dimension
+   `(n+1)²` des Spanns.
+5. **Schwache Eigenwertgleichung** `⟪ψ, H φ⟫ = E ⟪ψ, φ⟫` für `φ` im Domain:
+   Weg (bevorzugt) Regularisierung `r → √(r² + δ²)`: `ψ_δ` ist glatt, `(-Δ/2m - k/r) ψ_δ = E ψ_δ + R_δ`
+   explizit; partielle Integration auf ganz ℝ^d für glatte Funktionen mit integrierbaren
+   Ableitungen; dann `δ → 0` mit dominierter Konvergenz (`∫ ψ_δ Hφ → ∫ ψ Hφ`, `∫ R_δ φ → 0`).
+   Alternative: Green-Formel mit ausgeschnittener Kugel `B_δ` (braucht Divergenzsatz auf
+   Kugelschalen, in Mathlib schwach). Braucht `d ≥ 2` (Randterm `O(δ^{d-1})`, `Δψ ~ 1/r`
+   lokal integrierbar). Aufwendigster Teil, vermutlich mehrere Sitzungen.
+6. **Abschluss**: `boundState_mem_adjoint_domain`, `adjoint_boundState = E_n • …`; Korollar
+   „E_n ist Eigenwert von `H†`“ mit Vielfachheit ≥ `(n+1)²` in d = 3.
+
+### Einschätzung
+Schritte 2–4 mittel (Standard-Analysis, gute Mathlib-Abdeckung zu erwarten). Schritt 5 schwer
+(singuläres Potential, Regularisierungsgrenzwert). Schritt 1 entscheidet, ob 5 über
+Regularisierung oder Kugelausschnitt läuft. Branch später von `hydrogen-degeneracy-analytic`
+(braucht `boundState`, `toFun`, `boundStateMap`).
