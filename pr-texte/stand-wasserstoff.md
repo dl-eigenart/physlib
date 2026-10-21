@@ -339,3 +339,27 @@ In `BoundStatesL2.lean` §E:
 - `adjoint_boundStateHS` (Hypothese `Dense dom H`): `H† ψ = E • ψ`, bewiesen über
   `LinearPMap.adjoint_apply_eq`. Dichtheit von `dom H = Schwartz ∩ {Vφ ∈ L²}` bleibt eigenes Thema
   (für d ≥ 3 ist das alle Schwartz-Funktionen, da 1/r ∈ L²_loc).
+
+### 2026-10-22 00:00: e1 erledigt — `H φ` als Differentialoperator
+- `momentumOperator_apply_schwartzEquiv`: `𝓟ᵢ[g] = [𝐩ᵢ g]`;
+  `momentumSqOperator_apply_schwartzEquiv`: `𝐩²[f] = [Σᵢ 𝐩ᵢ𝐩ᵢ f]`.
+- `hamiltonianOperator_apply_ae`: jedes `φ ∈ dom H` ist `[f]` mit `f` Schwartz, und
+  `H φ =ᵐ -ℏ²/(2m) Σᵢ ∂ᵢ∂ᵢ f + V f`.
+- Lean-Notizen: `kineticOperator`/`potentialOperator` sind im Modulsystem nicht entfaltbar
+  (`change` scheitert) — Trick: über beliebiges `T` mit `T = …` argumentieren (`rintro T rfl`)
+  und `kineticOperator_eq`/`potentialOperator_eq` einsetzen. `(𝓟 i).domain` vs.
+  `SchwartzSubmodule`: definitorisch, aber nicht reduzierbar gleich ⇒ `simp` scheitert, Weg über
+  `calc` + `congr 1` + `Subtype.ext`. Summe von Schwartz-Abbildungen auswerten: `_root_.sum_apply`.
+- Recherche für e2 (Green-Identität `∫ ψ Δf = ∫ (Δψ) f`, ψ mit Knick bei 0), Ergebnis:
+  * Mathlib/physlib haben **kein** Lemma „differenzierbar außer bei 0 ⇒ partielle Integration“.
+    `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable` u. Varianten
+    (`Mathlib/Analysis/Calculus/LineDeriv/IntegrationByParts.lean`) brauchen Differenzierbarkeit auf
+    ganz `tsupport` der Testfunktion (enthält 0).
+  * physlib-Hausmethode (Space/Norm/Basic.lean ~l.392–612, `distGrad_distOfFunction_norm_zpow`,
+    `distLaplacian_distOfFunction_norm_zpow`): ‖x‖ regularisieren (`normPowerSeries n x =
+    √(‖x‖²+1/(n+1))`, `Norm/Regularized.lean`), partiell integrieren, dominierte Konvergenz;
+    Integrierbarkeit über `IsDistBounded` (Schranken `‖x‖^p`, `p ≥ -(d-1)`;
+    `IsDistBounded.integrable_space`, `integrable_space_fderiv`).
+  * `distDeriv_distOfFunction` (DistOfFunction.lean:158) braucht `Differentiable ℝ f` überall.
+  * Mathlib-Divergenzsatz erlaubt abzählbare Ausnahmemengen
+    (`integral_divergence_of_hasFDerivAt_off_countable`), aber nur auf Quadern in `Fin (n+1) → ℝ`.
