@@ -661,6 +661,7 @@ public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Addition
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.Basic
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanCoefficients
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanFormula
+public import PhyslibAlpha.QuantumMechanics.AngularMomentum.CouplingSchemes
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.NormalizedBasis
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.SpinOrbit
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.WignerEckart
