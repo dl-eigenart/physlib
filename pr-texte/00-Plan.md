@@ -79,6 +79,13 @@ Literaturangaben selbst prüfen (§2.1).
 (auf master `a945101`) umgesetzt, inkl. der neuen Symmetrie-Commits auf `pr/wigner-3j` und
 `pr/six-j-symmetry`. Lean-Dateien unverändert. Vor dem nächsten PR auf agents-pc bauen.
 
+## Wasserstoffspektrum (Langzeit)
+
+- **E1 erledigt** (21.10., agents-pc): `hydrogen-pauli`, Commit `56a4ff7` auf master `96a6bc5`, Build und Linter grün,
+  `PauliSystem.exists_energyLevel` als `theorem` in `Theorems.txt`. PR-Text: `15-hydrogen-pauli.md`.
+  Unabhängig vom übrigen Stapel, kann jederzeit eingereicht werden.
+- Nächstes: E2 (Entartung n²).
+
 ## Koordination
 
 - **Philippe Kevorkian** (GitHub `KevorkianPhilippe`, per E-Mail, 21.10.): arbeitet außerhalb von physlib
