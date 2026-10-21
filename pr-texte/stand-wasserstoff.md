@@ -113,3 +113,62 @@ Commits auf `hydrogen-degeneracy-analytic`: ead3287d (Linearität, Skalierung, H
 - Referenz: Axler–Bourdon–Ramey, Harmonic Function Theory, GTM 137 (2001), Kap. 5, per CrossRef
   geprüft (doi:10.1007/978-1-4757-8137-3_5). Nicht geprüft: genaue Stelle der Dimensionsformel im
   Kapitel — vor PR im Buch nachsehen.
+
+## 2026-10-21 23:00: Umbau, Basen, Pushes (nach Daniels „ja“)
+- `pr/hydrogen-bound-states` lokal neu vom Fork geholt (349128d0, Basis a46a93e9 = #1900; alte
+  lokale Fassung c2c625dd war inhaltsgleich, nur veraltete Basis). `hydrogen-degeneracy-analytic`
+  darauf umgesetzt, zu einem Commit 7ad91892 zusammengefasst. Linter alle OK außer `theorem_lint`
+  (gleiche Ursache wie oben: .olean von `Time/ManifoldCurves.lean` (#1863) im gemeinsamen `.lake`,
+  fehlt auf a46a93e9; Degeneracy.lean hat 0 `theorem`).
+- Umbau von `J` (κ statt E, `rep`, `rep_Jsq`, `minusRep`, `minusRep_Jsq`, `ne_zero_of_sq_eq`) in den
+  einen Commit von `hydrogen-pauli` eingefaltet: fd5f5b4e. `hydrogen-pauli-degeneracy` darauf neu
+  aufgesetzt, ein Commit b07c9efd (Inhalt identisch, Tree-Hash geprüft). Beide: alle Linter OK
+  inkl. `theorem_lint`, Axiome Standard.
+- Gepusht: `hydrogen-pauli` (`--force-with-lease` gegen 56a4ff79), `hydrogen-pauli-degeneracy`,
+  `hydrogen-degeneracy-analytic` (neu). Kein PR geöffnet.
+- PR-Text 15 an die neue Schnittstelle angepasst (Deklarationstabelle, Reviewer-Map, `comm_J`).
+
+## Plan: `L ∧ A = 0` in physlib (noch kein Code)
+Ziel: die Annahme `L_dot_A` aus `PauliSystem` für physlibs Operatoren beweisen.
+
+**Aussage (d beliebig, für jedes ε exakt):** zyklische Identität
+`𝐋 i j ∘L 𝐀(ε) k + 𝐋 j k ∘L 𝐀(ε) i + 𝐋 k i ∘L 𝐀(ε) j = 0` für alle `i j k`
+(`angularMomentum_cyclic_lrl`), dasselbe mit `𝐀` links (`lrl_cyclic_angularMomentum`).
+In d = 3 mit `Lₖ = ½ εₖᵢⱼ Lᵢⱼ` ist das für `(i,j,k) = (1,2,0)` genau `L·A = 0`
+(`L 0 = 𝐋 1 2`, `L 1 = 𝐋 2 0`, `L 2 = 𝐋 0 1`), also das Feld `L_dot_A`.
+Warum exakt trotz Regularisierung: ε steckt nur in `𝐫₀ ε (-1)`, und das kommutiert mit `𝐋`.
+
+**Rechenweg** über `lrlOperator_eq`: `𝐀ₖ = 𝐱ₖ𝐩² - (𝐱·𝐩)𝐩ₖ + ½iℏ(d-1)𝐩ₖ - mk·𝐫₀(-1)𝐱ₖ`. Mit
+`Σ_cyc` für die zyklische Summe über `(i,j,k)`:
+- `Σ_cyc 𝐋ᵢⱼ 𝐱ₖ 𝐩² = (Σ_cyc 𝐋ᵢⱼ 𝐱ₖ) 𝐩²`, braucht (F1) `Σ_cyc 𝐋ᵢⱼ 𝐱ₖ = 0`.
+- `Σ_cyc 𝐋ᵢⱼ (𝐱·𝐩) 𝐩ₖ = (𝐱·𝐩) Σ_cyc 𝐋ᵢⱼ 𝐩ₖ`, braucht (F3) `[𝐋ᵢⱼ, 𝐱·𝐩] = 0` und
+  (F2) `Σ_cyc 𝐋ᵢⱼ 𝐩ₖ = 0`.
+- `½iℏ(d-1) Σ_cyc 𝐋ᵢⱼ 𝐩ₖ = 0` nach (F2).
+- `Σ_cyc 𝐋ᵢⱼ 𝐫₀(-1) 𝐱ₖ = 𝐫₀(-1) Σ_cyc 𝐋ᵢⱼ 𝐱ₖ = 0` nach `angularMomentum_comp_radiusRegPow_commute`
+  (vorhanden) und (F1).
+- `𝐀` links: `Σ_cyc 𝐀ₖ 𝐋ᵢⱼ = Σ_cyc 𝐋ᵢⱼ 𝐀ₖ - Σ_cyc [𝐋ᵢⱼ, 𝐀ₖ]`, und mit
+  `angularMomentum_commutation_lrl` (vorhanden) ist `Σ_cyc iℏ(δᵢₖ𝐀ⱼ - δⱼₖ𝐀ᵢ) = 0`
+  (die δ-Terme heben sich paarweise weg, auch bei gleichen Indizes).
+
+**Hilfslemmata** (in `Operators/AngularMomentum.lean`):
+- (F1) `angularMomentum_cyclic_position`: aus `𝐋ᵢⱼ = 𝐱ᵢ𝐩ⱼ - 𝐱ⱼ𝐩ᵢ` und
+  `angularMomentum_commutation_position`; die `𝐱𝐱𝐩`-Terme heben sich auf, weil Orte vertauschen,
+  die `iℏδ`-Terme heben sich paarweise auf.
+- (F2) `angularMomentum_cyclic_momentum`: wie F1, ohne Kommutatoren (Impulse vertauschen).
+- (F3) `angularMomentum_commutation_positionDotMomentum`: `[𝐋ᵢⱼ, Σₘ 𝐱ₘ𝐩ₘ] =
+  Σₘ([𝐋ᵢⱼ,𝐱ₘ]𝐩ₘ + 𝐱ₘ[𝐋ᵢⱼ,𝐩ₘ]) = iℏ(𝐱ⱼ𝐩ᵢ - 𝐱ᵢ𝐩ⱼ) + iℏ(𝐱ᵢ𝐩ⱼ - 𝐱ⱼ𝐩ᵢ) = 0`, mit den
+  vorhandenen `angularMomentum_commutation_position/momentum`. Gibt es in physlib noch nicht.
+
+**Ort und Form:** Physlib selbst (nicht Alpha), Hauptlemma in `LaplaceRungeLenzVector.lean`
+(neuer Abschnitt nach den `⁅𝐋, 𝐀⁆`-Kommutatoren), F1–F3 in `Operators/AngularMomentum.lean`.
+Branch `lrl-angular-cyclic` von `origin/master`. Alles als `lemma` (kein `Theorems.txt`).
+Optional als dritter Schritt ein d = 3-Korollar in der Form `Σₖ Lₖ Aₖ = 0`, dann gleich mit den
+Indizes von `PauliSystem`.
+
+**Schritte:** (1) F1–F3 mit `sorry`, bauen; (2) F2, F1, F3 beweisen; (3) Hauptlemma beiden Ordnungen;
+(4) d = 3-Korollar; (5) Linter (Physlib-Linter strenger als Alpha: vorher prüfen, was
+`check_pr.sh` für Physlib-Dateien abdeckt).
+
+**Offen danach:** Dass physlibs `𝐋`, `𝐀(ε)`, `𝐇(ε)` im Limes ε → 0 auf einem geeigneten Raum
+einen `PauliSystem` bilden, bleibt Funktionalanalysis (E3/E5). Dieses Lemma liefert nur das
+fehlende algebraische Feld.
