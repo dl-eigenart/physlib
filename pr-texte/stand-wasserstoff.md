@@ -96,7 +96,7 @@ Schwierigkeitseinschätzung:
 - B ist Routine (Ableitung von `MvPolynomial.eval`).
 
 ### 2026-10-21 C und A fertig (lokal, nicht gepusht)
-Commits auf `hydrogen-degeneracy-analytic`: 5c… Linearität/Skalierung/Hilfslemma, b6e9f141 (C),
+Commits auf `hydrogen-degeneracy-analytic`: ead3287d (Linearität, Skalierung, Hilfslemma), b6e9f141 (C),
 009dd72e (A1), ae22dd0e (A2), c7375010 (A3–A5), 94146771 (Referenz).
 - C: `boundStateMap_injective` ohne Annahmen an `d`, `k` (Strahl `y = t w`, kleinste Potenz von `t`,
   `L(0) = C(N+α,N) ≠ 0`, `eq_zero_of_sum_pow_mul` per Grenzwert `t → 0⁺`, dann `MvPolynomial.funext`).
