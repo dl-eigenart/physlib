@@ -69,7 +69,7 @@ Commits: d6dcb30e (Refactor: `J κ` für jedes `κ² = -2mE`, `rep`, `rep_Jsq`, 
 - Hinweis: d6dcb30e ändert `J`/`plusRep` aus PR 15 (API: `J` nimmt `κ` statt `E`). Optional
   vor dem Öffnen von PR 15 dort einarbeiten, sonst wird PR 15-Text bei Nachfolge-PR veraltet.
 
-## E2 analytisch — Gerüst steht
+## E2 analytisch — fertig (kein sorry)
 Branch `hydrogen-degeneracy-analytic` (lokal, von `pr/hydrogen-bound-states` c2c625dd; diese Basis
 ist 7 Commits hinter master, gleiche Mathlib/Toolchain), Datei
 `PhyslibAlpha/QuantumMechanics/Hydrogen/Degeneracy.lean`. Commit lokal, nicht gepusht.
@@ -94,3 +94,22 @@ Schwierigkeitseinschätzung:
 - Injektivität: `Σ_l f_l(r) P_l(y) = 0` ⇒ alle `P_l = 0`. Idee: Radialfaktor ist `e^{-κr}` mal
   Polynom in `r`; Entwicklung nach Homogenitätsgrad entlang Strahlen `y = t·ω`. Noch auszuarbeiten.
 - B ist Routine (Ableitung von `MvPolynomial.eval`).
+
+### 2026-10-21 C und A fertig (lokal, nicht gepusht)
+Commits auf `hydrogen-degeneracy-analytic`: 5c… Linearität/Skalierung/Hilfslemma, b6e9f141 (C),
+009dd72e (A1), ae22dd0e (A2), c7375010 (A3–A5), 94146771 (Referenz).
+- C: `boundStateMap_injective` ohne Annahmen an `d`, `k` (Strahl `y = t w`, kleinste Potenz von `t`,
+  `L(0) = C(N+α,N) ≠ 0`, `eq_zero_of_sum_pow_mul` per Grenzwert `t → 0⁺`, dann `MvPolynomial.funext`).
+  `finrank_range_boundStateMap = Σ_l dim Harm_l`, `_three = (n+1)²` (nur noch `hd : H.d = 3`).
+- A: `finrank_homogeneousSubmodule` (Monome ↔ `Sym (Fin d) l`), `polyLaplacian_isHomogeneous`,
+  `polyLaplacian_eq_zero_of_lt_two`, Fischer-Produkt (`fischer`, `fischer_mul_X` = Adjungiertheit
+  `Xᵢ`/`∂ᵢ`, `fischer_self_pos`), `eq_zero_of_polyLaplacian_eq_zero_of_eq_rSq_mul`
+  (`Harm ∩ r²·Hom = 0`), `finrank_harmonicSubmodule_add_finrank` (`dim Harm_{l+2} + dim Hom_l =
+  dim Hom_{l+2}`, beide Richtungen ohne orthogonales Komplement), dann Formel und `2l+1`.
+- `check_pr.sh deg-analytic`: alles OK außer `theorem_lint`: „no such file …
+  Physlib/Mathematics/ForMathlib/SesquilinearForm.lean“ = veraltete .olean von neuerem master im
+  gemeinsamen `.lake`, Datei fehlt auf der alten Basis 653895b0. Degeneracy.lean hat 0 `theorem`.
+  Erst nach Rebase auf master sinnvoll prüfbar.
+- Referenz: Axler–Bourdon–Ramey, Harmonic Function Theory, GTM 137 (2001), Kap. 5, per CrossRef
+  geprüft (doi:10.1007/978-1-4757-8137-3_5). Nicht geprüft: genaue Stelle der Dimensionsformel im
+  Kapitel — vor PR im Buch nachsehen.
