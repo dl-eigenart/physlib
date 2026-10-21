@@ -363,3 +363,21 @@ In `BoundStatesL2.lean` §E:
   * `distDeriv_distOfFunction` (DistOfFunction.lean:158) braucht `Differentiable ℝ f` überall.
   * Mathlib-Divergenzsatz erlaubt abzählbare Ausnahmemengen
     (`integral_divergence_of_hasFDerivAt_off_countable`), aber nur auf Quadern in `Fin (n+1) → ℝ`.
+
+### 2026-10-22 00:10: e3 erledigt — alles auf die Green-Identität reduziert
+`inner_boundStateHS_hamiltonianOperator` bewiesen bis auf das eine Lemma
+`integral_boundState_mul_hamiltonian` (sorry):
+`∫ ψ(-ℏ²/2m Σᵢ∂ᵢ∂ᵢf + Vf) = ∫ (-ℏ²/2m Δψ + Vψ) f` für `f` Schwartz.
+Rest: `L2.inner_def` + `coeFn_mk`/`hamiltonianOperator_apply_ae`, dann Eigenwertgleichung aus PR 05
+fast überall (`{0}` Nullmenge; braucht `Nontrivial (Space d)` aus `d ≥ 2`).
+Commit lokal 78c2ad52.
+
+Plan Green-Identität:
+- G1 (allgemein): `u` glatt (C²), `u`, `∂ᵢu`, `∂ᵢ∂ᵢu` polynomial beschränkt ⇒
+  `∫ u Σ∂ᵢ∂ᵢf = ∫ (Σ∂ᵢ∂ᵢu) f` (zweimal `integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable`;
+  Integrierbarkeit über `SchwartzMap.integrable_pow_mul`).
+- G2: `ψ_ε(y) = G(‖y‖²+ε²) P(y)` mit `G(s) = R(√s)` — überall glatt; Ableitungsformeln
+  (`laplacian_radial_mul` aus PR 05) und Schranken.
+- G3: `ε → 0`, dominierte Konvergenz, `|Δψ_ε| ≤ C(1+1/‖y‖)(1+‖y‖)^k` (integrierbar gegen Schwartz in
+  d ≥ 2, z. B. über `IsDistBounded`).
+- Potentialterm: `ψ V f` integrierbar (|V| = k/‖y‖) — ebenfalls über `IsDistBounded`.
