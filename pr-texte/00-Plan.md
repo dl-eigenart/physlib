@@ -6,7 +6,11 @@ byte-identisch mit dem Original auf agents-pc; geändert ist nur die Importliste
 **Stand 21.10.2026, agents-pc:** `lake build PhyslibAlpha` grün auf `pr/six-j-symmetry`,
 `pr/wigner-eckart-cg`, `pr/projection-selection`, `pr/fine-structure`, `pr/hydrogen-quantisation`,
 `pr/hydrogen-bound-states` (deckt alle Vorgänger ab). Pflichtlinter grün auf `pr/spin-orbit` und
-`pr/laguerre`, 0 `sorry`. Vor jedem weiteren PR die Linter auf dessen Branch laufen lassen.
+`pr/laguerre`, 0 `sorry`.
+
+**21.10., 16:40:** #1900 gemergt; `pr/hydrogen-radial`, `-quantisation`, `-bound-states`,
+`pr/fine-structure` auf master `a46a93e` umgesetzt (Laguerre-Commit entfällt, Lean-Dateien unverändert).
+Vor PR 03 auf agents-pc bauen und linten. Vor jedem weiteren PR die Linter auf dessen Branch laufen lassen.
 
 Jeder PR fügt eine Datei bzw. ein Konzept hinzu. Die Branches liegen auf `dl-eigenart/physlib`.
 
@@ -28,8 +32,8 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | Welle | PR | Branch | Zeilen | Wartet auf |
 |---|---|---|---|---|
 | **offen: #1899** | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
-| **offen: #1900** | 02 generalised Laguerre polynomials | `pr/laguerre` | 383 | nichts |
-| nach #1900 | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
+| **gemergt: #1900** | 02 generalised Laguerre polynomials | `pr/laguerre` | 383 | nichts |
+| **jetzt** | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
 | nach 03 | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
 | nach 03 | 05 bound states of the d-dimensional hydrogen atom | `pr/hydrogen-bound-states` | 329 | 03 |
 | nach #1899+03 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
