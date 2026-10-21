@@ -401,3 +401,18 @@ Weiter (G2/G3, Regularisierung — Fubini-Weg verworfen: `Space.slice` hat kein
 - Für festes ε polynomiale Schranken (1/ρ ≤ 1/ε) ⇒ G1 anwendbar.
 - G3: `Δψ_ε = [(2l+d) R'(ρ)/ρ + (‖y‖²/ρ²)(R''(ρ) - R'(ρ)/ρ)] P → Δψ` für `y ≠ 0`;
   Majorante `C(1 + 1/‖y‖)(2+‖y‖)^k |P|` (ε ≤ 1); dominierte Konvergenz beidseitig.
+
+### 2026-10-22 01:00: G2 erledigt
+- `deriv_radial_mul`, `deriv_deriv_radial_mul`: Ableitungen von `G(‖y‖²)Q` an jedem Punkt (nur
+  `G` auf `[0,∞)` differenzierbar nötig).
+- `regG/regG'/regG''` (`f(√(s+ε²))` und Ableitungen), `hasDerivAt_regG(')` aus PR 05
+  `hasDerivAt_comp_sqrt(')`.
+- Schranken: `IsPolyBounded.mono/of_abs_le_const/neg`, `abs_le_regRadius` (`|ε| ≤ ρ`),
+  `isPolyBounded_regRadius`, `isPolyBounded_poly_exp_regRadius`, `isPolyBounded_inv_regRadius`,
+  `isPolyBounded_regG/regG'/regG''`.
+- `integral_regBoundState_mul_sum_deriv_deriv`: G1 für `ψ_ε` (`ε ≠ 0`), inkl. `ContDiff ℝ 2`
+  (`Polynomial.contDiff_aeval`, `ContDiff.sqrt`). Commit lokal.
+Offen: G3 (Grenzwert ε → 0) und Integrierbarkeit des Potentialterms; dann ist das sorry weg.
+Plan G3: dominierte Konvergenz mit ε = 1/(n+1); Majoranten uniform in ε ≤ 1:
+LHS `C(1+‖y‖)^k |P| ‖Σ∂∂f‖`, RHS `C(1+‖y‖⁻¹)(1+‖y‖)^k |P| ‖f‖`; Integrierbarkeit der RHS-Majorante
+über Polarkoordinaten (`integrable_fun_norm_addHaar`, d ≥ 2) oder `IsDistBounded`.
