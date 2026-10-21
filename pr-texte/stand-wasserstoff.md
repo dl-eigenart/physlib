@@ -191,3 +191,20 @@ F3 `angularMomentum_commutation_positionDotMomentum` bewiesen (rein algebraisch:
 `momentum_comp_position_eq`, `position_comp_commute`, `momentum_comp_commute`, `KroneckerDelta.symm`
 bzw. `lie_leibniz` + `KroneckerDelta.sum_smul`, Abschluss `module`/`abel`). AngularMomentum.lean ohne
 `sorry`, `lake build` grün. Commit lokal, nicht gepusht. Offen: Schritt 3 (Hauptlemma, 2 `sorry`).
+
+### 2026-10-21 23:12: `L ∧ A = 0`, Schritt 3 und 5 erledigt (lokal, nicht gepusht)
+Commits auf `lrl-angular-cyclic`: e77035e5 (Aussagen), 5a4ae591 (F1–F3), d9109478 (Hauptlemmata).
+Vor einem Push zu einem Commit zusammenfassen (wie bei den anderen PRs).
+- `angularMomentum_cyclic_lrl`: `calc` über `lrlOperator_eq`; `𝐋` an `𝐱·𝐩` (F3) und `𝐫₀` vorbei,
+  dann Summe = (F1-Summe)𝐩² − (𝐱·𝐩)(F2-Summe) + c·(F2-Summe) − mk·𝐫₀(F1-Summe) = 0.
+- `lrl_cyclic_angularMomentum`: `comp_eq_comp_sub_commute` + `angularMomentum_commutation_lrl`,
+  δ symmetrisiert, `linear_combination (norm := module)`.
+- Gilt für jedes `d` und jedes ε, ohne Zusatzannahmen. Für d = 3 ist `(i,j,k) = (1,2,0)` genau das
+  Feld `L_dot_A` von `PauliSystem` (`L 0 = 𝐋 1 2`, `L 1 = 𝐋 2 0`, `L 2 = 𝐋 0 1`); ein eigenes
+  d = 3-Korollar (Schritt 4) bringt daher wenig und ist weggelassen.
+- Prüfung wie CI (build.yml): `lake build -KCI --iofail`, check_file_imports, check_dup_tags,
+  sorry_lint, theorem_lint Physlib QuantumInfo, module_doc_lint, api_map_lint, runPhyslibLinters,
+  lint-style, codespell: alle OK. Zusätzlich `lake build -KCI PhyslibAlpha` grün (wegen neuem
+  `@[simp]`-Lemma F3). Axiome Standard.
+- Neue `@[simp]`: `angularMomentum_commutation_positionDotMomentum` (wie die übrigen
+  `⁅𝐋, ·⁆ = 0`-Lemmata der Datei).
