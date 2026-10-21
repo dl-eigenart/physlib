@@ -274,3 +274,25 @@ Schritte 2–4 mittel (Standard-Analysis, gute Mathlib-Abdeckung zu erwarten). S
 (singuläres Potential, Regularisierungsgrenzwert). Schritt 1 entscheidet, ob 5 über
 Regularisierung oder Kugelausschnitt läuft. Branch später von `hydrogen-degeneracy-analytic`
 (braucht `boundState`, `toFun`, `boundStateMap`).
+
+## E3 (a–d), Branch `hydrogen-bound-states-l2` (lokal, von `hydrogen-degeneracy-analytic` 7ad91892)
+
+### 2026-10-21 23:22: a) Mathlib-Recherche — erledigt
+In der echten Umgebung getestet (Scratch-Datei):
+- Maß: `volume` auf `Space d` ist `IsAddHaarMeasure` und `IsOpenPosMeasure` (Instanzen greifen);
+  `Space.finrank_eq_dim`.
+- Integrierbarkeit: `integrable_one_add_norm` (JapaneseBracket): `(1+‖x‖)^(-r)` integrierbar für
+  `r > d`. Plan: `|ψ|² ≤ C (1+‖y‖)^(-(d+1))` zeigen und `Integrable.mono` nutzen — keine
+  Polarkoordinaten nötig (`integrable_fun_norm_addHaar` wäre die Alternative).
+- Abklingen: elementar über `x^m/m! ≤ exp x` (`Real.pow_div_factorial_le_exp`):
+  `(1+t)^m e^{-ct} ≤ e^c m!/c^m` — geschlossene Schranke, kein Kompaktheitsargument.
+- Polynomschranken: eigenes Prädikat `|f y| ≤ C(1+‖y‖)^k`, abgeschlossen unter `+`, `·`;
+  Koordinaten über `Space.abs_eval_le_norm`; `MvPolynomial`/`Polynomial` per Induktion.
+  (`HasTemperateGrowth` passt nur für den Polynomfaktor, nicht für den Laguerre-Faktor in `‖y‖`,
+  der bei 0 nicht glatt ist.)
+- L²: `memLp_two_iff_integrable_sq_norm`; physlib `MemHS`, `mk`, `mk_add`, `mk_const_smul`,
+  `mk_eq_iff` (`mk hf = mk hg ↔ f =ᵐ g`).
+- Unabhängigkeit: `MeasureTheory.Measure.eq_of_ae_eq` / `Continuous.ae_eq_iff_eq` (stetig und a.e.
+  gleich ⇒ gleich), dann `boundStateMap_injective` aus E2.
+- Für κ > 0 (`boundKappa`) braucht es `0 < H.k` und `2 ≤ H.d` (wie `boundState_eigen`).
+Neue Datei geplant: `PhyslibAlpha/QuantumMechanics/Hydrogen/BoundStatesL2.lean`.
