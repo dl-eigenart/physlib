@@ -84,7 +84,9 @@ Literaturangaben selbst prüfen (§2.1).
 - **E1 erledigt** (21.10., agents-pc): `hydrogen-pauli`, Commit `56a4ff7` auf master `96a6bc5`, Build und Linter grün,
   `PauliSystem.exists_energyLevel` als `theorem` in `Theorems.txt`. PR-Text: `15-hydrogen-pauli.md`.
   Unabhängig vom übrigen Stapel, kann jederzeit eingereicht werden.
-- Nächstes: E2 (Entartung n²).
+- E2 algebraisch (`hydrogen-pauli-degeneracy`) und analytisch (`hydrogen-degeneracy-analytic`) auf dem Fork.
+- **L·A = 0 in Physlib bewiesen** (`lrl-angular-cyclic`, `bdf8396`, alle d, alle ε). PR-Text: `16-lrl-angular-cyclic.md` (PR gegen Physlib, nicht Alpha).
+- E3: Plan in `stand-wasserstoff.md` (L², lineare Unabhängigkeit, schwache Eigenwertgleichung, H†). Noch kein Code.
 
 ## Koordination
 
