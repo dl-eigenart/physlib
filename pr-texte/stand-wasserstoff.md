@@ -326,3 +326,16 @@ Commit lokal 2130c40d (Branch `hydrogen-bound-states-l2`, 4 Commits über 7ad918
 - Lean-Notiz: Die Null in `SpaceDHilbertSpace`-Funktionen erscheint als `{re := 0, im := 0}`;
   `simp` erkennt sie nicht als `0`, Ausweg über `Complex.ext_iff` (Realteil).
 - Offen: Schritt e (schwache Eigenwertgleichung / Adjungierte), wartet auf Daniel.
+
+## E3 Schritt e (schwache Eigenwertgleichung), Branch `hydrogen-bound-states-adjoint`
+(lokal, von `hydrogen-bound-states-l2` 53805fce; nicht pushen)
+
+### 2026-10-21 23:50: Aussagen formuliert, gebaut — 1 `sorry`
+In `BoundStatesL2.lean` §E:
+- `inner_boundStateHS_hamiltonianOperator` (sorry): für `P ∈ Harm_l`, `φ ∈ dom H`:
+  `⟪E_{N+l} • ψ, φ⟫ = ⟪ψ, H φ⟫`, `H = H.hamiltonianOperator` (aus `SpaceDQuantumSystem`).
+- `boundStateHS_mem_adjoint_domain`: bewiesen aus dem obigen über
+  `LinearPMap.mem_adjoint_domain_of_exists` (braucht keine Dichtheit).
+- `adjoint_boundStateHS` (Hypothese `Dense dom H`): `H† ψ = E • ψ`, bewiesen über
+  `LinearPMap.adjoint_apply_eq`. Dichtheit von `dom H = Schwartz ∩ {Vφ ∈ L²}` bleibt eigenes Thema
+  (für d ≥ 3 ist das alle Schwartz-Funktionen, da 1/r ∈ L²_loc).
