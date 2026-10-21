@@ -17,6 +17,12 @@ Die Modul-Docstrings behaupten mehr, als in Lean bewiesen ist:
   24 symmetries of the tetrahedron.“ Bewiesen sind `sixJSym_swap₁₂`, `sixJSym_swap₂₃`,
   `sixJSym_flip₁₂`.
 
+## Stand
+
+- **Aufgabe 1 (6j) erledigt** am 21.10.: Commit `4832a35` auf `pr/six-j-symmetry`
+  (`sixJSymEdge_comp_map`, `sym2_map_perm_injective`), Build und Linter grün, nur Standardaxiome.
+- Aufgabe 2 (3j) offen.
+
 ## Aufgabe
 
 1. **6j (Branch `pr/six-j-symmetry`, zuerst):** Die volle Invarianz als Lean-Satz formulieren und

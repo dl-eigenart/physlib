@@ -2,13 +2,14 @@
 
 Branch: `pr/six-j-symmetry` · Base: master after merge of `pr/wigner-3j` and `pr/six-j` · Depends on: `pr/wigner-3j`, `pr/six-j` (and through them `pr/clebsch-gordan-formula`, `pr/clebsch-gordan` and #1876; independent of `pr/wigner-eckart-cg`)
 
-This PR defines the 3j symbol `threeJ` with general arguments in doubled units and the 6j symbol `sixJSym` as a sum over the projections of four 3j symbols, proves the three generating symmetries of the tetrahedron for `sixJSym`, and shows that the 6j symbol `sixJ` of `pr/six-j`, defined through recoupling coefficients, equals `sixJSym`. It builds on the 3j symmetries `threeJR_*` and the relation `cgCoefficient_eq_wigner3j` of `pr/wigner-3j`, and on `recoupling`, `stateA`, `stateB` and `recoupling_eq_recoupling_zero` of `pr/six-j`.
+This PR defines the 3j symbol `threeJ` with general arguments in doubled units and the 6j symbol `sixJSym` as a sum over the projections of four 3j symbols, proves its invariance under all 24 symmetries of the tetrahedron (from three generating symmetries), and shows that the 6j symbol `sixJ` of `pr/six-j`, defined through recoupling coefficients, equals `sixJSym`. It builds on the 3j symmetries `threeJR_*` and the relation `cgCoefficient_eq_wigner3j` of `pr/wigner-3j`, and on `recoupling`, `stateA`, `stateB` and `recoupling_eq_recoupling_zero` of `pr/six-j`.
 
 ## Main results
 
 - `threeJ_swap`, `threeJ_cycle`, `threeJ_neg`: `threeJ` changes by `(-1)^(j₁ + j₂ + j₃)` under a swap of the first two columns and under `m ↦ -m`, and is invariant under cyclic permutations.
 - `sixJSym_swap₁₂`, `sixJSym_swap₂₃`: `{j₂ j₁ j₃; j₅ j₄ j₆} = {j₁ j₃ j₂; j₄ j₆ j₅} = {j₁ j₂ j₃; j₄ j₅ j₆}`.
 - `sixJSym_flip₁₂`: `{j₄ j₅ j₃; j₁ j₂ j₆} = {j₁ j₂ j₃; j₄ j₅ j₆}`.
+- `sixJSymEdge_comp_map`: indexing the arguments by the edges of the tetrahedron whose vertices are the four triads, the 6j symbol is invariant under every `σ : Equiv.Perm (Fin 4)`; `sym2_map_perm_injective` shows these are 24 distinct symmetries.
 - `recoupling_eq_sum`: the recoupling coefficient as a sum over products of four Clebsch-Gordan coefficients.
 - `sixJ_eq_sixJSym`: `sixJ` equals `sixJSym a b (a + b - 2k₁) c (a + b + c - 2K) (b + c - 2k₃)` for admissible arguments.
 
@@ -16,7 +17,7 @@ This PR defines the 3j symbol `threeJ` with general arguments in doubled units a
 
 1. `SixJSymmetry.lean` §A The 3j symbol with general arguments: the admissibility predicate `Adm3`, the Regge square `reggeJ` in doubled units, and the reduction of each `threeJ` symmetry to the corresponding `threeJR` lemma; `wigner3j_eq_threeJ` fixes the dictionary to `Wigner3j`.
 2. `SixJSymmetry.lean` §B The 6j symbol as a sum over four 3j symbols: the arguments of the four 3j symbols and the sign in `sixJTerm`, and the finite box `sixJBox`.
-3. `SixJSymmetry.lean` §C The tetrahedral symmetry: each symmetry is a bijection of `sixJBox` (`Finset.sum_nbij'`) followed by 3j symmetries; the sign bookkeeping is in `term_congr_1324`, `term_congr_1243`, `term_congr_4321` and uses admissibility only where all four 3j symbols are nonzero.
+3. `SixJSymmetry.lean` §C The tetrahedral symmetry: each symmetry is a bijection of `sixJBox` (`Finset.sum_nbij'`) followed by 3j symmetries; the sign bookkeeping is in `term_congr_1324`, `term_congr_1243`, `term_congr_4321` and uses admissibility only where all four 3j symbols are nonzero. Then `sixJSymEdge`: the three generators are the vertex permutations `(1 2)`, `(2 3)`, `(0 3)(1 2)` (`sixJSymEdge_comp_map_swap₁₂`, `…_swap₂₃`, `…_flip`); `sixJSymEdge_comp_map` derives all six transpositions from them (each identity checked by `decide`) and concludes with `Equiv.Perm.swap_induction_on`.
 4. `SixJSymmetry.lean` §D The 6j symbols of `SixJ` as sums over four 3j symbols: `tripleForm_normVec_stateB` and `recoupling_eq_sum` expand both states in the product basis; `cg_four_eq` matches one summand with a summand of `sixJSym` (signs via `link_congr`); `sum_sixJTerm_eq` reindexes the sum; `sixJ_eq_sixJSym` sums over `M` with `recoupling_eq_recoupling_zero`.
 
 ## Declarations
@@ -52,6 +53,13 @@ All declarations are in the namespace `PhyslibAlpha.Sl2`.
 | `sixJSym_swap₁₂` | lemma | `{j₂ j₁ j₃; j₅ j₄ j₆} = {j₁ j₂ j₃; j₄ j₅ j₆}`. |
 | `sixJSym_swap₂₃` | lemma | `{j₁ j₃ j₂; j₄ j₆ j₅} = {j₁ j₂ j₃; j₄ j₅ j₆}`. |
 | `sixJSym_flip₁₂` | lemma | `{j₄ j₅ j₃; j₁ j₂ j₆} = {j₁ j₂ j₃; j₄ j₅ j₆}`. |
+| `sixJSymEdge` | def | `sixJSym` with arguments indexed by the edges `Sym2 (Fin 4)` of the tetrahedron of triads. |
+| `sixJSymEdge_comp_map_swap₁₂` | lemma | Invariance under the vertex transposition `(1 2)`; this is `sixJSym_swap₁₂`. |
+| `sixJSymEdge_comp_map_swap₂₃` | lemma | Invariance under `(2 3)`; this is `sixJSym_swap₂₃`. |
+| `sixJSymEdge_comp_map_flip` | lemma | Invariance under `(0 3)(1 2)`; this is `sixJSym_flip₁₂`. |
+| `sixJSymEdge_comp_map_mul` | lemma | Invariance under `σ` and `τ` implies invariance under `σ * τ`. |
+| `sixJSymEdge_comp_map` | lemma | Invariance under every permutation of the four triads. |
+| `sym2_map_perm_injective` | lemma | `σ ↦ Sym2.map σ` is injective on `Equiv.Perm (Fin 4)`, so the 24 symmetries are distinct. |
 | `link_congr` | lemma | Sign and square-root identity matching a product of four Clebsch-Gordan factors with a `sixJTerm`, conditional on nonvanishing. |
 | `tripleForm_normVec_stateB` | lemma | The product-basis component of `stateB` as `Σ_ν cgCoefficient a (b + c - 2k₃) k₄ l α ν · cgCoefficient b c k₃ ν β γ`. |
 | `recoupling_eq_sum` | lemma | `recoupling` as a sum over products of four `cgCoefficient`s. |
@@ -62,7 +70,6 @@ All declarations are in the namespace `PhyslibAlpha.Sl2`.
 ## Notes
 
 - All spins and projections are in doubled units; `threeJ` and `sixJSym` take natural spins and integer projections and vanish for inadmissible arguments. A phase written `(-1)^(j₁ + j₂ + j₃)` is `(-1)^((j₁ + j₂ + j₃)/2)` in the doubled arguments of the code.
-- The module docstring states that the three proved symmetries generate the 24 symmetries of the tetrahedron; this is not a Lean statement.
 - `sixJ_eq_sixJSym` assumes `0 < a`, `0 < c` and the admissibility conditions `ValidA`, `ValidB` of `SixJ`.
 - `neg_one_zpow_mul_pow_four`, `prod_four_eq_zero_or`, `term_congr_1324`, `term_congr_1243`, `term_congr_4321` and `link_congr` are auxiliary identities about signs in real products.
 
