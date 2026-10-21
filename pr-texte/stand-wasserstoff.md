@@ -80,6 +80,11 @@ ist 7 Commits hinter master, gleiche Mathlib/Toolchain), Datei
 - C: `boundStateMap H n : (Π l : Fin (n+1), harm l) →ₗ (Space d → ℝ)`, `boundStateMap_injective`,
   `finrank_range_boundStateMap_three = (n+1)²`.
 - `lake build` grün, 9 `sorry`.
+- 2026-10-21 B fertig (ae1e9e9d, lokal): `toFun_C/add/mul_X`, `contDiff_toFun(_infty)`,
+  `differentiable_toFun`, `deriv_toFun` (`∂[i] (toFun P) = toFun (pderiv i P)`, Induktion
+  `MvPolynomial.induction_on`), `euler_toFun` (Mathlib `IsHomogeneous.sum_X_mul_pderiv`),
+  `laplacian_toFun`, Korollar `boundState_eigen_of_mem_harmonicSubmodule` (PR-05-Gleichung für
+  `P ∈ harmonicSubmodule`). `lake build` grün. Offen: 6 `sorry` (A: 2 Dimension, C: 4).
 - Referenz im Modul-Doc ist `[CITATION_NEEDED: …]` (Dimension harmonischer Polynome) — vor PR mit
   Tool-Lookup belegen oder streichen.
 
