@@ -184,3 +184,10 @@ Branch `lrl-angular-cyclic` (lokal, von `origin/master` 96a6bc5e), Commit lokal,
 - Für die Beweise: Stil von `angularMomentum_commutation_angularMomentum` (punktweise `ext`,
   `positionCLM_apply`/`momentumCLM_apply`, `ring`) bzw. von `angularMomentum_commutation_lrl`
   (`lie_leibniz`, `module`).
+
+### 2026-10-21 23:08: `L ∧ A = 0`, Schritt 2 erledigt
+F1 `angularMomentum_cyclic_position`, F2 `angularMomentum_cyclic_momentum`,
+F3 `angularMomentum_commutation_positionDotMomentum` bewiesen (rein algebraisch:
+`momentum_comp_position_eq`, `position_comp_commute`, `momentum_comp_commute`, `KroneckerDelta.symm`
+bzw. `lie_leibniz` + `KroneckerDelta.sum_smul`, Abschluss `module`/`abel`). AngularMomentum.lean ohne
+`sorry`, `lake build` grün. Commit lokal, nicht gepusht. Offen: Schritt 3 (Hauptlemma, 2 `sorry`).
