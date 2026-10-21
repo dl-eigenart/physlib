@@ -3,7 +3,10 @@
 Stand 21.10.2026. Ausgangspunkt: `sl2-tetra-quant` von agents-pc (17 Commits über #1876),
 umgesetzt auf das rebasete #1876 (`f755d95`). Alle 18 Lean-Dateien sind in jedem PR-Branch
 byte-identisch mit dem Original auf agents-pc; geändert ist nur die Importliste `PhyslibAlpha.lean`.
-**Nicht gebaut** (Lean läuft in der Cloud-Session nicht): jeden Branch vor dem PR auf agents-pc bauen.
+**Stand 21.10.2026, agents-pc:** `lake build PhyslibAlpha` grün auf `pr/six-j-symmetry`,
+`pr/wigner-eckart-cg`, `pr/projection-selection`, `pr/fine-structure`, `pr/hydrogen-quantisation`,
+`pr/hydrogen-bound-states` (deckt alle Vorgänger ab). Pflichtlinter grün auf `pr/spin-orbit` und
+`pr/laguerre`, 0 `sorry`. Vor jedem weiteren PR die Linter auf dessen Branch laufen lassen.
 
 Jeder PR fügt eine Datei bzw. ein Konzept hinzu. Die Branches liegen auf `dl-eigenart/physlib`.
 
