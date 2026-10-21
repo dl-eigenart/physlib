@@ -1,6 +1,6 @@
 # feat(PhyslibAlpha): tetrahedral symmetry of the 6j symbols
 
-Branch: `pr/six-j-symmetry` · Base: master after merge of `pr/wigner-3j` and `pr/six-j` · Depends on: `pr/wigner-3j`, `pr/six-j` (and through them `pr/clebsch-gordan-formula`, `pr/clebsch-gordan` and #1876; independent of `pr/wigner-eckart-cg`)
+Branch: `pr/six-j-symmetry` · Base: master after merge of `pr/wigner-3j` and `pr/six-j` · Depends on: `pr/wigner-3j`, `pr/six-j` (and through them `pr/clebsch-gordan-formula`, #1911 and #1876; independent of `pr/wigner-eckart-cg`)
 
 This PR defines the 3j symbol `threeJ` with general arguments in doubled units and the 6j symbol `sixJSym` as a sum over the projections of four 3j symbols, proves its invariance under all 24 symmetries of the tetrahedron (from three generating symmetries), and shows that the 6j symbol `sixJ` of `pr/six-j`, defined through recoupling coefficients, equals `sixJSym`. It builds on the 3j symmetries `threeJR_*` and the relation `cgCoefficient_eq_wigner3j` of `pr/wigner-3j`, and on `recoupling`, `stateA`, `stateB` and `recoupling_eq_recoupling_zero` of `pr/six-j`.
 

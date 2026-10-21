@@ -1,9 +1,9 @@
 # feat(PhyslibAlpha): closed formulas for Clebsch-Gordan coefficients
 
-Branch: `pr/clebsch-gordan-formula` · Base: master after merge of `pr/clebsch-gordan` · Depends on: `pr/clebsch-gordan` (and through it #1876)
+Branch: `pr/clebsch-gordan-formula` · Base: master after merge of #1911 · Depends on: #1911 (and through it #1876)
 
 This PR builds on the coupled basis `|J, M⟩` and the coefficients `cgCoefficient` of
-`pr/clebsch-gordan`. It proves completeness of the coupled basis and the second orthogonality
+#1911. It proves completeness of the coupled basis and the second orthogonality
 relation, the closed form of the squared norm `⟨w_k, w_k⟩` of the highest-weight vectors, a
 closed formula for `⟨j₁ m₁ j₂ m₂ | J M⟩` with a single alternating sum, and Racah's formula. The
 passage from the first sum to Racah's sum goes through two binomial sums `L` and `R` with integer
@@ -73,7 +73,7 @@ lower indices that satisfy the same recursion in `k`.
 ## Notes
 
 - All names are in the namespace `PhyslibAlpha.Sl2`.
-- `cgCoefficient_closed` and `cgCoefficient_racah` assume `α + β = k + l`; for `α + β ≠ k + l` the coefficient vanishes by `cgCoefficient_eq_zero_of_ne` from `pr/clebsch-gordan`.
+- `cgCoefficient_closed` and `cgCoefficient_racah` assume `α + β = k + l`; for `α + β ≠ k + l` the coefficient vanishes by `cgCoefficient_eq_zero_of_ne` from #1911.
 - The statements use the natural-number indices `m, n, k, l, α, β`; the spin notation `j₁, m₁, j₂, m₂, J, M` appears only in the docstrings.
 - `racahSum` sums only over the `z` for which all six factorial arguments are nonnegative.
 

@@ -37,9 +37,9 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | nach #1909 | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
 | nach #1909 | 05 bound states of the d-dimensional hydrogen atom | `pr/hydrogen-bound-states` | 329 | 03 |
 | nach #1899+#1909 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
-| **#1876 gemergt → jetzt** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
-| **#1876 gemergt → jetzt** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
-| nach 09 | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
+| **offen: #1910** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
+| **offen: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
+| nach #1911 | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
 | nach 10 | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
 | nach 10 | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
 | nach 12a | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | 12a |
@@ -73,3 +73,8 @@ Danach die Pflichtlinter wie bei den früheren PRs (Skripte in `teil11-6j-wasser
 Kommentare an Reviewer schreibt Daniel selbst (physlib `AGENTS.md` und `AI-POLICY.md` §3.1).
 Die PR-Texte in diesem Ordner sind Entwürfe; jede Zeile vor dem Posten prüfen (§1.7),
 Literaturangaben selbst prüfen (§2.1).
+
+
+**21.10., 20:45:** #1910 (08) und #1911 (09) offen. Stapel 10–14 auf das neue `pr/clebsch-gordan`
+(auf master `a945101`) umgesetzt, inkl. der neuen Symmetrie-Commits auf `pr/wigner-3j` und
+`pr/six-j-symmetry`. Lean-Dateien unverändert. Vor dem nächsten PR auf agents-pc bauen.
