@@ -69,6 +69,23 @@ Commits: d6dcb30e (Refactor: `J κ` für jedes `κ² = -2mE`, `rep`, `rep_Jsq`, 
 - Hinweis: d6dcb30e ändert `J`/`plusRep` aus PR 15 (API: `J` nimmt `κ` statt `E`). Optional
   vor dem Öffnen von PR 15 dort einarbeiten, sonst wird PR 15-Text bei Nachfolge-PR veraltet.
 
-## E2 analytisch — als Nächstes
-Branch von `pr/hydrogen-bound-states`: Dimension harmonischer Polynome `2l+1`, `Σ_{l<n}(2l+1) = n²`,
-lineare Unabhängigkeit der PR-05-Eigenfunktionen zu festem `N + l`.
+## E2 analytisch — Gerüst steht
+Branch `hydrogen-degeneracy-analytic` (lokal, von `pr/hydrogen-bound-states` c2c625dd; diese Basis
+ist 7 Commits hinter master, gleiche Mathlib/Toolchain), Datei
+`PhyslibAlpha/QuantumMechanics/Hydrogen/Degeneracy.lean`. Commit lokal, nicht gepusht.
+- A: `polyLaplacian`, `harmonicSubmodule d l` (`MvPolynomial (Fin d) ℝ`, homogen ⊓ ker Δ),
+  `finrank_harmonicSubmodule` (`C(l+d-1,d-1) - C(l+d-3,d-1)`), `_three` (`2l+1`),
+  `sum_two_mul_add_one` (bewiesen).
+- B: `toFun` (Polynom als Funktion auf `Space d`), `contDiff_toFun`, `euler_toFun`, `laplacian_toFun`.
+- C: `boundStateMap H n : (Π l : Fin (n+1), harm l) →ₗ (Space d → ℝ)`, `boundStateMap_injective`,
+  `finrank_range_boundStateMap_three = (n+1)²`.
+- `lake build` grün, 9 `sorry`.
+- Referenz im Modul-Doc ist `[CITATION_NEEDED: …]` (Dimension harmonischer Polynome) — vor PR mit
+  Tool-Lookup belegen oder streichen.
+
+Schwierigkeitseinschätzung:
+- Dimensionsformel braucht Surjektivität von `Δ : Hom_l → Hom_{l-2}` (z. B. Zerlegung
+  `Hom_l = Harm_l ⊕ |x|² Hom_{l-2}` über das Fischer-Skalarprodukt). Größter Brocken.
+- Injektivität: `Σ_l f_l(r) P_l(y) = 0` ⇒ alle `P_l = 0`. Idee: Radialfaktor ist `e^{-κr}` mal
+  Polynom in `r`; Entwicklung nach Homogenitätsgrad entlang Strahlen `y = t·ω`. Noch auszuarbeiten.
+- B ist Routine (Ableitung von `MvPolynomial.eval`).
