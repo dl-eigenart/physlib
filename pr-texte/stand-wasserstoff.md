@@ -172,3 +172,15 @@ Indizes von `PauliSystem`.
 **Offen danach:** Dass physlibs `𝐋`, `𝐀(ε)`, `𝐇(ε)` im Limes ε → 0 auf einem geeigneten Raum
 einen `PauliSystem` bilden, bleibt Funktionalanalysis (E3/E5). Dieses Lemma liefert nur das
 fehlende algebraische Feld.
+
+### 2026-10-21 23:05: `L ∧ A = 0`, Schritt 1 erledigt
+Branch `lrl-angular-cyclic` (lokal, von `origin/master` 96a6bc5e), Commit lokal, nicht gepusht.
+- `Operators/AngularMomentum.lean`, neuer Abschnitt E.4 (TOC ergänzt):
+  `angularMomentum_cyclic_position`, `angularMomentum_cyclic_momentum`,
+  `angularMomentum_commutation_positionDotMomentum` (`@[simp]`), je `sorry`.
+- `LaplaceRungeLenzVector.lean`, nach `angularMomentumSqr_commutation_lrlSqr`:
+  `angularMomentum_cyclic_lrl`, `lrl_cyclic_angularMomentum`, je `sorry`; Modul-Doc ergänzt.
+- `lake build` grün, genau 5 `sorry`-Warnungen.
+- Für die Beweise: Stil von `angularMomentum_commutation_angularMomentum` (punktweise `ext`,
+  `positionCLM_apply`/`momentumCLM_apply`, `ring`) bzw. von `angularMomentum_commutation_lrl`
+  (`lie_leibniz`, `module`).
