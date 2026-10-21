@@ -49,4 +49,6 @@ Lean-Notiz: Relationen auf dem Eigenraum gehen per `ext x; exact congr($(rel) (x
 - E1-Zusatz: Dimension des Eigenraums Vielfaches von `n²` (braucht `J₋`, `J₊² = J₋²`, Tensorprodukt
   zweier Spin-`j`-Darstellungen).
 - Dann E2 laut Auftrag.
-- PR-Text für `hydrogen-pauli` noch nicht geschrieben; Push wartet auf Daniels „ja“.
+- 2026-10-21 22:24: zu einem Commit 56a4ff79 zusammengefasst, nach „ja“ auf `fork/hydrogen-pauli`
+  gepusht (Fork-master vorher von Daniel auf 96a6bc5e synchronisiert, wegen Workflow-Scope).
+  Kein PR geöffnet, PR-Text noch nicht geschrieben. Offen: `Theorems.txt`-Eintrag bestätigen.
