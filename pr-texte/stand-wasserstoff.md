@@ -114,7 +114,7 @@ Commits auf `hydrogen-degeneracy-analytic`: ead3287d (Linearität, Skalierung, H
   geprüft (doi:10.1007/978-1-4757-8137-3_5). Nicht geprüft: genaue Stelle der Dimensionsformel im
   Kapitel — vor PR im Buch nachsehen.
 
-## 2026-10-21 23:00: Umbau, Basen, Pushes (nach Daniels „ja“)
+## 2026-10-21 22:59: Umbau, Basen, Pushes (nach Daniels „ja“)
 - `pr/hydrogen-bound-states` lokal neu vom Fork geholt (349128d0, Basis a46a93e9 = #1900; alte
   lokale Fassung c2c625dd war inhaltsgleich, nur veraltete Basis). `hydrogen-degeneracy-analytic`
   darauf umgesetzt, zu einem Commit 7ad91892 zusammengefasst. Linter alle OK außer `theorem_lint`
@@ -173,7 +173,7 @@ Indizes von `PauliSystem`.
 einen `PauliSystem` bilden, bleibt Funktionalanalysis (E3/E5). Dieses Lemma liefert nur das
 fehlende algebraische Feld.
 
-### 2026-10-21 23:05: `L ∧ A = 0`, Schritt 1 erledigt
+### 2026-10-21 23:02: `L ∧ A = 0`, Schritt 1 erledigt
 Branch `lrl-angular-cyclic` (lokal, von `origin/master` 96a6bc5e), Commit lokal, nicht gepusht.
 - `Operators/AngularMomentum.lean`, neuer Abschnitt E.4 (TOC ergänzt):
   `angularMomentum_cyclic_position`, `angularMomentum_cyclic_momentum`,
@@ -185,14 +185,14 @@ Branch `lrl-angular-cyclic` (lokal, von `origin/master` 96a6bc5e), Commit lokal,
   `positionCLM_apply`/`momentumCLM_apply`, `ring`) bzw. von `angularMomentum_commutation_lrl`
   (`lie_leibniz`, `module`).
 
-### 2026-10-21 23:08: `L ∧ A = 0`, Schritt 2 erledigt
+### 2026-10-21 23:05: `L ∧ A = 0`, Schritt 2 erledigt
 F1 `angularMomentum_cyclic_position`, F2 `angularMomentum_cyclic_momentum`,
 F3 `angularMomentum_commutation_positionDotMomentum` bewiesen (rein algebraisch:
 `momentum_comp_position_eq`, `position_comp_commute`, `momentum_comp_commute`, `KroneckerDelta.symm`
 bzw. `lie_leibniz` + `KroneckerDelta.sum_smul`, Abschluss `module`/`abel`). AngularMomentum.lean ohne
 `sorry`, `lake build` grün. Commit lokal, nicht gepusht. Offen: Schritt 3 (Hauptlemma, 2 `sorry`).
 
-### 2026-10-21 23:12: `L ∧ A = 0`, Schritt 3 und 5 erledigt (lokal, nicht gepusht)
+### 2026-10-21 23:09: `L ∧ A = 0`, Schritt 3 und 5 erledigt (lokal, nicht gepusht)
 Commits auf `lrl-angular-cyclic`: e77035e5 (Aussagen), 5a4ae591 (F1–F3), d9109478 (Hauptlemmata).
 Vor einem Push zu einem Commit zusammenfassen (wie bei den anderen PRs).
 - `angularMomentum_cyclic_lrl`: `calc` über `lrlOperator_eq`; `𝐋` an `𝐱·𝐩` (F3) und `𝐫₀` vorbei,
@@ -209,7 +209,7 @@ Vor einem Push zu einem Commit zusammenfassen (wie bei den anderen PRs).
 - Neue `@[simp]`: `angularMomentum_commutation_positionDotMomentum` (wie die übrigen
   `⁅𝐋, ·⁆ = 0`-Lemmata der Datei).
 
-## 2026-10-21 23:15: `lrl-angular-cyclic` gepusht
+## 2026-10-21 23:12: `lrl-angular-cyclic` gepusht
 Zu einem Commit bdf8396d zusammengefasst (Tree-Hash geprüft), auf `fork/lrl-angular-cyclic`
 (von origin/master 96a6bc5e). PR-Text schreibt die Cloud-Session.
 
@@ -277,7 +277,7 @@ Regularisierung oder Kugelausschnitt läuft. Branch später von `hydrogen-degene
 
 ## E3 (a–d), Branch `hydrogen-bound-states-l2` (lokal, von `hydrogen-degeneracy-analytic` 7ad91892)
 
-### 2026-10-21 23:22: a) Mathlib-Recherche — erledigt
+### 2026-10-21 23:18: a) Mathlib-Recherche — erledigt
 In der echten Umgebung getestet (Scratch-Datei):
 - Maß: `volume` auf `Space d` ist `IsAddHaarMeasure` und `IsOpenPosMeasure` (Instanzen greifen);
   `Space.finrank_eq_dim`.
@@ -297,7 +297,7 @@ In der echten Umgebung getestet (Scratch-Datei):
 - Für κ > 0 (`boundKappa`) braucht es `0 < H.k` und `2 ≤ H.d` (wie `boundState_eigen`).
 Neue Datei geplant: `PhyslibAlpha/QuantumMechanics/Hydrogen/BoundStatesL2.lean`.
 
-### 2026-10-21 23:30: b) Integrierbarkeit (allgemein) — erledigt
+### 2026-10-21 23:20: b) Integrierbarkeit (allgemein) — erledigt
 Neue Datei `BoundStatesL2.lean` (in `PhyslibAlpha.lean` eingetragen), Commit lokal.
 - §A `IsPolyBounded f` (`∃ C ≥ 0, k, |f y| ≤ C(1+‖y‖)^k`) mit `const`, `add`, `mul`, `pow`, `coord`,
   `norm`, `toFun` (MvPolynomial), `polynomial_eval` (Polynom ∘ beschränkte Funktion).
@@ -308,12 +308,12 @@ Neue Datei `BoundStatesL2.lean` (in `PhyslibAlpha.lean` eingetragen), Commit lok
   ⇒ `f²` integrierbar (Schranke durch `(1+‖y‖)^{-(d+1)}`, `integrable_one_add_norm`).
 - Datei elaboriert ohne Fehler/Warnungen.
 
-### 2026-10-21 23:35: c) L² — erledigt
+### 2026-10-21 23:21: c) L² — erledigt
 `boundKappa_pos` (`k > 0`, `d ≥ 2`), `continuous_boundState`, `memHS_boundState`
 (über `integrable_sq_of_le_mul_exp` mit `g = L(‖y‖)·P(y)`, `c = κ`), `boundStateHS`
 (`SpaceDHilbertSpace.mk`). Commit lokal.
 
-### 2026-10-21 23:45: d) Lineare Unabhängigkeit in L² — erledigt; E3 a–d fertig
+### 2026-10-21 23:22: d) Lineare Unabhängigkeit in L² — erledigt; E3 a–d fertig
 Commit lokal 2130c40d (Branch `hydrogen-bound-states-l2`, 4 Commits über 7ad91892, nicht gepusht).
 - `IsPolyBounded.sum`; `boundStateMap_apply` (alle Terme haben `κ = boundKappa H n`, da
   `(n-l)+l = n`); `continuous_boundStateMap`; `memHS_boundStateMap`;
@@ -330,7 +330,7 @@ Commit lokal 2130c40d (Branch `hydrogen-bound-states-l2`, 4 Commits über 7ad918
 ## E3 Schritt e (schwache Eigenwertgleichung), Branch `hydrogen-bound-states-adjoint`
 (lokal, von `hydrogen-bound-states-l2` 53805fce; nicht pushen)
 
-### 2026-10-21 23:50: Aussagen formuliert, gebaut — 1 `sorry`
+### 2026-10-21 23:28: Aussagen formuliert, gebaut — 1 `sorry`
 In `BoundStatesL2.lean` §E:
 - `inner_boundStateHS_hamiltonianOperator` (sorry): für `P ∈ Harm_l`, `φ ∈ dom H`:
   `⟪E_{N+l} • ψ, φ⟫ = ⟪ψ, H φ⟫`, `H = H.hamiltonianOperator` (aus `SpaceDQuantumSystem`).
@@ -340,7 +340,7 @@ In `BoundStatesL2.lean` §E:
   `LinearPMap.adjoint_apply_eq`. Dichtheit von `dom H = Schwartz ∩ {Vφ ∈ L²}` bleibt eigenes Thema
   (für d ≥ 3 ist das alle Schwartz-Funktionen, da 1/r ∈ L²_loc).
 
-### 2026-10-22 00:00: e1 erledigt — `H φ` als Differentialoperator
+### 2026-10-21 23:34: e1 erledigt — `H φ` als Differentialoperator
 - `momentumOperator_apply_schwartzEquiv`: `𝓟ᵢ[g] = [𝐩ᵢ g]`;
   `momentumSqOperator_apply_schwartzEquiv`: `𝐩²[f] = [Σᵢ 𝐩ᵢ𝐩ᵢ f]`.
 - `hamiltonianOperator_apply_ae`: jedes `φ ∈ dom H` ist `[f]` mit `f` Schwartz, und
@@ -364,7 +364,7 @@ In `BoundStatesL2.lean` §E:
   * Mathlib-Divergenzsatz erlaubt abzählbare Ausnahmemengen
     (`integral_divergence_of_hasFDerivAt_off_countable`), aber nur auf Quadern in `Fin (n+1) → ℝ`.
 
-### 2026-10-22 00:10: e3 erledigt — alles auf die Green-Identität reduziert
+### 2026-10-21 23:35: e3 erledigt — alles auf die Green-Identität reduziert
 `inner_boundStateHS_hamiltonianOperator` bewiesen bis auf das eine Lemma
 `integral_boundState_mul_hamiltonian` (sorry):
 `∫ ψ(-ℏ²/2m Σᵢ∂ᵢ∂ᵢf + Vf) = ∫ (-ℏ²/2m Δψ + Vψ) f` für `f` Schwartz.
@@ -382,7 +382,7 @@ Plan Green-Identität:
   d ≥ 2, z. B. über `IsDistBounded`).
 - Potentialterm: `ψ V f` integrierbar (|V| = k/‖y‖) — ebenfalls über `IsDistBounded`.
 
-### 2026-10-22 00:40: G1 erledigt
+### 2026-10-21 23:39: G1 erledigt
 - `IsPolyBounded.integrable_ofReal_mul_schwartz` (polynomial beschränkt × Schwartz integrierbar,
   über `one_add_le_sup_seminorm_apply` + `integrable_one_add_norm`).
 - `deriv_ofReal`, `deriv_schwartz` (`∂[i] ⇑f = ⇑(∂_{basis i} f)`).
@@ -402,7 +402,7 @@ Weiter (G2/G3, Regularisierung — Fubini-Weg verworfen: `Space.slice` hat kein
 - G3: `Δψ_ε = [(2l+d) R'(ρ)/ρ + (‖y‖²/ρ²)(R''(ρ) - R'(ρ)/ρ)] P → Δψ` für `y ≠ 0`;
   Majorante `C(1 + 1/‖y‖)(2+‖y‖)^k |P|` (ε ≤ 1); dominierte Konvergenz beidseitig.
 
-### 2026-10-22 01:00: G2 erledigt
+### 2026-10-21 23:44: G2 erledigt
 - `deriv_radial_mul`, `deriv_deriv_radial_mul`: Ableitungen von `G(‖y‖²)Q` an jedem Punkt (nur
   `G` auf `[0,∞)` differenzierbar nötig).
 - `regG/regG'/regG''` (`f(√(s+ε²))` und Ableitungen), `hasDerivAt_regG(')` aus PR 05
@@ -416,3 +416,30 @@ Offen: G3 (Grenzwert ε → 0) und Integrierbarkeit des Potentialterms; dann ist
 Plan G3: dominierte Konvergenz mit ε = 1/(n+1); Majoranten uniform in ε ≤ 1:
 LHS `C(1+‖y‖)^k |P| ‖Σ∂∂f‖`, RHS `C(1+‖y‖⁻¹)(1+‖y‖)^k |P| ‖f‖`; Integrierbarkeit der RHS-Majorante
 über Polarkoordinaten (`integrable_fun_norm_addHaar`, d ≥ 2) oder `IsDistBounded`.
+
+(Korrektur 23:58: Die Uhrzeiten in den Überschriften seit 22:59 waren teils geschätzt und falsch;
+sie sind jetzt durch die Commit-Zeitpunkte ersetzt.)
+
+### 2026-10-21 23:56: G3 und Potentialterm erledigt — E3 Schritt e fertig, kein `sorry`
+Branch `hydrogen-bound-states-adjoint` (lokal, 20 Commits über `hydrogen-bound-states-l2`
+53805fce, nicht gepusht), Datei `BoundStatesL2.lean` (1244 Zeilen).
+- G3: `integrable_inv_norm_mul_one_add_norm_pow` (Polarkoordinaten,
+  `integrable_fun_norm_addHaar`, d ≥ 2), `Polynomial.exists_abs_eval_le`,
+  `IsPolyBounded.integrable_abs_mul_norm_schwartz`, `IsPolyBounded.integrable_inv_norm_mul`,
+  `exists_abs_poly_exp_regRadius_le` (gleichmäßig in |ε| ≤ 1), `laplacian_regBoundState`
+  (`Δψ_ε = ((4l+2d)G_ε' + 4‖y‖²G_ε'')P` für y ≠ 0, auch ε = 0, über PR 05
+  `laplacian_radial_mul`), `boundState_eq_regG` (ψ = ψ_0),
+  `exists_abs_laplacian_regBoundState_le` (`|Δψ_ε| ≤ (A(1+‖y‖)^k₁‖y‖⁻¹ + C(1+‖y‖)^k₂)|P|`),
+  `integral_boundState_mul_sum_deriv_deriv` (∫ψΣ∂∂f = ∫Δψ f; dominierte Konvergenz beidseitig mit
+  ε_n = 1/(n+1), Grenzwerte gleich per `tendsto_nhds_unique`).
+- `integral_boundState_mul_hamiltonian` (Green mit Potential) bewiesen: Integrierbarkeit von ψS (H1),
+  ψVf (P2, |V| = k/‖y‖), Δψ f (Schranke bei ε = 0).
+- Damit bewiesen: `inner_boundStateHS_hamiltonianOperator` (schwache Eigenwertgleichung),
+  `boundStateHS_mem_adjoint_domain`, `adjoint_boundStateHS` (Hypothese: dom H dicht).
+- `check_pr.sh adj`: alles OK außer `theorem_lint` (bekannte Ursache: .olean von
+  `Time/ManifoldCurves.lean` fehlt auf Basis a46a93e9; BoundStatesL2.lean hat 0 `theorem`).
+  Axiome Standard, `sorry` 0.
+- Offen/Hinweise: (1) Dichtheit von dom H (für d ≥ 3: Schwartz ⊆ dom V, da 1/r ∈ L²_loc) ist nur
+  Hypothese. (2) Die Datei ist lang; vor einem PR evtl. teilen (L²-Teil / Adjungierten-Teil) und
+  Hilfslemmata (IsPolyBounded, Integrierbarkeit, `deriv_ofReal`, `deriv_schwartz`,
+  Green G1) an passendere Orte verschieben. (3) Viele `wip:`-Commits — vor Push zusammenfassen.
