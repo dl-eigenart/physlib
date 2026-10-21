@@ -35,7 +35,12 @@ the signs cancel on the support. This gives
 - `sixJSym_swap₁₂`, `sixJSym_swap₂₃`: invariance under permutations of the columns;
 - `sixJSym_flip₁₂`: invariance under exchange of upper and lower arguments in two columns.
 
-These generate the 24 symmetries of the tetrahedron.
+Indexing the six arguments by the edges of the tetrahedron whose vertices `0, 1, 2, 3` are the
+triads `(j₁ j₂ j₃)`, `(j₁ j₅ j₆)`, `(j₄ j₂ j₆)`, `(j₄ j₅ j₃)` (`sixJSymEdge`), the three generators
+become the vertex permutations `(1 2)`, `(2 3)` and `(0 3)(1 2)`. These generate the symmetric
+group on the four vertices, so `sixJSymEdge_comp_map` gives invariance under every permutation of
+the triads. The action on the edges is faithful (`sym2_map_perm_injective`), so these are 24
+distinct symmetries.
 
 The connection to the recoupling coefficients of `SixJ` is `sixJ_eq_sixJSym`. Expanding both
 coupled states in the product basis writes `⟨(j₁ j₂) j₁₂, j₃; J M | j₁, (j₂ j₃) j₂₃; J M⟩` as a sum
@@ -47,7 +52,8 @@ symbols turns every summand into a summand of `sixJSym` (`cg_four_eq`, `sum_sixJ
 
 - `threeJ`, `threeJ_swap`, `threeJ_cycle`, `threeJ_neg`: the 3j symbol and its symmetries.
 - `sixJSym`: the 6j symbol as a sum over four 3j symbols.
-- `sixJSym_swap₁₂`, `sixJSym_swap₂₃`, `sixJSym_flip₁₂`: the tetrahedral symmetry.
+- `sixJSymEdge_comp_map`: invariance under all 24 symmetries of the tetrahedron, with the
+  generators `sixJSym_swap₁₂`, `sixJSym_swap₂₃`, `sixJSym_flip₁₂` as special cases.
 - `recoupling_eq_sum`: the recoupling coefficient through four Clebsch–Gordan coefficients.
 - `sixJ_eq_sixJSym`: the 6j symbols of `SixJ` are the symmetric sums.
 
@@ -376,6 +382,107 @@ lemma sixJSym_flip₁₂ : sixJSym j₄ j₅ j₃ j₁ j₂ j₆ = sixJSym j₁ 
     obtain ⟨s₃, -, -, -, -, -, -, p₄, -, -, -, -, -, t₃⟩ := adm3_of_threeJ_ne_zero h₃
     obtain ⟨s₄, -, -, -, -, -, -, -, -, -, -, -, -, t₄⟩ := adm3_of_threeJ_ne_zero h₄
     omega
+
+/-- The 6j symbol as a function of the edge labels of the tetrahedron whose vertices are the four
+triads `0 = (j₁ j₂ j₃)`, `1 = (j₁ j₅ j₆)`, `2 = (j₄ j₂ j₆)`, `3 = (j₄ j₅ j₃)`. -/
+def sixJSymEdge (j : Sym2 (Fin 4) → ℕ) : ℝ :=
+  sixJSym (j s(0, 1)) (j s(0, 2)) (j s(0, 3)) (j s(2, 3)) (j s(1, 3)) (j s(1, 2))
+
+lemma sixJSymEdge_comp_map_swap₁₂ (j : Sym2 (Fin 4) → ℕ) :
+    sixJSymEdge (j ∘ Sym2.map (Equiv.swap 1 2)) = sixJSymEdge j := by
+  simp only [sixJSymEdge, Function.comp_apply]
+  rw [show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(0, 1) = s(0, 2) by decide,
+    show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(0, 2) = s(0, 1) by decide,
+    show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(0, 3) = s(0, 3) by decide,
+    show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(2, 3) = s(1, 3) by decide,
+    show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(1, 3) = s(2, 3) by decide,
+    show Sym2.map (Equiv.swap (1 : Fin 4) 2) s(1, 2) = s(1, 2) by decide]
+  exact sixJSym_swap₁₂ ..
+
+lemma sixJSymEdge_comp_map_swap₂₃ (j : Sym2 (Fin 4) → ℕ) :
+    sixJSymEdge (j ∘ Sym2.map (Equiv.swap 2 3)) = sixJSymEdge j := by
+  simp only [sixJSymEdge, Function.comp_apply]
+  rw [show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(0, 1) = s(0, 1) by decide,
+    show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(0, 2) = s(0, 3) by decide,
+    show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(0, 3) = s(0, 2) by decide,
+    show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(2, 3) = s(2, 3) by decide,
+    show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(1, 3) = s(1, 2) by decide,
+    show Sym2.map (Equiv.swap (2 : Fin 4) 3) s(1, 2) = s(1, 3) by decide]
+  exact sixJSym_swap₂₃ ..
+
+lemma sixJSymEdge_comp_map_flip (j : Sym2 (Fin 4) → ℕ) :
+    sixJSymEdge (j ∘ Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4))) =
+      sixJSymEdge j := by
+  simp only [sixJSymEdge, Function.comp_apply]
+  rw [show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(0, 1) = s(2, 3) by
+      decide,
+    show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(0, 2) = s(1, 3) by
+      decide,
+    show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(0, 3) = s(0, 3) by
+      decide,
+    show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(2, 3) = s(0, 1) by
+      decide,
+    show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(1, 3) = s(0, 2) by
+      decide,
+    show Sym2.map (Equiv.swap 0 3 * Equiv.swap 1 2 : Equiv.Perm (Fin 4)) s(1, 2) = s(1, 2) by
+      decide]
+  exact sixJSym_flip₁₂ ..
+
+lemma sixJSymEdge_comp_map_mul {σ τ : Equiv.Perm (Fin 4)}
+    (hσ : ∀ j, sixJSymEdge (j ∘ Sym2.map σ) = sixJSymEdge j)
+    (hτ : ∀ j, sixJSymEdge (j ∘ Sym2.map τ) = sixJSymEdge j) (j : Sym2 (Fin 4) → ℕ) :
+    sixJSymEdge (j ∘ Sym2.map (σ * τ : Equiv.Perm (Fin 4))) = sixJSymEdge j := by
+  rw [Equiv.Perm.coe_mul, Sym2.map_comp, ← Function.comp_assoc, hτ, hσ]
+
+/-- **Tetrahedral symmetry.** The 6j symbol is invariant under every permutation of the four
+triads. -/
+lemma sixJSymEdge_comp_map (σ : Equiv.Perm (Fin 4)) (j : Sym2 (Fin 4) → ℕ) :
+    sixJSymEdge (j ∘ Sym2.map σ) = sixJSymEdge j := by
+  have h12 := sixJSymEdge_comp_map_swap₁₂
+  have h23 := sixJSymEdge_comp_map_swap₂₃
+  have h03 : ∀ j, sixJSymEdge (j ∘ Sym2.map (Equiv.swap (0 : Fin 4) 3)) = sixJSymEdge j := by
+    rw [show Equiv.swap (0 : Fin 4) 3 = Equiv.swap 0 3 * Equiv.swap 1 2 * Equiv.swap 1 2 by decide]
+    exact sixJSymEdge_comp_map_mul sixJSymEdge_comp_map_flip h12
+  have h13 : ∀ j, sixJSymEdge (j ∘ Sym2.map (Equiv.swap (1 : Fin 4) 3)) = sixJSymEdge j := by
+    rw [show Equiv.swap (1 : Fin 4) 3 = Equiv.swap 2 3 * Equiv.swap 1 2 * Equiv.swap 2 3 by decide]
+    exact sixJSymEdge_comp_map_mul (sixJSymEdge_comp_map_mul h23 h12) h23
+  have h02 : ∀ j, sixJSymEdge (j ∘ Sym2.map (Equiv.swap (0 : Fin 4) 2)) = sixJSymEdge j := by
+    rw [show Equiv.swap (0 : Fin 4) 2 = Equiv.swap 2 3 * Equiv.swap 0 3 * Equiv.swap 2 3 by decide]
+    exact sixJSymEdge_comp_map_mul (sixJSymEdge_comp_map_mul h23 h03) h23
+  have h01 : ∀ j, sixJSymEdge (j ∘ Sym2.map (Equiv.swap (0 : Fin 4) 1)) = sixJSymEdge j := by
+    rw [show Equiv.swap (0 : Fin 4) 1 = Equiv.swap 1 2 * Equiv.swap 0 2 * Equiv.swap 1 2 by decide]
+    exact sixJSymEdge_comp_map_mul (sixJSymEdge_comp_map_mul h12 h02) h12
+  have hswap : ∀ x y : Fin 4, x ≠ y →
+      ∀ j, sixJSymEdge (j ∘ Sym2.map (Equiv.swap x y)) = sixJSymEdge j := by
+    intro x y hxy
+    have : Equiv.swap x y = Equiv.swap 0 1 ∨ Equiv.swap x y = Equiv.swap 0 2 ∨
+        Equiv.swap x y = Equiv.swap 0 3 ∨ Equiv.swap x y = Equiv.swap 1 2 ∨
+        Equiv.swap x y = Equiv.swap 1 3 ∨ Equiv.swap x y = Equiv.swap 2 3 := by
+      revert x y; decide
+    rcases this with h | h | h | h | h | h
+    · rw [h]; exact h01
+    · rw [h]; exact h02
+    · rw [h]; exact h03
+    · rw [h]; exact h12
+    · rw [h]; exact h13
+    · rw [h]; exact h23
+  induction σ using Equiv.Perm.swap_induction_on generalizing j with
+  | one => rw [Equiv.Perm.coe_one, Sym2.map_id]; rfl
+  | swap_mul f x y hxy ih => exact sixJSymEdge_comp_map_mul (hswap x y hxy) ih j
+
+/-- The permutations of the triads act faithfully on the edges, so the symmetries of
+`sixJSymEdge_comp_map` are 24 distinct permutations of the arguments. -/
+lemma sym2_map_perm_injective :
+    Function.Injective (fun σ : Equiv.Perm (Fin 4) => Sym2.map σ) := by
+  refine fun σ τ h => Equiv.ext fun x => ?_
+  have h₁ := congrFun h s(x, x + 1)
+  have h₂ := congrFun h s(x, x + 2)
+  simp only [Sym2.map_mk, Sym2.eq_iff] at h₁ h₂
+  rcases h₁ with ⟨e, -⟩ | ⟨e₁, -⟩
+  · exact e
+  rcases h₂ with ⟨e, -⟩ | ⟨e₂, -⟩
+  · exact e
+  exact absurd (τ.injective (e₁.symm.trans e₂)) (by simp)
 
 /-!
 
