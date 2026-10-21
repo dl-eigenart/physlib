@@ -381,3 +381,23 @@ Plan Green-Identität:
 - G3: `ε → 0`, dominierte Konvergenz, `|Δψ_ε| ≤ C(1+1/‖y‖)(1+‖y‖)^k` (integrierbar gegen Schwartz in
   d ≥ 2, z. B. über `IsDistBounded`).
 - Potentialterm: `ψ V f` integrierbar (|V| = k/‖y‖) — ebenfalls über `IsDistBounded`.
+
+### 2026-10-22 00:40: G1 erledigt
+- `IsPolyBounded.integrable_ofReal_mul_schwartz` (polynomial beschränkt × Schwartz integrierbar,
+  über `one_add_le_sup_seminorm_apply` + `integrable_one_add_norm`).
+- `deriv_ofReal`, `deriv_schwartz` (`∂[i] ⇑f = ⇑(∂_{basis i} f)`).
+- `integral_ofReal_mul_sum_deriv_deriv`: `u` C², `u, ∂ᵢu, ∂ᵢ∂ᵢu` polynomial beschränkt ⇒
+  `∫ u Σ∂ᵢ∂ᵢf = ∫ (Σ∂ᵢ∂ᵢu) f`. Commit lokal da245a83.
+- Lean-Notizen: `(∂[i] u y : ℂ)` wird als komplexe Ableitung gelesen — `((∂[i] u y : ℝ) : ℂ)`
+  schreiben; `set e := basis i` blockiert `← Space.deriv_eq` in `simp`; Fortsetzungszeilen in
+  `(by simpa … using …)` tiefer einrücken als der Taktikbeginn.
+
+Weiter (G2/G3, Regularisierung — Fubini-Weg verworfen: `Space.slice` hat kein
+`MeasurePreserving`-Lemma):
+- `ψ_ε(y) = R(√(‖y‖²+ε²)) P(y)`, `R = radialFactor κ N α`; `G_ε(s) = R(√(s+ε²))` ist für `s ≥ 0`
+  differenzierbar (PR 05: `hasDerivAt_radialFactor` global, `hasDerivAt_comp_sqrt`).
+- Ableitungsformeln für alle `y` (wie im Beweis von `laplacian_radial_mul`, aber ohne `y ≠ 0`):
+  `∂ᵢψ_ε = G ∂ᵢP + 2yᵢ G' P`, `∂ᵢ∂ᵢψ_ε = G ∂ᵢ∂ᵢP + 4yᵢ G' ∂ᵢP + (2G' + 4yᵢ² G'') P`.
+- Für festes ε polynomiale Schranken (1/ρ ≤ 1/ε) ⇒ G1 anwendbar.
+- G3: `Δψ_ε = [(2l+d) R'(ρ)/ρ + (‖y‖²/ρ²)(R''(ρ) - R'(ρ)/ρ)] P → Δψ` für `y ≠ 0`;
+  Majorante `C(1 + 1/‖y‖)(2+‖y‖)^k |P|` (ε ≤ 1); dominierte Konvergenz beidseitig.
