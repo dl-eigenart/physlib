@@ -497,3 +497,9 @@ mit `V = span ℂ (range boundStateMapHS)`.
 4. Eigenvektor-Eigenschaft auf `span ℂ` per `Submodule.span_induction` (0, +, ℂ-Vielfache;
    `H†` ist ℂ-linear).
 Das reelle Korollar bleibt (billig) stehen, das komplexe kommt dazu.
+
+### 2026-10-22 11:55: Punkt 3 erledigt (ℂ-Dimension)
+`linearIndependent_complex_of_real_inner` (abstrakt, wie geplant), `im_inner_boundStateMapHS`,
+`finrank_span_range_boundStateMapHS_three` (finrank ℂ des ℂ-Spanns = (n+1)²),
+`exists_finrank_eigenvectors_adjoint_three_complex`. Build grün, Axiome Standard, Linter grün.
+Commit lokal 1cc27d88. Als Nächstes: Vorschlag zur Aufteilung (Punkt 2).
