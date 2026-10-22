@@ -445,3 +445,52 @@ Bilanz: 7 auch in Adopted (#1, 3, 5, 6, 7, 8, 9), 2 nur im Einzeldatensatz (#4, 
 - Damit stehen 18 der 29 A-Treffer auch im Adopted-Satz (12 sind selbst Adopted, 6 dort ebenfalls
   verletzt). Das sind die Kandidaten für einen etwaigen Bericht an NNDC; Entscheidung und
   Kontakt nach außen: Daniel.
+
+## Gegenprobe aller 29 A-Records — Ergebnis von Daniel (NuDat 3, Adopted, Web 22.10.2026)
+- **Auch in Adopted identisch (17):** ⁹Be 6760, ¹⁹F 3998.7, ³⁰P 3019, ⁵³Cr 1006.27, ⁵³Cr 7613.8,
+  ⁵³Fe 2339.24, ⁹⁰Nb 854.32, ¹⁰⁶Ag 2441.6 (2×), ¹⁰⁶Sn 8215.7 (2×), ¹¹¹Ru 705.65, ¹¹²Cd 3531.32,
+  ¹⁵⁰Gd 1207.135, ¹⁵⁰Gd 1699.9 (2×), ¹⁹⁸Au 646.411.
+- **In Adopted bereinigt (11):** ²⁵Mg (Adopted E1), ⁴¹Sc (ohne M), ⁴⁷Ti ([E2]), ¹⁰²Rh (ohne M),
+  ¹⁰⁶Cd (Q), ¹¹¹Sn (E2), ¹¹³Cd (ohne M), ¹⁴⁴Nd (E2), ¹⁴⁹Gd ((Q)), ¹⁶²Dy 1061 und 1324 (E2).
+- **In Adopted nur vorläufig (1):** ¹⁰⁶Pd 2366 (M1+E2).
+
+### Abgleich mit den automatischen Spalten (2026-10-22 19:05)
+- Erst 28 von 29 übereinstimmend. Abweichung bei ¹⁴⁴Nd 2109.4: Das Werkzeug meldete „level not in
+  Adopted“. Ursache: Adopted schreibt `2109.964`, der (n,γ)-Satz `2109.4`, beide ohne DE. Mit σ =
+  eine Einheit der letzten Stelle ist das 3σ-Fenster (0,3 keV) kleiner als die Differenz (0,56 keV).
+- Korrektur, **nur für den Adopted-Abgleich** (nicht für die Kategorien): Fenster max(3σ, 1 keV).
+  Danach ¹⁴⁴Nd: „Adopted contradicts: M=E2, J_f=2+, allowed“.
+- **Jetzt 29 von 29 übereinstimmend:**
+
+  | Daniels Befund | Werkzeug |
+  |---|---|
+  | identisch (17) | 12 „Adopted itself“, 4 „yes, as A“, ³⁰P „yes, as B (angular momentum)“ |
+  | nur vorläufig (¹⁰⁶Pd) | „yes, as B (angular momentum, bracketed component only)“ |
+  | bereinigt (11) | 11 „Adopted contradicts“ (8 erlaubte M, 3 ohne M) |
+
+  ³⁰P steht beim Werkzeug in Adopted als B, bei Daniel als identisch: Die Verletzung ist dieselbe,
+  B kommt von einer vorläufigen Angabe in Adopted (Jπ oder Platzierung), nicht von der Multipolarität.
+
+## Breite-Schwelle: Lauf mit 5 / 10 / 20 / 50 keV (2026-10-22 19:05)
+Neue Option `--broad <keV>`. Berichte in `~/ensdf/sweep/`. Die Zertifikate wurden dabei nicht
+überschrieben.
+
+| Schwelle | A | A′ | B | C | S | P | N | ok |
+|---|---|---|---|---|---|---|---|---|
+| 5 keV | 29 | 24 | 130 | 67,071 | 3 | 206 | 5,448 | 160,191 |
+| 10 keV | 29 | 24 | 131 | 66,889 | 3 | 206 | 5,459 | 160,361 |
+| 20 keV | 29 | **26** | 131 | 66,841 | 3 | 206 | 5,465 | 160,401 |
+| 50 keV | 29 | **26** | 131 | 66,805 | 3 | 206 | 5,466 | 160,436 |
+
+- Die A-Mengen sind bei allen vier Schwellen identisch (Records verglichen, nicht nur Zahlen).
+  Die A′-Mengen sind bei 5 und 10 keV identisch und ebenso bei 20 und 50 keV.
+- **Die Bedingung „A und A′ bleiben gleich“ ist nicht erfüllt**: Bei 20 und 50 keV kommen zwei
+  A′ hinzu, nämlich ¹¹B (γ,γ) 7.29E3 5/2+ → 5.02E3 3/2- (2264.9, M1+E2, 011:3762) und → 4.44E3 5/2-
+  (2840.2, M1+E2, 011:3763). Die Endniveaus stehen dort als `5.02E3` und `4.44E3` ohne DE, also σ =
+  10 keV aus der letzten Stelle; bei der 10-keV-Schwelle gelten sie damit als breit (→ C). Adopted
+  widerspricht beiden (E1+M2, erlaubt).
+- Deshalb habe ich die Schwelle nicht festgelegt. Der Standard bleibt vorläufig 10 keV
+  (`broadKeV`). **Entscheidung: Daniel.**
+
+Code: Commit **ensdf-check: --broad option; Adopted matching with 1 keV floor** (lokal). Der
+Standardlauf ist unverändert (A 29, A′ 24, …), die 29 Zertifikate bauen.
