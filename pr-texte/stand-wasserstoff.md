@@ -693,3 +693,14 @@ für das System, `Prod`-Norm). 3 und 2 sind Routine, 1 im Wesentlichen schon in 
 Offene Fragen an Daniel: (i) Randbedingung `u → 0` bei `0⁺` so recht (Alternative: `u = O(ρ)`,
 stärker, einfacher Beweis von 5, aber schwächeres Ergebnis)? (ii) Docstring-Satz in PR 04 im
 E4-PR anpassen oder in PR 04 selbst? (iii) Branchname ok?
+
+## 2026-10-22 14:45: Alpha-Stapel auf master rebased (nach Merge von #1930)
+- #1930 = 8d676858 auf origin/master, Inhalt identisch zu fdd7f900.
+- `git rebase --onto origin/master a46a93e9 hydrogen-bound-states-split`: konfliktfrei, c3084668
+  automatisch verworfen („patch contents already upstream“). Neuer Stand (lokal, **nicht gepusht**):
+  d82876a0 radial · 4b601af7 bound states · 2d239514 degeneracy · 618ba633 (a) · 3a9f119f (b) ·
+  58f077ee (c1) · 850eaba2 (c2). Sicherung: Branch `backup/hydrogen-bound-states-split-pre-rebase` = f67ddc47.
+- `check_pr.sh split`: alles OK, **theorem_lint jetzt grün**; build_modules, build_alpha,
+  runPhyslibAlphaLinters, module_doc_lint, alphaFileImports, noAlphaImports, lint_style,
+  alpha_python, codespell OK, sorry 0. Alle 8 Module neu gebaut (Oleans 14:44).
+- Push von `hydrogen-bound-states-split` (force, da rebased) wartet auf „ja“.
