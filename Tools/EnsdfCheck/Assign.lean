@@ -10,9 +10,12 @@ import EnsdfCheck.Parse
 # ENSDF check: the final level of a gamma transition
 
 A gamma record follows the level it depopulates. The final level is taken from `FL=` if given
-(manual IV.C.2), otherwise as the level with energy `E_i - E_γ` within the uncertainties. The
-ENSDF manual does not prescribe a recoil correction, so none is applied; transitions whose final
-level is missing or ambiguous are reported separately and never checked.
+(manual IV.C.2), otherwise as the level with energy `E_i - E_γ - E_R` within three standard
+uncertainties, where `E_R = E_γ²/(2Mc²)` is the recoil energy with `M = A u` and
+`u c² = 931494.10372 keV` (CODATA 2022, NIST). Only a unique candidate counts; a broad level
+(energy uncertainty or width at least `broadKeV`) is never accepted as the only candidate.
+Transitions whose final level is missing or ambiguous are reported separately and never
+checked.
 
 This is unverified code.
 
@@ -35,8 +38,10 @@ inductive Placement
   | badEnergy
   /-- No level matches `E_i - E_γ`. -/
   | noMatch
-  /-- Several levels match `E_i - E_γ`. -/
+  /-- Several levels match `E_i - E_γ - E_R`. -/
   | ambiguous
+  /-- The only matching level is broad. -/
+  | onlyBroad
   deriving Repr, BEq
 
 /-- The standard uncertainty of an energy: `DE` in units of the last digit, or one unit of the
@@ -45,6 +50,12 @@ def sigma (d : Dec) (de : List Char) : Float :=
   match parseUnc de with
   | some n => n.toFloat * d.unit
   | none => d.unit
+
+/-- The atomic mass constant in keV (CODATA 2022, `931.494 103 72(29) MeV`, NIST). -/
+def uKeV : Float := 931494.10372
+
+/-- Levels with an energy uncertainty or a width of at least this many keV count as broad. -/
+def broadKeV : Float := 10.0
 
 /-- Locate the final level of gamma `g` in data set `ds`. `levelE` holds the parsed level
 energies. -/
@@ -79,7 +90,9 @@ def placeGamma (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec) : 
       | some ⟨o, some ei⟩, some ⟨"", some eg⟩ =>
         let si := sigma ei (ds.levels[i]!).de
         let sg := sigma eg g.de
-        let target := ei.value - eg.value
+        let mc2 := (ds.massNumber.getD 0).toFloat * uKeV
+        let recoil := if mc2 > 0 then eg.value * eg.value / (2.0 * mc2) else 0.0
+        let target := ei.value - eg.value - recoil
         let cands := (List.range ds.levels.size).filter fun k =>
           k != i && match levelE[k]! with
             | some ⟨o', some ef⟩ =>
@@ -87,9 +100,14 @@ def placeGamma (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec) : 
               o == o' && ef.value < ei.value &&
                 Float.abs (ef.value - target) ≤ 3.0 * Float.sqrt (si * si + sg * sg + sf * sf)
             | _ => false
+        let broad (k : Nat) : Bool :=
+          let l := ds.levels[k]!
+          (match levelE[k]! with
+            | some ⟨_, some ef⟩ => sigma ef l.de ≥ broadKeV
+            | _ => false) || (parseWidth l.t).any (· ≥ broadKeV)
         match cands with
-        | [k] => .ok k false false
-        | [] => .noMatch
+        | [k] => if broad k then .onlyBroad else .ok k false false
+        | [] => if mc2 > 0 then .noMatch else .badEnergy
         | _ => .ambiguous
       | _, _ => .badEnergy
 

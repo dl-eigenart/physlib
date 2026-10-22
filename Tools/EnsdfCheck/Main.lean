@@ -106,6 +106,7 @@ def placeKey : Placement → String
   | .badEnergy => "energy unreadable or offset"
   | .noMatch => "no matching level"
   | .ambiguous => "ambiguous"
+  | .onlyBroad => "only a broad level"
 
 /-- Statistics of the final level assignment, for gammas with a multipolarity. -/
 def placementStats (dir : System.FilePath) : IO Unit := do
@@ -148,6 +149,8 @@ structure Hit where
   m : String
   /-- Certificate data for `A`. -/
   cert : Option (Nat × Nat × Nat)
+  /-- Final level from `FL=`. -/
+  viaFL : Bool
 
 /-- Markdown-safe text of a field. -/
 def fld (l : List Char) : String :=
@@ -186,9 +189,20 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
   let mut cats : Tally := {}
   let mut hits : Array Hit := #[]
   let mut bHits : Array Hit := #[]
+  let mut sLevels : Array String := #[]
   for f in files do
     for d in parseFile f.fileName (← readAscii f.path) do
       let levelE := d.levels.map fun l => parseEnergy l.e
+      if let some a := d.massNumber then
+        for l in d.levels do
+          let j := parseJ l.j
+          if spinMassMismatch a j then
+            let firmJ := match j with
+              | .ok [c] => !c.jTent
+              | _ => false
+            sLevels := sLevels.push (s!"| {d.nucid} | {fld l.e} | {fld l.j} | " ++
+              s!"{if firmJ then "firm" else "bracketed or list"} | {d.dsid} | " ++
+              s!"{f.fileName}:{l.line} |")
       for g in d.gammas do
         match classify d levelE g with
         | none => pure ()
@@ -202,7 +216,7 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
             let h : Hit := ⟨r.cat, loc, d.nucid, d.dsid,
               (li.map (fld ·.e)).getD "", (li.map (fld ·.j)).getD "",
               (lf.map (fld ·.e)).getD "", (lf.map (fld ·.j)).getD "",
-              fld g.e, fld g.m, r.cert⟩
+              fld g.e, fld g.m, r.cert, r.viaFL⟩
             if r.cat == .b then bHits := bHits.push h else hits := hits.push h
   -- report
   let byCat (cat : Category) : Nat :=
@@ -213,7 +227,7 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
     "parity rule, which is a definition in PR 08. The parser and the final level assignment " ++
     "are unverified code.\n\n"
   s := s ++ "| Category | Count |\n|---|---|\n"
-  for cat in [Category.a, .a', .b, .c, .p, .n, .ok] do
+  for cat in [Category.a, .a', .b, .c, .s, .p, .n, .ok] do
     s := s ++ s!"| {cat.name} | {byCat cat} |\n"
   s := s ++ "\n## Subcategories\n\n| Category | Reason | Count | Examples |\n|---|---|---|---|\n"
   let l := cats.counts.toList.toArray.qsort (fun a b => a.1 < b.1)
@@ -223,23 +237,31 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
       s!"{", ".intercalate (cats.examples.getD k #[]).toList} |\n"
   for (cat, title) in [(Category.a, "A: angular momentum rule violated, everything firm"),
       (.a', "A': only the parity rule violated, everything firm")] do
-    s := s ++ s!"\n## {title}\n\n" ++
-      "| Nuclide | E_i | Jπ_i | E_f | Jπ_f | E_γ | M | Data set | Record |\n" ++
-      "|---|---|---|---|---|---|---|---|---|\n"
-    for h in hits.filter (·.cat == cat) do
-      s := s ++ s!"| {h.nucid} | {h.ei} | {h.ji} | {h.ef} | {h.jf} | {h.eg} | {h.m} | " ++
-        s!"{h.dsid} | {h.loc} |\n"
+    for viaFL in [true, false] do
+      let sub := if viaFL then "final level from FL=" else "final level from E_i - E_γ - E_R"
+      let hs := hits.filter fun h => h.cat == cat && h.viaFL == viaFL
+      s := s ++ s!"\n## {title}; {sub} ({hs.size})\n\n" ++
+        "| Nuclide | E_i | Jπ_i | E_f | Jπ_f | E_γ | M | Data set | Record |\n" ++
+        "|---|---|---|---|---|---|---|---|---|\n"
+      for h in hs do
+        s := s ++ s!"| {h.nucid} | {h.ei} | {h.ji} | {h.ef} | {h.jf} | {h.eg} | {h.m} | " ++
+          s!"{h.dsid} | {h.loc} |\n"
+  s := s ++ s!"\n## S: level records with 2J and A of different parity ({sLevels.size})\n\n" ++
+    "All data sets, also levels without a checked gamma transition.\n\n" ++
+    "| Nuclide | E | Jπ | Jπ firm | Data set | Record |\n|---|---|---|---|---|---|\n"
+  for r in sLevels do
+    s := s ++ r ++ "\n"
   IO.FS.writeFile out s
   -- tab-separated lists for further use
   let tsv (hs : Array Hit) : String := hs.foldl (fun acc h =>
     acc ++ s!"{h.cat.name}\t{h.nucid}\t{h.ei}\t{h.ji}\t{h.ef}\t{h.jf}\t{h.eg}\t{h.m}\t" ++
-      s!"{h.dsid}\t{h.loc}\t" ++
+      s!"{h.dsid}\t{h.loc}\t{if h.viaFL then "FL=" else "dE"}\t" ++
       (match h.cert with | some (x, y, l) => s!"{x} {y} {l}" | none => "") ++ "\n") ""
   IO.FS.writeFile (out.withExtension "AA.tsv") (tsv hits)
   IO.FS.writeFile (out.withExtension "B.tsv") (tsv bHits)
   if let some c := cert then IO.FS.writeFile c (certificates dir (hits.filter (·.cat == .a)))
   IO.println (s!"{total} transitions; A {byCat .a}, A' {byCat .a'}, B {byCat .b}, " ++
-    s!"C {byCat .c}, P {byCat .p}, N {byCat .n}, ok {byCat .ok}")
+    s!"C {byCat .c}, S {byCat .s}, P {byCat .p}, N {byCat .n}, ok {byCat .ok}")
 
 /-- Entry point. -/
 def main (args : List String) : IO UInt32 := do

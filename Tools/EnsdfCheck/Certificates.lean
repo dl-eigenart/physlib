@@ -28,11 +28,6 @@ example : ∀ (t : MultipoleType) (πi πf : ℤ),
     ¬ IsAllowedMultipole 9 3 πi πf t 2 :=
   fun _ _ _ h => absurd h.2.1 (by decide)
 
--- 9BE, ADOPTED LEVELS, GAMMAS, ensdf.009:1097: 16977.1 1/2- → 2.78E+3 1/2-, E_γ = 14535.1, M = E2
-example : ∀ (t : MultipoleType) (πi πf : ℤ),
-    ¬ IsAllowedMultipole 1 1 πi πf t 2 :=
-  fun _ _ _ h => absurd h.2.1 (by decide)
-
 -- 19F, ADOPTED LEVELS, GAMMAS, ensdf.019:2059: 3998.7 7/2- → 1458.7 3/2-, E_γ = 2540.0, M = M1
 example : ∀ (t : MultipoleType) (πi πf : ℤ),
     ¬ IsAllowedMultipole 7 3 πi πf t 1 :=
@@ -46,6 +41,16 @@ example : ∀ (t : MultipoleType) (πi πf : ℤ),
 -- 30P, 30S EC DECAY, ensdf.030:10190: 3019.2 1+ → 677.01 0+, E_γ = 2342.3, M = M1+E2
 example : ∀ (t : MultipoleType) (πi πf : ℤ),
     ¬ IsAllowedMultipole 2 0 πi πf t 2 :=
+  fun _ _ _ h => absurd h.2.1 (by decide)
+
+-- 41SC, 40CA(P,G), ensdf.041:16170: 3775 3/2- → 0 7/2-, E_γ = 3775, M = D(+Q)
+example : ∀ (t : MultipoleType) (πi πf : ℤ),
+    ¬ IsAllowedMultipole 3 7 πi πf t 1 :=
+  fun _ _ _ h => absurd h.2.1 (by decide)
+
+-- 47TI, 44CA(A,NG),47TI(P,P'),(P,P'G),, ensdf.047:5645: 1549.8 3/2- → 159.3 7/2-, E_γ = 1391, M = D(+Q)
+example : ∀ (t : MultipoleType) (πi πf : ℤ),
+    ¬ IsAllowedMultipole 3 7 πi πf t 1 :=
   fun _ _ _ h => absurd h.2.1 (by decide)
 
 -- 53CR, ADOPTED LEVELS, GAMMAS, ensdf.053:1276: 1006.27 5/2- → 564.03 1/2-, E_γ = 442.7, M = M1+E2

@@ -328,6 +328,8 @@ structure LevelRec where
   de : List Char
   /-- Jπ, columns 22–39. -/
   j : List Char
+  /-- Half-life or width, columns 40–49. -/
+  t : List Char
   /-- Column 80: `?` questionable level, `S` separation energy or expected level. -/
   q : Char
   deriving Inhabited
@@ -371,6 +373,22 @@ structure Dataset where
   /-- Gamma records in order. -/
   gammas : Array GammaRec
 
+/-- The mass number from the nuclide identification (columns 1–3, manual V.1). -/
+def Dataset.massNumber (d : Dataset) : Option Nat :=
+  digitsToNat (d.nucid.toList.takeWhile Char.isDigit)
+
+/-- A level width given in the half-life field in energy units (manual V.14: `EV`, `KEV`,
+`MEV`), in keV. -/
+def parseWidth (t : List Char) : Option Float :=
+  match splitBy (· == ' ') (trimL t) |>.filter (!·.isEmpty) with
+  | [v, u] =>
+    let f : Option Float := if u == "EV".toList then some 1e-3 else if u == "KEV".toList then
+      some 1.0 else if u == "MEV".toList then some 1e3 else none
+    match f, parseDec v with
+    | some f, some d => some (d.value * f)
+    | _, _ => none
+  | _ => none
+
 /-- The `FL=` value among the `$`-separated items of a continuation record. -/
 def findFL (data : List Char) : Option (List Char) :=
   (splitBy (· == '$') data).findSome? fun item =>
@@ -404,7 +422,7 @@ def parseFile (file : String) (contents : String) : Array Dataset := Id.run do
       let first := c6 == ' ' || c6 == '1'
       if c8 == 'L' && first then
         cur := some { d with levels := d.levels.push ⟨n, cols r 10 19, cols r 20 21,
-          cols r 22 39, col r 80⟩ }
+          cols r 22 39, cols r 40 49, col r 80⟩ }
       else if c8 == 'G' && first then
         cur := some { d with gammas := d.gammas.push ⟨n, cols r 10 19, cols r 20 21,
           cols r 32 41, cols r 42 49, cols r 50 55, col r 77, col r 80, none,
