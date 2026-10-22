@@ -215,3 +215,43 @@ damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
   67,067 unplatziert, 21,734 mehrdeutig, 16,602 kein Treffer.
 - Frage an Daniel: Soll die Rückstoßkorrektur als Option kommen (gemeldet getrennt, nicht als
   Standard)? Laut Auftrag nein, deshalb nicht umgesetzt.
+
+## S4 Lauf und Bericht — erledigt (2026-10-22 18:05), Commit **ensdf-check S4** (lokal)
+- `Tools/EnsdfCheck/Classify.lean` (unbewiesen, die Urteile selbst kommen aus `checkTransition`).
+  Reihenfolge der Entscheidungen:
+  1. Ohne Multipolarität: nicht gezählt.
+  2. M nicht lesbar → P.
+  3. Zuordnung gescheitert → C.
+  4. Jπ nicht lesbar → P.
+  5. Jπ leer oder nicht geprüfte Form → N.
+  6. E0 → C, 0→0 → C.
+  7. Sonst die Regelprüfung:
+     - **A**: Beide J fest, M eine Alternative ohne Klammern, Platzierung fest, und eine
+       Komponente verletzt die Drehimpulsregel. Die Parität darf dabei fehlen oder in Klammern
+       stehen, weil die Drehimpulsregel nicht von der Parität abhängt.
+     - **A′**: wie A, dazu beide Paritäten angegeben und fest; nur die Paritätsregel verletzt.
+     - **B**: nicht fest, und alle Kombinationen verletzen (Listen × Alternativen × unbekannte
+       Paritäten).
+     - Erlaubt, aber D/Q ohne Typ → C; sonst ok.
+  - „Platzierung fest“ heißt: kein `?` an `FL=`, Spalte 80 der Gamma-Zeile weder `?` noch `S`,
+    Spalte 77 nicht `*&@`, keines der beiden Levels mit `?` oder `S` in Spalte 80.
+- Aufruf: `lake exe ensdf-check ~/ensdf/data_261001 ~/ensdf/bericht.md` (12 s). Daneben liegen
+  `bericht.AA.tsv` (A und A′, mit Zertifikatsdaten) und `bericht.B.tsv`.
+- **Ergebnis**, 233,102 Gamma-Übergänge mit Multipolarität:
+
+  | Kategorie | Anzahl | davon |
+  |---|---|---|
+  | **A** | **28** | |
+  | **A′** | **17** | |
+  | B | 146 | 89 Drehimpuls, 55 Parität oder gemischt, 2 Parität offen |
+  | C | 67,173 | 52,008 D/Q ohne Typ, aber erlaubt · 2,123 E0 · 5,845 Zuordnung mehrdeutig · 2,667 kein Endniveau · 4,431 unplatziert · 99 FL/Energie |
+  | P | 206 | alle mit `O` |
+  | N | 5,430 | 3,025 Jπ leer, 2,405 nicht geprüfte Form |
+  | ok | 160,102 | |
+
+- Die Trefferliste steht im Bericht. Einige Zeilen sind doppelt, weil derselbe Übergang im
+  Adopted-Satz und in einem Reaktions- oder Zerfallsdatensatz steht (106Ag, 106Sn, 150Gd).
+- Erste Beobachtung, noch ohne Bewertung: Viele A-Treffer sind `D` oder `D+Q` bei ΔJ = 2
+  (z. B. 106Ag 11⁻→9⁻, 106Sn 17⁻→15⁻, 149Gd 17/2⁻→13/2⁻); dort verletzt der Dipolanteil die
+  Dreiecksregel. Mindestens ein Treffer sieht nach Zuordnungsproblem aus: 9Be 16977.1 →
+  `2.78E+3`, das große σ des Zielniveaus macht das Fenster breit. Mehr in S6.
