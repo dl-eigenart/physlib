@@ -741,3 +741,22 @@ auf `Ioo (m/2) (ρ+1)`, `m = min δ ρ`, Lipschitz-Konstante `max 1 C` (`C` Schr
 kompakten `Icc`, `IsCompact.exists_bound_of_continuousOn`), Startpunkt `t₀ = 3m/4`; `w' t₀ = 0` über
 `HasDerivAt.unique`. Import: die Eindeutigkeitssätze stehen in `Mathlib.Analysis.ODE.ExistUnique`
 (nicht `Gronwall`). Modul baut.
+
+### 2026-10-22 14:56: S6 erledigt — E4 fertig, kein `sorry` (lokal, nicht gepusht)
+`radial_regular_solution` (w = u - A u₁, `eqOn_zero_of_eqOn_Ioo`; `c = A · regCoeff`, `c 0 = A`)
+und `radial_quantization_of_tendsto` (Vollständigkeit + `radial_quantization`, Integrierbarkeit per
+`IntegrableOn.congr_fun`). `#print axioms`: nur propext, Classical.choice, Quot.sound.
+Docstring von `RadialQuantization.lean` angepasst („not formalised“ → Verweis auf
+`radial_regular_solution` / `radial_quantization_of_tendsto`). Eine aus dem Gedächtnis
+eingefügte Literaturangabe (ODE-Lehrbuch) wieder entfernt — nur Sakurai (aus PR 04) bleibt.
+WIP-Commits zu **ad29c408** zusammengefasst (auf e9f670d4); Datei 457 Zeilen, 15 Deklarationen.
+`check_pr.sh e4`: build_modules, build_alpha, runPhyslibAlphaLinters, module_doc_lint,
+alphaFileImports, noAlphaImports, lint_style, alpha_python, codespell OK, sorry 0;
+theorem_lint FEHLER = bekannter Werkzeugabbruch der alten Basis (`pseudoExtension`).
+Gegenprobe: temporäre Kopie des Stapels (radial, quantisation, E4) auf origin/master rebased
+(konfliktfrei), `lake build -KCI --iofail PhyslibAlpha` grün (dort mit sorry-Warnungen aktiv),
+theorem_lint grün; Temp-Branch gelöscht. Hinweis: theorem_lint braucht ein frisch gebautes
+`PhyslibAlpha`-Root-Olean, sonst derselbe Abbruch.
+PR-Text-Entwurf: `18-hydrogen-radial-completeness.md`.
+Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf master rebasen
+(nach Merge von radial/quantisation oder mit dem ganzen Stapel).
