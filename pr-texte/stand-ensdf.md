@@ -313,3 +313,82 @@ ohne Vorgabe im Handbuch keine Rückstoßkorrektur, daher nur als Vorschlag.
   - Push.
   - Ob und wo veröffentlicht wird.
 - Wasserstoff: #1909 bei Abschluss noch nicht gemergt, also kein Rebase fällig.
+
+## Runde 2 nach Daniels Vorgaben (2026-10-22 18:40), Commit **ensdf-check: recoil …** (lokal)
+
+### Belege (heruntergeladen, nicht aus dem Gedächtnis)
+- **IAEA Evaluators Guidelines 2021**: `~/ensdf/guidelines/Evaluators_Guidelines_2021_V2.pdf` von
+  https://www-nds.iaea.org/nsdd/docs/Evaluators_Guidelines_2021_V2.pdf.
+  - 3,015,510 Bytes, 91 Seiten, HTTP Last-Modified 16 Feb 2022,
+    sha256 b085ec39b33e85d7ac0e292b694cf9635486407305cf7f722121505bc0f0cd1d.
+  - Laut Titelseite: M. J. Martin (ORNL/UTK), „Guidelines for Nuclear Structure Evaluators“,
+    ORNL/TM-2022/1835, datiert 4/26/2021.
+- **`M1(+E2)` belegt**, §1.10 Punkt 4 e) (S. 30–31): „If δ overlaps zero or infinity, the
+  corresponding small multipolarity component should be in parens. Example: For mult =M1+E2 with
+  δ=0.3 4, the multipolarity should be entered as M1(+E2). For δ>10, the multipolarity should be
+  entered as E2(+M1)“. Der Anteil in Klammern kann also null sein; das trägt Daniels Regel
+  „Verletzung nur durch Klammeranteil → B“.
+- **`[D,E2]` belegt**, §1.10 Punkt 7 b): „set, for example, mult=[D,E2] (or mult=[E1,M1,E2])“,
+  also Komma = Alternativen und eckige Klammer = aus dem Niveauschema. Ebenso §1.10 Punkt 4 d):
+  „E1+M2+E3 or E0+M1+E2“ (mehr als zwei Anteile).
+- **`O` nicht belegt**: Weder die Guidelines 2021 noch `ensdf-procedures.pdf` (NNDC evalcorner,
+  `~/ensdf/guidelines/`) noch das Handbuch von 2001 definieren `O` im Multipolaritätsfeld. Eine
+  Websuche fand ebenfalls keine Definition. → `O` bleibt P („nicht belegt“).
+- **Atomare Masseneinheit** für den Rückstoß: NIST, CODATA 2022, u c² = 931.494 103 72(29) MeV
+  (https://physics.nist.gov/cgi-bin/cuu/Value?muc2mev). Näherung M = A·u; der Massenexzess fehlt,
+  der Fehler im Rückstoß liegt unter 0,01 keV.
+
+### Änderungen
+1. **Rückstoß immer**: E_f = E_i − E_γ − E_γ²/(2·A·u c²).
+2. **Breite Niveaus**: Ein Level mit σ_E ≥ 10 keV oder einer Breite ≥ 10 keV (T-Feld in
+   EV/KEV/MEV, V.14) zählt nie als einziger Kandidat (→ C „only a broad level matches“).
+   **Die Schwelle `broadKeV = 10` habe ich gewählt; Daniel bitte bestätigen oder ändern.**
+   Nur eine eindeutige Zuordnung zählt, mehrere Kandidaten → C „ambiguous“.
+3. **A und A′ nach Herkunft des Endniveaus getrennt** (`FL=` / E_i − E_γ − E_R), im Bericht als
+   eigene Tabellen, in `bericht.AA.tsv` als Spalte.
+4. **Klammeranteile**: Festigkeit wird je Komponente geprüft. A gilt nur, wenn eine Komponente
+   außerhalb der Klammern verletzt; verletzt nur der Klammeranteil (`M1(+E2)`, `D(+Q)`), dann B
+   („bracketed component only“). Dasselbe gilt für A′.
+5. **`32/2` nicht als 16**: neue Kategorie **S**, „2J und A haben verschiedene Parität“ (halbzahliges J
+   bei geradem A oder ganzzahliges bei ungeradem A). Betroffene Übergänge werden nicht weiter
+   geprüft. Der Bericht listet zusätzlich alle betroffenen Level-Records.
+
+### Ergebnis (233,102 Übergänge), vorher → jetzt
+| Kategorie | Runde 1 | Runde 2 |
+|---|---|---|
+| A | 28 | **29**, alle mit Endniveau aus E_i − E_γ − E_R, keiner aus `FL=` |
+| A′ | 17 | **24** (3 über `FL=`, 21 über die Energiedifferenz) |
+| B | 146 | 131 (19 Drehimpuls nur im Klammeranteil, 11 Parität nur im Klammeranteil, …) |
+| C | 67,173 | 66,889 (152 „only a broad level“, 2,159 kein Endniveau statt 2,667, 5,857 mehrdeutig) |
+| **S** | — | **3** Übergänge; 5 Level-Records |
+| P | 206 | 206 |
+| N | 5,430 | 5,459 |
+| ok | 160,102 | 160,361 |
+
+- Zertifikate: 29, `lake build EnsdfCheck.Certificates` grün.
+- Der Zuordnungsfehler ⁹Be 16977.1 → 2.78E+3 ist weg (jetzt C).
+- Neu in A sind ⁴¹Sc 3775 3/2- → 0 7/2- und ⁴⁷Ti 1549.8 3/2- → 159.3 7/2-, beide `D(+Q)` bei ΔJ = 2.
+  Dort verletzt der Dipolanteil außerhalb der Klammern.
+- **S, Level-Records** (alle eingeklammert oder Liste):
+  - ¹⁵C 10248 `(5/2, 7,2, 9/2)` (015:249) und ⁸³Kr 2985.9 `(11/2,13,2,15/2)` (083:4392):
+    offensichtlich `,` statt `/`.
+  - ¹²⁷La 4587.2 `(32/2-)` (127:13068 und 127:13738).
+  - ¹⁷¹Re 7377.8 `(58/2+)` (171:17693).
+  - Die 3 S-Übergänge hängen an ⁸³Kr und ¹²⁷La.
+
+### Die ersten 10 A-Treffer (Runde 2) — für Daniels Gegenprobe
+| # | Nuklid | Übergang | E_γ, M | Datensatz, Zeile | Vermutung |
+|---|---|---|---|---|---|
+| 1 | ⁹Be | 6760 9/2+ → 0.0 3/2- | 6757, E2 | Adopted, 009:987 | echter Widerspruch in den Jπ-Daten; der Level-Kommentar nennt (5/2-) aus ¹⁰Be(e,e'p) |
+| 2 | ¹⁹F | 3998.7 7/2- → 1458.7 3/2- | 2540.0, M1 | Adopted, 019:2059 | Tippfehler (E2?) oder Widerspruch; `BM1W` angegeben |
+| 3 | ²⁵Mg | 5116.4 1/2- → 585.0 1/2+ | 4531.4, D+Q | ²⁴Mg(d,pγ), 025:5350 | Formatfall: D+Q aus A2/A4 passt nicht zu den Spins |
+| 4 | ³⁰P | 3019.2 1+ → 677.01 0+ | 2342.3, M1+E2 | ³⁰S EC decay, 030:10190 | Formatfall/Tippfehler: E2 bei 1→0 unmöglich |
+| 5 | ⁴¹Sc | 3775 3/2- → 0 7/2- | 3775, D(+Q) | ⁴⁰Ca(p,γ), 041:16170 | echter Widerspruch oder Tippfehler: D mit δ = 0.00(11) bei ΔJ = 2 (A2, A4 von 1968Yo04) |
+| 6 | ⁴⁷Ti | 1549.8 3/2- → 159.3 7/2- | 1391, D(+Q) | ⁴⁴Ca(α,nγ) u. a., 047:5645 | echter Widerspruch oder falsche Platzierung; δ = −0.06(6); E_γ ohne Unsicherheit |
+| 7 | ⁵³Cr | 1006.27 5/2- → 564.03 1/2- | 442.7, M1+E2 | Adopted, 053:1276 | Tippfehler (E2?) |
+| 8 | ⁵³Cr | 7613.8 25/2(-) → 6009.1 21/2(-) | 1604.7, D | (HI,xnγ), 053:3010 | DCO gegen Spinzuordnung, oder Doppellinie (paralleles 1605.0 `?`) |
+| 9 | ⁵³Fe | 2339.24 11/2- → 0.0 7/2- | 2338.3, M1+E2 | Adopted, 053:8745 | Tippfehler (E2?) |
+| 10 | ⁹⁰Nb | 854.32 2- → 651.19 4(+) | 203.13, E1 | Adopted, 090:11281 | echter Widerspruch, in ENSDF selbst vermerkt („Inconsistent with ce measurements“) |
+
+Keine Bewertung „Fehler in ENSDF“ ohne Daniels Prüfung. Bericht: `~/ensdf/bericht.md`
+(Kopie `bericht_v2.md`), Listen `bericht.AA.tsv` und `bericht.B.tsv`.
