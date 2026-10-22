@@ -124,3 +124,61 @@ damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
   (Standard). `lake build EnsdfCheck.Rules` grün.
 - Umsetzung der S0-Befunde 1–3: A und A′ sind getrennt (angular/parity), Parität ist `ℤˣ` mit
   Umwandlung, E0 ist `special`. Für Befund 4 (`M1(+E2)`) kommt die Regel in S2.
+
+## S2 Parser — erledigt (2026-10-22 17:45), Commit **ensdf-check S2** (lokal)
+- `Tools/EnsdfCheck/Parse.lean`, **unbewiesener Code**. Er liest die Records mit den
+  Spaltenpositionen aus S0:
+  - L: E 10–19, DE 20–21, J 22–39, Q 80.
+  - G: E 10–19, DE 20–21, M 32–41, MR 42–49, DMR 50–55, C 77, Q 80.
+  - Fortsetzung mit `G` in Spalte 8 und Spalte 6 ≠ blank/`1`, darin `FL=`.
+  - Kommentare (Spalte 7 nicht blank) werden übersprungen.
+  - Datensätze sind durch Leerzeilen (END-Record) getrennt, die erste Zeile ist der ID-Record.
+- `lean_exe ensdf-check` (root `EnsdfCheck.Main`, srcDir `Tools`) mit Modus `--parse-stats`.
+  - Die exe importiert `Rules.lean` statisch, führt also genau den bewiesenen Code aus.
+  - Erster Bau 22 s, Lauf über alle 300 Dateien 11,6 s.
+  - Statistik: `~/ensdf/parse_stats_S2.txt`.
+- **Gesamtzahlen**: 20,117 Datensätze (Webseite: 20,118), 568,228 Levels, 793,431 Gammas,
+  34,700 Gammas mit `FL=`.
+- **Jπ** (Levels):
+
+  | Ergebnis | Anzahl |
+  |---|---|
+  | einzeln, fest | 171,955 |
+  | leer | 170,996 |
+  | einzeln, in Klammern | 135,528 |
+  | Liste | 53,203 |
+  | einzeln, ohne Parität | 18,561 |
+  | nicht geprüft: Offset (`J+2`, `N`, `U`, …) | 9,638 |
+  | nicht geprüft: nur Parität | 3,359 |
+  | nicht geprüft: Bereich (`TO`, `:`) | 3,010 |
+  | nicht geprüft: Schranke (`GE`, `LE`, …) | 1,441 |
+  | nicht geprüft: Dublett (`&`) | 457 |
+  | nicht geprüft: `NATURAL` | 58 |
+  | nicht geprüft: `NOT` | 18 |
+  | **nicht lesbar** | **4** |
+
+  Die 4 nicht lesbaren Felder: `3/21` (087:2133), `3/2,5/25,7/2(-)` (091:1775), `(37-/2)`
+  (123:8278), `1(1/2,3/2)` (185:1912).
+- **Multipolarität** (Gammas):
+
+  | Ergebnis | Anzahl |
+  |---|---|
+  | leer | 560,329 |
+  | einzeln, fest | 108,061 |
+  | in Klammern (inkl. `M1(+E2)`) | 76,457 |
+  | gemischt, fest | 36,787 |
+  | Alternativen mit `,` | 11,591 |
+  | **nicht lesbar** | **206** |
+
+  Alle 206 nicht lesbaren Felder enthalten `O`, z. B. `Q(+O)` oder `Q+O`.
+- **Energien**: 67 Level-Energien sind nicht lesbar (`SN+X`, `SN-0.377`). Exponenten wie `1.8E+3`
+  werden jetzt gelesen.
+- Lesarten, die Daniel prüfen sollte:
+  1. `M1(+E2)` und ähnliche Formen lese ich als `M1+E2`, wobei der Anteil in Klammern als
+     „probable“ gilt (Klammerregel V.19). Das Handbuch von 2001 kennt `(+E2)` selbst nicht.
+  2. `O` (wohl Oktupol) steht nicht im Handbuch → P, nicht geraten.
+  3. `(1,2,3)(+)` heißt Liste mit vorläufiger Parität. `(5/2-,7/2)-` wird nur angenommen, wenn
+     innere und äußere Parität gleich sind.
+  4. `32/2-` und `58/2+` lese ich wörtlich nach V.20 („J = N/2“, N beliebig) als J = 16 bzw. 29;
+     das sind vermutlich Tippfehler in ENSDF.
+  5. Eine einzelne Großbuchstaben-Spin (`N`, `U`) gilt als Offset-Form V.20.8.
