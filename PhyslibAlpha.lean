@@ -678,6 +678,7 @@ public import PhyslibAlpha.QuantumMechanics.HilbertSpaces.FiniteTarget.ProductSt
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.Degeneracy
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.Eigenfunctions
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.FineStructure
+public import PhyslibAlpha.QuantumMechanics.Hydrogen.PolyBounded
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.RadialFunctions
 public import PhyslibAlpha.QuantumMechanics.Hydrogen.RadialQuantization
 public import PhyslibAlpha.QuantumMechanics.QuantumHarmonicOscillator
