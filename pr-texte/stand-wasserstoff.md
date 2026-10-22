@@ -458,3 +458,23 @@ Branch `hydrogen-bound-states-adjoint` (lokal, 20 Commits über `hydrogen-bound-
   `PolyBddSchwartzSubmodule d a` (Schwartz mit `‖x‖^{-k}|f| ≤ C_k`, k ≤ a) und
   `PolyBddSchwartzSubmodule.dense`. Plan: `PolyBddSchwartzSubmodule d 1 ≤ dom H`
   (`|f|/‖x‖` beschränkt und schnell fallend ⇒ `Vf ∈ L²`), daraus Dichtheit für alle d ≥ 1.
+
+### 2026-10-22 11:45: Dichtheit von dom H bewiesen — E3 vollständig, ohne Zusatzhypothesen
+- `polyBddSchwartzSubmodule_le_hamiltonianOperator_domain`:
+  `PolyBddSchwartzSubmodule d ⌊2 - d/2⌋.toNat ≤ dom H` (für d ≥ 3 alle Schwartz-Abbildungen),
+  aus physlib `radiusPowOperator_domain_ge` (s = -1), `momentumSqOperator_domain_eq`,
+  `LinearPMap.smul_domain`, `HydrogenAtom.potential_eq`.
+- `dense_hamiltonianOperator_domain`: dom H dicht, für **alle** d (über
+  `PolyBddSchwartzSubmodule.dense`).
+- Hypothese `hdense` aus `adjoint_boundStateHS`, `adjoint_boundStateMapHS`,
+  `exists_finrank_eigenvectors_adjoint_three` entfernt. Axiome Standard, `sorry` 0,
+  `lint-style.py` grün, Modul-Build grün. Commit lokal cd26c951; Branch
+  `hydrogen-bound-states-adjoint` jetzt 23 Commits über 53805fce, **nicht gepusht**.
+- Offen (Entscheidung Daniel): (1) WIP-Commits zusammenfassen; (2) Datei (≈1300 Zeilen) teilen
+  (L²-Teil / Adjungierten-Teil) und Hilfslemmata (IsPolyBounded, `deriv_ofReal`,
+  `deriv_schwartz`, Green G1, Dichtheit) an passendere Orte verschieben; (3) ℂ-Dimension
+  `(n+1)²` des Eigenraums (bisher nur reeller Unterraum); (4) voller `check_pr.sh` /
+  `lake build PhyslibAlpha` vor Push; (5) Push + PR-Text.
+- Hinweis: `physlib-notes` hat kein `origin`-Ziel für Notizen — Push geht nach `fork`
+  (Upstream jetzt auf `fork/notes/pr-texte` gesetzt). Die E3e-Notizen waren bis heute nicht
+  gepusht.
