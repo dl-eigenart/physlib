@@ -255,3 +255,19 @@ damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
   (z. B. 106Ag 11⁻→9⁻, 106Sn 17⁻→15⁻, 149Gd 17/2⁻→13/2⁻); dort verletzt der Dipolanteil die
   Dreiecksregel. Mindestens ein Treffer sieht nach Zuordnungsproblem aus: 9Be 16977.1 →
   `2.78E+3`, das große σ des Zielniveaus macht das Fenster breit. Mehr in S6.
+
+## S5 Zertifikate — erledigt (2026-10-22 18:10), Commit **ensdf-check S5** (lokal)
+- Die exe erzeugt die Datei selbst (kein Python):
+  `lake exe ensdf-check ~/ensdf/data_261001 ~/ensdf/bericht.md --certificates Tools/EnsdfCheck/Certificates.lean`.
+- `Tools/EnsdfCheck/Certificates.lean`: **28** `example`s, eines je A-Treffer, die Daten als
+  Kommentar. Form:
+  `example : ∀ (t : MultipoleType) (πi πf : ℤ), ¬ IsAllowedMultipole 2Jᵢ 2J_f πi πf t λ := fun _ _ _ h => absurd h.2.1 (by decide)`.
+- **Abweichung vom Auftrag**: Statt `¬ IsAllowedMultipole … := by decide` mit festen Paritäten
+  steht ein ∀ über Typ und Paritäten. Gründe:
+  - Bei A darf die Parität fehlen oder in Klammern stehen.
+  - Bei `D`/`Q` ist der Typ offen.
+  - Die Aussage ist stärker, und `decide` prüft im Kern genau den Teil `¬ TriangleRule (2λ) 2Jᵢ 2J_f`.
+  Die Datei importiert nur `SelectionRules.lean` und hängt nicht vom Werkzeugcode ab.
+- `lake build EnsdfCheck.Certificates` grün, zusätzlich `lake env lean` auf die Datei.
+- Gegenprobe: Ein absichtlich falsches Zertifikat (9/2→5/2, λ = 2, erlaubt) wird abgelehnt
+  („`decide` proved that the proposition ¬TriangleRule (2 * 2) 9 5 is false“).
