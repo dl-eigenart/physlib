@@ -542,3 +542,41 @@ baubar. Inhalt am Ende identisch zu 1cc27d88 (Prüfung per `git diff` gegen 1cc2
 Verschiebung).
 Hinweis: Basis a46a93e9 ist alt (origin/master jetzt 8a6ce260); Rebase separat, nach Punkt 4.
 Offene Fragen an Daniel: (i) (d) nach Physlib oder vorerst Alpha? (ii) (c) in c1/c2 teilen?
+
+### 2026-10-22 11:55: Punkte 2 und 1 erledigt (Aufteilung, ein Commit je Teil); Punkt 4 Prüfläufe
+Daniels Entscheidung: (d) nach Physlib, eigener Branch auf master; (c) in c1/c2 geteilt.
+
+**Branch `hydrogen-dense-domain`** (lokal, auf origin/master 8a6ce260, 1 Commit fdd7f900, nicht gepusht):
+`Physlib/QuantumMechanics/Hydrogen/Basic.lean`, neuer Abschnitt „C. Domain of the Hamiltonian“:
+`HydrogenAtom.polyBddSchwartzSubmodule_le_hamiltonianOperator_domain`,
+`HydrogenAtom.hamiltonianOperator_hasDenseDomain` (`lemma`, kein Eintrag in Theorems.txt — falls
+`theorem` gewünscht: Daniel). Satz im Modul-Docstring ergänzt; Authors-Zeile nicht geändert.
+Prüfung (`check_physlib_build.sh dense` = Schritte aus build.yml, + `check_pr.sh dense`):
+`lake build -KCI --iofail` OK, check_file_imports, check_dup_tags, pseudo_lint, theorem_lint
+Physlib QuantumInfo, module_doc_lint, api_map_lint, runPhyslibLinters OK; check_pr: build_alpha,
+runPhyslibAlphaLinters, theorem_lint, module_doc_lint, alphaFileImports, noAlphaImports,
+lint_style, alpha_python, codespell OK, sorry 0. → kann als erster PR raus (nach „ja“).
+
+**Branch `hydrogen-bound-states-split`** (lokal, auf `hydrogen-degeneracy-analytic` 7ad91892,
+nicht gepusht; ersetzt `hydrogen-bound-states-adjoint`, der als Sicherung unverändert bleibt):
+- c3084668 (d) Cherry-Pick von fdd7f900
+- 9a6dc607 (a) `PolyBounded.lean` (307 Z.)
+- 1156a103 (b) `BoundStatesL2.lean` (255 Z.)
+- 52f3b731 (c1) `GreenIdentity.lean` (296 Z., Docstring allgemein)
+- f67ddc47 (c2) `BoundStatesAdjoint.lean` (741 Z.)
+Jeder Teil nach dem Commit einzeln gebaut (Modul-Build grün). Abweichung vom Vorschlag: (c1) ist
+kleiner/(c2) größer als geschätzt — nach (c1) kam nur der allgemeine Teil (G1, Ableitungen
+radialer Funktionen, `regG` + Schranken); alles mit `boundState`/`radialFactor` (Grenzwert ε → 0)
+steht in (c2). (c1) importiert über (a)/`Degeneracy` auch `Eigenfunctions` (für
+`hasDerivAt_comp_sqrt`).
+Inhaltsprüfung gegen 1cc27d88 (Zeilen-Multimenge): Code identisch bis auf die 2 nach Physlib
+verschobenen Lemmata und 2× `adjoint_apply_eq H.hamiltonianOperator_hasDenseDomain`; dabei einen
+verlorenen Docstring (`deriv_ofReal`) gefunden und per Fixup in (c1) korrigiert.
+`check_pr.sh split`: build_modules, build_alpha (`lake build PhyslibAlpha`), runPhyslibAlphaLinters,
+module_doc_lint, alphaFileImports, noAlphaImports, lint_style, alpha_python, codespell OK, sorry 0;
+**theorem_lint FEHLER** — Werkzeugabbruch beim Laden (`import Physlib.Meta.Linters.Sorry failed,
+environment already contains 'pseudoExtension'`), bekanntes Problem der alten Basis a46a93e9, nicht
+unser Code (neue Dateien enthalten 0 `theorem`; auf master-Basis war theorem_lint für (d) grün).
+Verschwindet mit dem Rebase des Stapels auf master.
+Offen: Push beider Branches (wartet auf „ja“); Rebase des Stapels auf master (nach Merge von (d)
+fällt c3084668 weg); PR-Texte.
