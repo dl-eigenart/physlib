@@ -478,3 +478,22 @@ Branch `hydrogen-bound-states-adjoint` (lokal, 20 Commits über `hydrogen-bound-
 - Hinweis: `physlib-notes` hat kein `origin`-Ziel für Notizen — Push geht nach `fork`
   (Upstream jetzt auf `fork/notes/pr-texte` gesetzt). Die E3e-Notizen waren bis heute nicht
   gepusht.
+
+## 2026-10-22 Aufräumen nach Daniels Freigabe (Reihenfolge 3 → 2 → 1 → 4)
+
+### Plan Punkt 3: ℂ-Dimension `(n+1)²`
+Ziel (d = 3): `∃ V : Submodule ℂ HS, finrank ℂ V = (n+1)² ∧ ∀ v ∈ V, v ∈ dom H† ∧ H† v = E_n v`,
+mit `V = span ℂ (range boundStateMapHS)`.
+1. Abstraktes Lemma (beliebiger ℂ-Innenproduktraum `E`): `v : ι → E` (ι endlich) mit
+   `(⟪v k, v j⟫).im = 0` für alle k, j und `LinearIndependent ℝ v` ⇒ `LinearIndependent ℂ v`.
+   Beweis: `Σ c_j v_j = 0`, `a = Re c`, `b = Im c`, `w_a = Σ a_j v_j`, `w_b = Σ b_j v_j`;
+   `w_a = -i w_b`, also `⟪w_a, w_a⟫ = -i ⟪w_a, w_b⟫` reell und rein imaginär ⇒ `w_a = 0`, dann
+   `w_b = 0`, ℝ-Unabhängigkeit ⇒ `a = b = 0`. Keine `Lp`-Summen nötig.
+2. Gram-Einträge reell: `⟪boundStateMapHS Ps, boundStateMapHS Qs⟫ = ∫ (g_P g_Q : ℝ)` über
+   `inner_mk_mk`/`coeFn_mk` und `integral_ofReal` ⇒ `im = 0`.
+3. ℝ-Basis `b` des Definitionsbereichs (`Module.finBasis`), `v = boundStateMapHS ∘ b`:
+   ℝ-unabhängig (Injektivität), also ℂ-unabhängig; `span ℂ (range boundStateMapHS) =
+   span ℂ (range v)`; `finrank_span_eq_card` ⇒ `finrank ℝ (Def.-bereich) = (n+1)²`.
+4. Eigenvektor-Eigenschaft auf `span ℂ` per `Submodule.span_induction` (0, +, ℂ-Vielfache;
+   `H†` ist ℂ-linear).
+Das reelle Korollar bleibt (billig) stehen, das komplexe kommt dazu.
