@@ -182,3 +182,36 @@ damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
   4. `32/2-` und `58/2+` lese ich wörtlich nach V.20 („J = N/2“, N beliebig) als J = 16 bzw. 29;
      das sind vermutlich Tippfehler in ENSDF.
   5. Eine einzelne Großbuchstaben-Spin (`N`, `U`) gilt als Offset-Form V.20.8.
+
+## S3 Endniveau — erledigt (2026-10-22 17:55), Commit **ensdf-check S3** (lokal)
+`Tools/EnsdfCheck/Assign.lean` (unbewiesen), Funktion `placeGamma` mit Ergebnis `Placement`.
+- **Mit `FL=`**: Es gilt der Level mit genau diesem Energietext (IV.C.2: „identical to a level
+  energy“), ersatzweise derselbe Zahlenwert mit gleichem Offset. Ein `?` dahinter wird als
+  „unsicher“ markiert; `FL=?` heißt Endniveau unbekannt.
+- **Ohne `FL=`**: E_f = E_i − E_γ, nur Levels mit gleichem Offset (`+X`) und E_f < E_i.
+  - Toleranz 3σ mit σ = √(σ_i² + σ_γ² + σ_f²); σ = DE in Einheiten der letzten Stelle, bei leerem
+    oder nicht-numerischem DE eine Einheit der letzten Stelle.
+  - Genau ein Kandidat → zugeordnet; keiner → „no match“; mehrere → „ambiguous“.
+- **Keine Rückstoßkorrektur**: Das Handbuch verlangt sie nicht (S0). Folge, an einer Stichprobe
+  belegt: `6LI L 3562.88` → `G 3561.75` (Ende 0+) liegt 1,13 keV daneben, genau der Rückstoß
+  E_γ²/(2Mc²). Leichte Kerne mit harten Gammas landen deshalb in „no match“. Das kostet
+  Abdeckung, erzeugt aber **keine** Treffer.
+- Lauf `--placement-stats` in 13,7 s, Ausgabe `~/ensdf/placement_stats_S3.txt`.
+
+  Gammas **mit Multipolarität** (232,902):
+
+  | Ergebnis | Anzahl |
+  |---|---|
+  | über E_i − E_γ | 209,750 |
+  | über `FL=` | 10,300 |
+  | mehrdeutig | 5,848 |
+  | unplatziert | 4,431 |
+  | kein Treffer | 2,674 |
+  | Energie nicht lesbar / Offset | 78 |
+  | `FL=` nicht gefunden | 16 |
+  | `FL=?` | 5 |
+
+  Zugeordnet sind 220,050, das sind 94,5 %. Über alle 793,431 Gammas: 686,823 zugeordnet,
+  67,067 unplatziert, 21,734 mehrdeutig, 16,602 kein Treffer.
+- Frage an Daniel: Soll die Rückstoßkorrektur als Option kommen (gemeldet getrennt, nicht als
+  Standard)? Laut Auftrag nein, deshalb nicht umgesetzt.
