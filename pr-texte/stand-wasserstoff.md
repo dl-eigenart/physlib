@@ -590,3 +590,106 @@ fällt c3084668 weg); PR-Texte.
   rebasen (c3084668 fällt weg), dann theorem_lint erneut, PR-Text(e) für den Alpha-Stapel.
 - Lokale Hilfsdateien außerhalb der Repos: `~/physlib_ci/check_physlib_build.sh` (Physlib-Schritte
   aus build.yml), `~/physlib_ci/scratch/` (Aufteilungsskript, wegwerfbar).
+
+## Plan E4: Vollständigkeit der radialen Lösungen (noch kein Code)
+
+### Ziel: die Annahme in PR 04 schließen
+PR 04 (`radial_quantization`, `RadialQuantization.lean`) setzt die Lösung als
+`radialSeries κ l c = ρ^(l+1) e^(-κρ) Σ c_k ρ^k` mit `EntireCoeff c`, `c 0 ≠ 0` voraus. E4 zeigt:
+jede bei 0 reguläre Lösung hat diese Form.
+
+**Hauptaussage (Vollständigkeit)**, `κ : ℝ` beliebig, `l : ℕ`, `u : ℝ → ℝ`, `q ρ = l(l+1)/ρ² - 2/ρ + κ²`:
+- `∀ ρ > 0, DifferentiableAt ℝ u ρ ∧ DifferentiableAt ℝ (deriv u) ρ` (sonst ist `deriv` Unsinn),
+- `∀ ρ > 0, deriv (deriv u) ρ = q ρ * u ρ` (gleiche Form wie `hode` in PR 04),
+- Randbedingung bei 0: `Tendsto u (𝓝[>] 0) (𝓝 0)`,
+
+⇒ `∃ c, EntireCoeff c ∧ RadialRec κ l c ∧ ∀ ρ > 0, u ρ = radialSeries κ l c ρ`;
+ist `u` auf `(0, ∞)` nicht identisch 0, gilt zusätzlich `c 0 ≠ 0`.
+
+Warum `u → 0`: die zweite Lösung verhält sich bei 0 wie `ρ^(-l)` (l ≥ 1, unbeschränkt) bzw. wie
+`1 + O(ρ log ρ)` (l = 0, beschränkt, aber `u(0) ≠ 0`). `u → 0` schließt beide aus und ist die
+physikalisch richtige Bedingung (für l = 0 ist `u₂/r ~ 1/r` zwar in L²(ℝ³), aber
+`Δ(1/r) = -4πδ`, also nicht im Definitionsbereich). „Beschränkt“ würde für l = 0 nicht reichen.
+
+**Folgerung (Quantisierung ohne Ansatz)** `radial_quantization_of_tendsto`: zusätzlich
+`IntegrableOn (u²) (Ioi 0)`, `κ > 0` und `u ≢ 0` auf `(0, ∞)` ⇒
+`∃ ν > l, κ = 1/ν ∧ ∃ C, ∀ ρ > 0, u ρ = C * radialU ν l ρ`.
+Beweis: Vollständigkeit + `radial_quantization` (Übertragung von `hode`/Integrierbarkeit über
+`EqOn` auf der offenen Menge `Ioi 0`, `Filter.EventuallyEq.deriv_eq`). Danach den Satz
+„… is not formalised“ im Modul-Docstring von `RadialQuantization.lean` anpassen (eigener Commit
+oder im E4-PR als Hinweis; Entscheidung Daniel).
+
+### Mathlib-Werkzeuge für lineare ODEs (Stand Mathlib im Repo, Manifest-rev 56a00585)
+Recherchiert in `Mathlib/Analysis/ODE/*`:
+- **Vorhanden:** `IsIntegralCurveOn` (Basic); Picard–Lindelöf nur **lokal**
+  (`IsPicardLindelof`, `exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt`);
+  Eindeutigkeit über Gronwall: `ODE_solution_unique_of_mem_Ioo`, `…_of_eventually`,
+  `ODE_solution_unique_univ` (für `x' = v t x`, `v t` Lipschitz auf `s t`, E Banachraum, also
+  auch für das System `(u, u') ∈ ℝ × ℝ`), `eq_zero_of_abs_deriv_le_mul_abs_self_of_eq_zero_right`.
+- **Nicht vorhanden:** lineare ODEs als eigenes Konzept, globale Existenz für lineare Systeme,
+  Lösungsraum = n-dimensional, Wronski-Determinante für Funktionen (nur
+  `Polynomial.wronskian`), reguläre singuläre Punkte, Frobenius-Methode, analytische
+  Lösungen analytischer ODEs (Cauchy–Kowalewskaja).
+- **Sonst nützlich:** Quotientenkriterium `summable_of_ratio_test_tendsto_lt_one` /
+  `summable_of_ratio_norm_eventually_le`; Monotonie aus Ableitungsvorzeichen
+  (`antitoneOn_of_deriv_nonpos`); `is_const_of_deriv_eq_zero` / `constant_of_derivWithin_zero`
+  bzw. `IsOpen.is_const_of_deriv_eq_zero` für die konstante Wronski-Funktion.
+
+Folge: Frobenius in voller Allgemeinheit (zweite Lösung mit `log`-Term, da die Indexdifferenz
+`2l + 1` ganzzahlig ist) wäre ein großes eigenes Projekt. **Wir brauchen sie nicht**: die
+reguläre Lösung wird explizit als Reihe gebaut, die zweite Lösung nie konstruiert, sondern per
+Wronski-Argument ausgeschlossen. Das ist ehrlicher Umfang für einen PR; im Docstring sagen, dass
+die Frobenius-Lösung nur für den Exponenten `l + 1` gebaut wird.
+
+### Beweisweg (elementar, ohne allgemeine ODE-Theorie)
+1. **Umkehrung von `recursion_of_radial_ode`**: `EntireCoeff c ∧ RadialRec κ l c ⇒` `radialSeries`
+   löst die Gleichung auf `(0, ∞)`. Mit `hasDerivAt_radialSeries`, `hasDerivAt_radialSeriesD`,
+   `radial_identity`; fehlt nur: Reihe `ρW'' + (2l+2-2κρ)W' + (2-2κ(l+1))W` hat Koeffizienten 0
+   (gleiche Reihe `d` wie im Beweis von `recursion_of_radial_ode` — dort ggf. als Lemma herausziehen;
+   PR 04 nicht ändern, falls vermeidbar → eigenes Lemma in der neuen Datei).
+2. **Existenz der regulären Lösung**: `c₁` per Rekursion mit `c₁ 0 = 1`
+   (`c₁ (k+1) = (2κ(k+l+1) - 2) / ((k+1)(k+2l+2)) · c₁ k`); `EntireCoeff c₁` per Quotientenkriterium
+   (`|c₁(k+1)| r^(k+1) / (|c₁ k| r^k) → 0`; Fall `c₁ k = 0` ab einem Index → `summable_of_ne_finset_zero`
+   bzw. `summable_of_ratio_norm_eventually_le` deckt das ab). Setze `u₁ = radialSeries κ l c₁`.
+3. **Asymptotik von `u₁` bei 0**: es gibt `δ > 0`, `0 < a ≤ b` mit `a ρ^(l+1) ≤ u₁ ρ ≤ b ρ^(l+1)` auf
+   `(0, δ]` (aus `psum c₁ 0 = 1`, Stetigkeit von `psum`, `e^(-κρ)` beschränkt).
+4. **Wronski-Funktion** `W = u u₁' - u' u₁` ist auf `(0, ∞)` konstant (Ableitung `u q u₁ - q u u₁ = 0`).
+5. **W = 0 aus `u → 0`**: auf `(0, δ)` ist `(u/u₁)' = -W/u₁²`. Für `W ≠ 0` (oBdA `W > 0`, sonst `-u`):
+   `g ρ = u ρ/u₁ ρ - W/(b²(2l+1)) ρ^(-(2l+1))` hat `g' ≤ 0`, also antiton ⇒ für `ρ ≤ δ/2`:
+   `u/u₁ ≥ K ρ^(-(2l+1)) - M` mit `K > 0` ⇒ `u ρ ≥ a K ρ^(-l) - b M ρ^(l+1)`, Widerspruch zu `u → 0`
+   (für l = 0 Grenzwert ≥ `aK > 0`). Keine Integrale nötig.
+6. **u = A u₁ auf (0, δ)**: aus `W = 0` ist `(u/u₁)' = 0` auf `(0, δ)` ⇒ konstant `A`.
+7. **Fortsetzung auf (0, ∞)**: `w = u - A u₁` löst die Gleichung, `w = w' = 0` auf `(0, δ)`.
+   `ODE_solution_unique_of_mem_Ioo` für das System `(w, w')` mit `v t (x, y) = (y, q t x)` auf
+   `Ioo a' b'` mit `0 < a' < δ` (Lipschitz-Konstante `max 1 (sup |q|)`, `q` dort beschränkt);
+   `b'` beliebig ⇒ `w = 0` auf `(0, ∞)`. (Alternative ohne System: zweites Wronski-Argument mit
+   `u₁ ≠ 0` — geht nicht global, `u₁` hat Nullstellen; daher Gronwall-Eindeutigkeit.)
+8. **Zusammensetzen**: `c = A • c₁` (`EntireCoeff.const_mul`, `psum_const_mul`); `u ≢ 0 ⇒ A ≠ 0 ⇒ c 0 ≠ 0`.
+9. **Folgerung** `radial_quantization_of_tendsto` (s. o.).
+
+Schwierigste Teile: 5 (Ungleichungskette mit Potenzen, Vorzeichenfall) und 7 (Lipschitz-Nachweis
+für das System, `Prod`-Norm). 3 und 2 sind Routine, 1 im Wesentlichen schon in PR 04 vorhanden.
+
+### Branch und Datei
+- Basis: **`fork/pr/hydrogen-quantisation` = e9f670d4** (auf #1900 a46a93e9 + radial d588e09d).
+  Achtung: der lokale Branch `pr/hydrogen-quantisation` (7222a740) ist veraltet (alte Basis
+  21da4ea5); Inhalt der Wasserstoff-Dateien gleich, aber **nicht** als Basis nehmen und nicht
+  anfassen.
+- Neuer Branch **`hydrogen-radial-completeness`** (lokal) von `fork/pr/hydrogen-quantisation`.
+- Neue Datei `PhyslibAlpha/QuantumMechanics/Hydrogen/RadialCompleteness.lean` (importiert
+  `RadialQuantization`, Namespace `PhyslibAlpha.Hydrogen`), Import in `PhyslibAlpha.lean`.
+  PR 04 bleibt unverändert (bis auf evtl. Docstring-Satz, s. o.).
+- Bekannt: Basis a46a93e9 ist alt → `theorem_lint` bricht dort mit dem `pseudoExtension`-Fehler ab
+  (s. o.); unabhängig von E4, verschwindet mit Rebase nach Merge von radial/04.
+
+### Schritte (je mit `lake build` des Moduls, nur ein Build gleichzeitig)
+- S1: Datei + alle Aussagen (1–9) mit `sorry`, bauen.
+- S2: 1 und 2 (Umkehrung, Existenz/`EntireCoeff c₁`).
+- S3: 3 und 4 (Asymptotik, Wronski konstant).
+- S4: 5 und 6 (W = 0, lokale Proportionalität).
+- S5: 7 (Gronwall-Fortsetzung).
+- S6: 8 und 9, kein `sorry`; `check_pr.sh`, PR-Text-Entwurf. Push erst nach „ja“.
+
+Offene Fragen an Daniel: (i) Randbedingung `u → 0` bei `0⁺` so recht (Alternative: `u = O(ρ)`,
+stärker, einfacher Beweis von 5, aber schwächeres Ergebnis)? (ii) Docstring-Satz in PR 04 im
+E4-PR anpassen oder in PR 04 selbst? (iii) Branchname ok?
