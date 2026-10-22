@@ -1,6 +1,6 @@
 # Auftrag (Entwurf): berechenbare rationale 3j²- und 6j²-Werte mit Gleichheitsbeweis
 
-Status: **Entwurf, noch nicht freigegeben.** Folgeauftrag zu `Auftrag-ENSDF.md` („Danach“).
+Status: **freigegeben mit Entscheidungen (22.10.2026 19:20), siehe unten.** Folgeauftrag zu `Auftrag-ENSDF.md` („Danach“).
 Regeln wie immer:
 - Kleine Schritte, erst Aussagen mit `sorry`.
 - Nach jedem Schritt `lake build`, nur ein Build gleichzeitig.
@@ -120,3 +120,15 @@ Laufzeiten messen und festhalten.
    Werkzeug zulässig? Vorschlag: im Kern nur `decide`; Massenwerte nur kompiliert im Werkzeug,
    dort nicht als Beweis.
 5. Push, Veröffentlichung, Kontakt nach außen: wie immer nur Daniel.
+
+## Entscheidungen Daniel (2026-10-22 19:20)
+1. **Ort**: PhyslibAlpha, PR-fähige Datei; das ENSDF-Werkzeug importiert sie.
+2. **Basis**: neuer Branch `rational-3j6j` von `fork/pr/six-j-symmetry`. PR erst nach Merge von
+   PR 11 (Wigner 3j) und PR 14 (6j-Symmetrie).
+3. **Zwei PRs**: zuerst 3j rational (R1/R2), dann 6j mit Racah-Formel (R3/R4).
+4. **Im Kern nur `decide`**, kein `native_decide`. Werte aus dem Werkzeug stehen im Bericht als
+   Rechnung, nicht als Beweis.
+5. **Zusätzlich zu R2**: sympy-Gegenprobe außerhalb von Lean (Skripte wie `check_3j.py`,
+   `check_6j.py`; die gibt es noch nicht, sie werden in R2 angelegt).
+6. **Reihenfolge**: zuerst T0 aus `Auftrag-ENSDF-2.md`, Tabelle zeigen, dann R0.
+   Überschneidung: Auftrag-ENSDF-2 T3 ist dieser Auftrag.
