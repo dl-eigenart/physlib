@@ -83,13 +83,14 @@ def Component.isUntyped : Component → Bool
   | _ => false
 
 /-- Classify one gamma transition of a data set. -/
-def classify (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec) : Option Finding :=
+def classify (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec)
+    (broad : Float := broadKeV) : Option Finding :=
   match parseM g.m with
   | .empty => none
   | .unparsable => some ⟨.p, "multipolarity unreadable", none, none, false⟩
   | .unchecked k => some ⟨.n, s!"multipolarity {k}", none, none, false⟩
   | .ok malts =>
-    match placeGamma ds levelE g, g.level with
+    match placeGamma ds levelE g broad, g.level with
     | .ok f viaFL unc, some i =>
       let li := ds.levels[i]!
       let lf := ds.levels[f]!

@@ -59,7 +59,8 @@ def broadKeV : Float := 10.0
 
 /-- Locate the final level of gamma `g` in data set `ds`. `levelE` holds the parsed level
 energies. -/
-def placeGamma (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec) : Placement :=
+def placeGamma (ds : Dataset) (levelE : Array (Option Energy)) (g : GammaRec)
+    (broadKeV : Float := broadKeV) : Placement :=
   match g.level with
   | none => .unplaced
   | some i =>

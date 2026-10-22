@@ -165,7 +165,8 @@ def fld (l : List Char) : String :=
 def EnsdfCheck.Dataset.isAdopted (d : Dataset) : Bool := d.dsid.startsWith "ADOPTED LEVELS"
 
 /-- The index of the closest element whose energy agrees with `e` within three combined standard
-uncertainties, if any. -/
+uncertainties or 1 keV, whichever is larger, if any. The 1 keV floor covers energies given without
+uncertainty to different precision in different data sets (`2109.4` and `2109.964`). -/
 def closestMatch (cands : List (Nat × List Char × List Char)) (e : List Char) (de : List Char) :
     Option Nat :=
   match parseEnergy e with
@@ -176,7 +177,8 @@ def closestMatch (cands : List (Nat × List Char × List Char)) (e : List Char) 
         let d := Float.abs (x.value - y.value)
         let sx := sigma x de
         let sy := sigma y de'
-        if o == o' && d ≤ 3.0 * Float.sqrt (sx * sx + sy * sy) then some (k, d) else none
+        let tol := max (3.0 * Float.sqrt (sx * sx + sy * sy)) 1.0
+        if o == o' && d ≤ tol then some (k, d) else none
       | _ => none
     (ok.foldl (fun (best : Option (Nat × Float)) c =>
       match best with
@@ -190,8 +192,8 @@ its final level fixed to the matched one. Returns the entries of the columns "al
 "Adopted contradicts". A violation in Adopted (A, A' or B) counts as "also in Adopted"; Adopted
 contradicts only if it gives an allowed transition or no multipolarity; other outcomes (placement
 or Jπ not checkable in Adopted) are "unclear". -/
-def adoptedCompare (ad : Dataset) (li : LevelRec) (lf : Option LevelRec) (g : GammaRec) :
-    String × String :=
+def adoptedCompare (ad : Dataset) (li : LevelRec) (lf : Option LevelRec) (g : GammaRec)
+    (broad : Float := broadKeV) : String × String :=
   let adE := ad.levels.map fun l => parseEnergy l.e
   let lvls := (List.range ad.levels.size).map fun k => (k, ad.levels[k]!.e, ad.levels[k]!.de)
   match closestMatch lvls li.e li.de with
@@ -208,7 +210,7 @@ def adoptedCompare (ad : Dataset) (li : LevelRec) (lf : Option LevelRec) (g : Ga
         | some kf => { ga with fl := some ad.levels[kf]!.e }
         | none => ga
       let m := fld ga.m
-      match classify ad adE ga with
+      match classify ad adE ga broad with
       | none => ("no", "yes: no multipolarity in Adopted")
       | some r =>
         let jf := (r.final.map fun f => fld ad.levels[f]!.j).getD "?"
@@ -243,7 +245,7 @@ def certificates (dir : System.FilePath) (hits : Array Hit) : String := Id.run d
 
 /-- Run the check and write the report. -/
 def runCheck (dir : System.FilePath) (out : System.FilePath)
-    (cert : Option System.FilePath := none) : IO Unit := do
+    (cert : Option System.FilePath := none) (broad : Float := broadKeV) : IO Unit := do
   let entries ← dir.readDir
   let files := (entries.filter fun e => e.fileName.startsWith "ensdf.").qsort
     (fun a b => a.fileName < b.fileName)
@@ -267,7 +269,7 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
               s!"{if firmJ then "firm" else "bracketed or list"} | {d.dsid} | " ++
               s!"{f.fileName}:{l.line} |")
       for g in d.gammas do
-        match classify d levelE g with
+        match classify d levelE g broad with
         | none => pure ()
         | some r =>
           total := total + 1
@@ -285,7 +287,7 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
               let cmp : String × String :=
                 if d.isAdopted then ("yes (Adopted itself)", "–")
                 else match dss.find? (fun a => a.isAdopted && a.nucid == d.nucid), li with
-                  | some ad, some l => adoptedCompare ad l lf g
+                  | some ad, some l => adoptedCompare ad l lf g broad
                   | none, _ => ("no Adopted data set", "–")
                   | _, none => ("–", "–")
               hits := hits.push { h with inAdopted := cmp.1, adoptedContra := cmp.2 }
@@ -343,7 +345,12 @@ def main (args : List String) : IO UInt32 := do
   | [dir] => runCheck dir ((System.FilePath.mk dir) / ".." / "bericht.md"); return 0
   | [dir, out] => runCheck dir out; return 0
   | [dir, out, "--certificates", c] => runCheck dir out (some c); return 0
+  | [dir, out, "--broad", b] =>
+    match parseDec b.toList with
+    | some x => runCheck dir out none x.value; return 0
+    | none => IO.eprintln s!"not a number: {b}"; return 1
   | _ =>
-    IO.eprintln ("usage: ensdf-check <dir> [report.md [--certificates file.lean]] | " ++
+    IO.eprintln ("usage: ensdf-check <dir> [report.md [--certificates file.lean | " ++
+      "--broad keV]] | " ++
       "<dir> (--parse-stats | --placement-stats)")
     return 1
