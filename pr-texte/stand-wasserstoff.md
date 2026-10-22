@@ -580,3 +580,13 @@ unser Code (neue Dateien enthalten 0 `theorem`; auf master-Basis war theorem_lin
 Verschwindet mit dem Rebase des Stapels auf master.
 Offen: Push beider Branches (wartet auf „ja“); Rebase des Stapels auf master (nach Merge von (d)
 fällt c3084668 weg); PR-Texte.
+
+### 2026-10-22 11:58: Gepusht (nach Daniels „ja“) — Pause
+- `fork/hydrogen-dense-domain` = fdd7f900 (neu), `fork/hydrogen-bound-states-split` = f67ddc47 (neu).
+- Entscheidungen: `hamiltonianOperator_hasDenseDomain` bleibt `lemma` (kein Theorems.txt-Eintrag);
+  Rebase des Alpha-Stapels erst nach Merge von (d).
+- Noch keine PRs geöffnet, keine PR-Texte geschrieben.
+- Nächste Schritte nach der Pause: PR-Text für (d); nach Merge von (d) den Stapel auf master
+  rebasen (c3084668 fällt weg), dann theorem_lint erneut, PR-Text(e) für den Alpha-Stapel.
+- Lokale Hilfsdateien außerhalb der Repos: `~/physlib_ci/check_physlib_build.sh` (Physlib-Schritte
+  aus build.yml), `~/physlib_ci/scratch/` (Aufteilungsskript, wegwerfbar).
