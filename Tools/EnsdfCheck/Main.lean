@@ -116,7 +116,8 @@ def placementStats (dir : System.FilePath) : IO Unit := do
   let mut pt : Tally := {}
   let mut ptAll : Tally := {}
   for f in files do
-    for d in parseFile f.fileName (← readAscii f.path) do
+    let dss := parseFile f.fileName (← readAscii f.path)
+    for d in dss do
       let levelE := d.levels.map fun l => parseEnergy l.e
       for g in d.gammas do
         let p := placeGamma d levelE g
@@ -151,10 +152,71 @@ structure Hit where
   cert : Option (Nat × Nat × Nat)
   /-- Final level from `FL=`. -/
   viaFL : Bool
+  /-- Whether the Adopted data set shows the same violation. -/
+  inAdopted : String := ""
+  /-- Whether the Adopted data set contradicts the hit, with details. -/
+  adoptedContra : String := ""
 
 /-- Markdown-safe text of a field. -/
 def fld (l : List Char) : String :=
   (String.ofList (trimL l)).replace "|" "/"
+
+/-- Whether a data set is the Adopted Levels (and Gammas) data set. -/
+def EnsdfCheck.Dataset.isAdopted (d : Dataset) : Bool := d.dsid.startsWith "ADOPTED LEVELS"
+
+/-- The index of the closest element whose energy agrees with `e` within three combined standard
+uncertainties, if any. -/
+def closestMatch (cands : List (Nat × List Char × List Char)) (e : List Char) (de : List Char) :
+    Option Nat :=
+  match parseEnergy e with
+  | some ⟨o, some x⟩ =>
+    let ok := cands.filterMap fun (k, e', de') =>
+      match parseEnergy e' with
+      | some ⟨o', some y⟩ =>
+        let d := Float.abs (x.value - y.value)
+        let sx := sigma x de
+        let sy := sigma y de'
+        if o == o' && d ≤ 3.0 * Float.sqrt (sx * sx + sy * sy) then some (k, d) else none
+      | _ => none
+    (ok.foldl (fun (best : Option (Nat × Float)) c =>
+      match best with
+      | some b => if c.2 < b.2 then some c else some b
+      | none => some c) none).map (·.1)
+  | _ => none
+
+/-- Compare a hit with the Adopted data set of the same nuclide. The initial level, the gamma and
+the final level are matched by energy; the Adopted gamma is then classified in the same way, with
+its final level fixed to the matched one. Returns the entries of the columns "also in Adopted" and
+"Adopted contradicts". A violation in Adopted (A, A' or B) counts as "also in Adopted"; Adopted
+contradicts only if it gives an allowed transition or no multipolarity; other outcomes (placement
+or Jπ not checkable in Adopted) are "unclear". -/
+def adoptedCompare (ad : Dataset) (li : LevelRec) (lf : Option LevelRec) (g : GammaRec) :
+    String × String :=
+  let adE := ad.levels.map fun l => parseEnergy l.e
+  let lvls := (List.range ad.levels.size).map fun k => (k, ad.levels[k]!.e, ad.levels[k]!.de)
+  match closestMatch lvls li.e li.de with
+  | none => ("level not in Adopted", "–")
+  | some k =>
+    let gs := (List.range ad.gammas.size).filter (fun n => ad.gammas[n]!.level == some k) |>.map
+      fun n => (n, ad.gammas[n]!.e, ad.gammas[n]!.de)
+    match closestMatch gs g.e g.de with
+    | none => ("gamma not in Adopted", "–")
+    | some n =>
+      let ga := ad.gammas[n]!
+      -- fix the final level to the Adopted level matching the hit's final level
+      let ga := match lf.bind (fun l => closestMatch lvls l.e l.de) with
+        | some kf => { ga with fl := some ad.levels[kf]!.e }
+        | none => ga
+      let m := fld ga.m
+      match classify ad adE ga with
+      | none => ("no", "yes: no multipolarity in Adopted")
+      | some r =>
+        let jf := (r.final.map fun f => fld ad.levels[f]!.j).getD "?"
+        if r.cat == .a || r.cat == .a' || r.cat == .b then
+          (s!"yes, as {r.cat.name} ({r.reason})", "no")
+        else if r.cat == .ok || (r.cat == .c && r.reason == "D/Q without type, allowed") then
+          ("no", s!"yes: M={m}, J_f={jf}, allowed")
+        else (s!"unclear: {r.cat.name} ({r.reason})", "unclear")
 
 /-- The Lean file with one kernel-checked certificate per A hit. -/
 def certificates (dir : System.FilePath) (hits : Array Hit) : String := Id.run do
@@ -191,7 +253,8 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
   let mut bHits : Array Hit := #[]
   let mut sLevels : Array String := #[]
   for f in files do
-    for d in parseFile f.fileName (← readAscii f.path) do
+    let dss := parseFile f.fileName (← readAscii f.path)
+    for d in dss do
       let levelE := d.levels.map fun l => parseEnergy l.e
       if let some a := d.massNumber then
         for l in d.levels do
@@ -216,8 +279,16 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
             let h : Hit := ⟨r.cat, loc, d.nucid, d.dsid,
               (li.map (fld ·.e)).getD "", (li.map (fld ·.j)).getD "",
               (lf.map (fld ·.e)).getD "", (lf.map (fld ·.j)).getD "",
-              fld g.e, fld g.m, r.cert, r.viaFL⟩
-            if r.cat == .b then bHits := bHits.push h else hits := hits.push h
+              fld g.e, fld g.m, r.cert, r.viaFL, "", ""⟩
+            if r.cat == .b then bHits := bHits.push h
+            else
+              let cmp : String × String :=
+                if d.isAdopted then ("yes (Adopted itself)", "–")
+                else match dss.find? (fun a => a.isAdopted && a.nucid == d.nucid), li with
+                  | some ad, some l => adoptedCompare ad l lf g
+                  | none, _ => ("no Adopted data set", "–")
+                  | _, none => ("–", "–")
+              hits := hits.push { h with inAdopted := cmp.1, adoptedContra := cmp.2 }
   -- report
   let byCat (cat : Category) : Nat :=
     cats.counts.fold (fun n k v => if k.startsWith (cat.name ++ "\t") then n + v else n) 0
@@ -241,11 +312,11 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
       let sub := if viaFL then "final level from FL=" else "final level from E_i - E_γ - E_R"
       let hs := hits.filter fun h => h.cat == cat && h.viaFL == viaFL
       s := s ++ s!"\n## {title}; {sub} ({hs.size})\n\n" ++
-        "| Nuclide | E_i | Jπ_i | E_f | Jπ_f | E_γ | M | Data set | Record |\n" ++
-        "|---|---|---|---|---|---|---|---|---|\n"
+        "| Nuclide | E_i | Jπ_i | E_f | Jπ_f | E_γ | M | Data set | Record | also in Adopted | " ++
+        "Adopted contradicts |\n|---|---|---|---|---|---|---|---|---|---|---|\n"
       for h in hs do
         s := s ++ s!"| {h.nucid} | {h.ei} | {h.ji} | {h.ef} | {h.jf} | {h.eg} | {h.m} | " ++
-          s!"{h.dsid} | {h.loc} |\n"
+          s!"{h.dsid} | {h.loc} | {h.inAdopted} | {h.adoptedContra} |\n"
   s := s ++ s!"\n## S: level records with 2J and A of different parity ({sLevels.size})\n\n" ++
     "All data sets, also levels without a checked gamma transition.\n\n" ++
     "| Nuclide | E | Jπ | Jπ firm | Data set | Record |\n|---|---|---|---|---|---|\n"
@@ -255,7 +326,8 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
   -- tab-separated lists for further use
   let tsv (hs : Array Hit) : String := hs.foldl (fun acc h =>
     acc ++ s!"{h.cat.name}\t{h.nucid}\t{h.ei}\t{h.ji}\t{h.ef}\t{h.jf}\t{h.eg}\t{h.m}\t" ++
-      s!"{h.dsid}\t{h.loc}\t{if h.viaFL then "FL=" else "dE"}\t" ++
+      s!"{h.dsid}\t{h.loc}\t{if h.viaFL then "FL=" else "dE"}\t{h.inAdopted}\t" ++
+      s!"{h.adoptedContra}\t" ++
       (match h.cert with | some (x, y, l) => s!"{x} {y} {l}" | none => "") ++ "\n") ""
   IO.FS.writeFile (out.withExtension "AA.tsv") (tsv hits)
   IO.FS.writeFile (out.withExtension "B.tsv") (tsv bHits)
