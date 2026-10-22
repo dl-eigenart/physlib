@@ -113,8 +113,10 @@ def parseEnergy (s : List Char) : Option Energy :=
     | '(' :: t => if t.getLast? == some ')' then t.dropLast else s
     | _ => s
   let s := trimL s
-  -- an exponent `E+3` or `e3` is not an offset
-  let s := replaceSub (s.map fun c => if c == 'e' then 'E' else c) "E+".toList "E".toList
+  -- an exponent `E+3` or `e3` is not an offset; blanks inside the field (`3138  +X`) carry no
+  -- meaning
+  let s := replaceSub ((s.filter (· != ' ')).map fun c => if c == 'e' then 'E' else c)
+    "E+".toList "E".toList
   let isLetters (l : List Char) := !l.isEmpty && l.all Char.isUpper
   match splitBy (· == '+') s with
   | [a] =>
