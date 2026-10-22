@@ -46,9 +46,9 @@ All declarations are in the namespace `PhyslibAlpha.Hydrogen`.
 
 ## Notes
 
-- The argument is abstract. That physlib's regularised operators `𝐋`, `𝐀(ε)`, `𝐇(ε)` give a `PauliSystem` in the limit `ε → 0` (on a suitable domain) is not proved; in particular `L · A = 0` is an assumption.
+- The argument is abstract. That physlib's regularised operators `𝐋`, `𝐀(ε)`, `𝐇(ε)` give a `PauliSystem` in the limit `ε → 0` (on a suitable domain) is not proved. The relation `L · A = 0` itself holds for physlib's operators at every `ε` (cyclic relation of `𝐋` and `𝐀(ε)`, companion Physlib PR).
 - Only `d = 3`. Only the energies are derived, not the degeneracy `n²` of the levels.
 - `exists_Jsq_eigenvector` is stated in the namespace `PhyslibAlpha.Sl2.AngularMomentumRepresentation`.
 
 ---
-*Draft for the human author. Check every line before posting (AI-POLICY.md §1.7), and the reference to Pauli (1926) yourself (§2.1).*
+AI use: Claude (Anthropic) wrote the Lean code and this description; I have checked both.
