@@ -164,30 +164,49 @@ def fld (l : List Char) : String :=
 /-- Whether a data set is the Adopted Levels (and Gammas) data set. -/
 def EnsdfCheck.Dataset.isAdopted (d : Dataset) : Bool := d.dsid.startsWith "ADOPTED LEVELS"
 
-/-- The index of the closest element whose energy agrees with `e` within three combined standard
-uncertainties or 1 keV, whichever is larger, if any. The 1 keV floor covers energies given without
-uncertainty to different precision in different data sets (`2109.4` and `2109.964`). -/
-def closestMatch (cands : List (Nat × List Char × List Char)) (e : List Char) (de : List Char) :
-    Option Nat :=
+/-- The element closest in energy to `e` (same offset), with the distance in keV and in units of
+the combined standard uncertainty. -/
+def nearest (cands : List (Nat × List Char × List Char)) (e : List Char) (de : List Char) :
+    Option (Nat × Float × Float) :=
   match parseEnergy e with
   | some ⟨o, some x⟩ =>
-    let ok := cands.filterMap fun (k, e', de') =>
+    let all := cands.filterMap fun (k, e', de') =>
       match parseEnergy e' with
       | some ⟨o', some y⟩ =>
         let d := Float.abs (x.value - y.value)
         let sx := sigma x de
         let sy := sigma y de'
-        let tol := max (3.0 * Float.sqrt (sx * sx + sy * sy)) 1.0
-        if o == o' && d ≤ tol then some (k, d) else none
+        if o == o' then some (k, d, d / Float.sqrt (sx * sx + sy * sy)) else none
       | _ => none
-    (ok.foldl (fun (best : Option (Nat × Float)) c =>
+    all.foldl (fun (best : Option (Nat × Float × Float)) c =>
       match best with
-      | some b => if c.2 < b.2 then some c else some b
-      | none => some c) none).map (·.1)
+      | some b => if c.2.1 < b.2.1 then some c else some b
+      | none => some c) none
   | _ => none
 
+/-- How an energy was matched in the Adopted data set. -/
+inductive MatchKind
+  /-- Within three standard uncertainties. -/
+  | within
+  /-- Less than 1 keV off, but more than three standard uncertainties. -/
+  | slight
+  /-- Not matched. -/
+  | none
+
+/-- Classify the nearest candidate: within `3σ`, slightly off (`< 1 keV` but `> 3σ`), or not
+matched. -/
+def matchKind : Option (Nat × Float × Float) → MatchKind
+  | some (_, d, n) => if n ≤ 3.0 then .within else if d < 1.0 then .slight else .none
+  | none => .none
+
+/-- Text for a nearest candidate: energy, distance in keV and in standard uncertainties. -/
+def nearestText (what : String) (e : Nat → String) : Option (Nat × Float × Float) → String
+  | some (k, d, n) => s!"nearest {what} {e k}, Δ = {d} keV = {n} σ"
+  | none => s!"no {what} with the same offset"
+
 /-- Compare a hit with the Adopted data set of the same nuclide. The initial level, the gamma and
-the final level are matched by energy; the Adopted gamma is then classified in the same way, with
+the final level are matched by energy (within `3σ`; less than 1 keV but more than `3σ` is matched
+and marked "energy deviates slightly"); the Adopted gamma is then classified in the same way, with
 its final level fixed to the matched one. Returns the entries of the columns "also in Adopted" and
 "Adopted contradicts". A violation in Adopted (A, A' or B) counts as "also in Adopted"; Adopted
 contradicts only if it gives an allowed transition or no multipolarity; other outcomes (placement
@@ -196,29 +215,57 @@ def adoptedCompare (ad : Dataset) (li : LevelRec) (lf : Option LevelRec) (g : Ga
     (broad : Float := broadKeV) : String × String :=
   let adE := ad.levels.map fun l => parseEnergy l.e
   let lvls := (List.range ad.levels.size).map fun k => (k, ad.levels[k]!.e, ad.levels[k]!.de)
-  match closestMatch lvls li.e li.de with
-  | none => ("level not in Adopted", "–")
-  | some k =>
+  let lvlE (k : Nat) : String := fld ad.levels[k]!.e
+  let nl := nearest lvls li.e li.de
+  let allG := (List.range ad.gammas.size).map fun n => (n, ad.gammas[n]!.e, ad.gammas[n]!.de)
+  let gOf (k : Nat) := allG.filter fun (n, _, _) => ad.gammas[n]!.level == some k
+  let gText (n : Nat) : String :=
+    s!"{fld ad.gammas[n]!.e} ({fld ad.gammas[n]!.m}) from level " ++
+      ((ad.gammas[n]!.level.map fun k => fld ad.levels[k]!.e).getD "?")
+  match matchKind nl, nl with
+  | .none, some (k, _, _) =>
+    (s!"level not in Adopted ({nearestText "level" lvlE nl}; " ++
+      s!"{nearestText "gamma there" gText (nearest (gOf k) g.e g.de)})", "–")
+  | .none, none => ("level not in Adopted (no level with the same offset)", "–")
+  | mk, some (k, _, _) =>
     let gs := (List.range ad.gammas.size).filter (fun n => ad.gammas[n]!.level == some k) |>.map
       fun n => (n, ad.gammas[n]!.e, ad.gammas[n]!.de)
-    match closestMatch gs g.e g.de with
-    | none => ("gamma not in Adopted", "–")
-    | some n =>
+    let gE (n : Nat) : String := fld ad.gammas[n]!.e
+    let ng := nearest gs g.e g.de
+    match matchKind ng, ng with
+    | .none, _ =>
+      (s!"gamma not in Adopted (level {lvlE k}: " ++
+        (if gs.isEmpty then "no gammas from this level" else nearestText "gamma" gE ng) ++
+        "; nearest gamma in Adopted overall: " ++
+        s!"{nearestText "gamma" gText (nearest allG g.e g.de)})",
+        "–")
+    | mg, some (n, _, _) =>
       let ga := ad.gammas[n]!
       -- fix the final level to the Adopted level matching the hit's final level
-      let ga := match lf.bind (fun l => closestMatch lvls l.e l.de) with
-        | some kf => { ga with fl := some ad.levels[kf]!.e }
-        | none => ga
+      let nf := lf.bind fun l => nearest lvls l.e l.de
+      let mf := matchKind nf
+      let ga := match mf, nf with
+        | .none, _ => ga
+        | _, some (kf, _, _) => { ga with fl := some ad.levels[kf]!.e }
+        | _, none => ga
+      let slight :=
+        (match mk with | .slight => [s!"level: {nearestText "level" lvlE nl}"] | _ => []) ++
+        (match mg with | .slight => [s!"gamma: {nearestText "gamma" gE ng}"] | _ => []) ++
+        (match mf with | .slight => [s!"final level: {nearestText "level" lvlE nf}"] | _ => [])
+      let tag := if slight.isEmpty then "" else
+        s!"energy deviates slightly ({"; ".intercalate slight}); "
       let m := fld ga.m
       match classify ad adE ga broad with
-      | none => ("no", "yes: no multipolarity in Adopted")
+      | none => (tag ++ "no", "yes: no multipolarity in Adopted")
       | some r =>
         let jf := (r.final.map fun f => fld ad.levels[f]!.j).getD "?"
         if r.cat == .a || r.cat == .a' || r.cat == .b then
-          (s!"yes, as {r.cat.name} ({r.reason})", "no")
+          (tag ++ s!"yes, as {r.cat.name} ({r.reason})", "no")
         else if r.cat == .ok || (r.cat == .c && r.reason == "D/Q without type, allowed") then
-          ("no", s!"yes: M={m}, J_f={jf}, allowed")
-        else (s!"unclear: {r.cat.name} ({r.reason})", "unclear")
+          (tag ++ "no", s!"yes: M={m}, J_f={jf}, allowed")
+        else (tag ++ s!"unclear: {r.cat.name} ({r.reason})", "unclear")
+    | _, none => ("gamma not in Adopted", "–")
+  | _, none => ("level not in Adopted", "–")
 
 /-- The Lean file with one kernel-checked certificate per A hit. -/
 def certificates (dir : System.FilePath) (hits : Array Hit) : String := Id.run do
