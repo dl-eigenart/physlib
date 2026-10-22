@@ -727,3 +727,17 @@ mit Quotient ≤ 1/2 ab `k ≥ ⌈4(|κ|+1)r⌉`), `radial_ode_of_radialRec` (gl
 `regSol_near_zero` (δ = min(ε/2, 1), a = e^(-|κ|)/2, b = 3e^(|κ|)/2), Hilfslemma
 `exists_const_of_hasDerivAt_zero` (über `IsOpen.exists_is_const_of_deriv_eq_zero`),
 `wronskian_const`. Modul baut.
+
+### S4 erledigt — W = 0 aus `u → 0`, lokale Proportionalität
+Hilfslemma `wronskian_nonpos_of_tendsto` (ein Vorzeichen; Anwendung auf `u` und `-u` gibt
+`wronskian_eq_zero_of_tendsto`): bei `W > 0` ist `g = u/u₁ - K (ρ^(2l+1))⁻¹`, `K = W/(b²(2l+1))`,
+auf `(0, δ)` antiton (`antitoneOn_of_deriv_nonpos`, `g' = -W/u₁² + W/(bρ^(l+1))² ≤ 0`), also
+`u ρ ≥ K a - |M| b ρ` für `ρ ≤ min(δ/2, 1)`; Widerspruch zu `u → 0` über `Ioo_mem_nhdsGT`.
+Wie geplant ohne Integrale. `exists_eqOn_near_zero_of_tendsto`: `(u/u₁)' = 0` auf `(0, δ)`. Modul baut.
+
+### S5 erledigt — Fortsetzung auf (0, ∞)
+`eqOn_zero_of_eqOn_Ioo` mit `ODE_solution_unique_of_mem_Ioo` für `(w, w')`, `v t (x, y) = (y, q t x)`
+auf `Ioo (m/2) (ρ+1)`, `m = min δ ρ`, Lipschitz-Konstante `max 1 C` (`C` Schranke von `|q|` auf dem
+kompakten `Icc`, `IsCompact.exists_bound_of_continuousOn`), Startpunkt `t₀ = 3m/4`; `w' t₀ = 0` über
+`HasDerivAt.unique`. Import: die Eindeutigkeitssätze stehen in `Mathlib.Analysis.ODE.ExistUnique`
+(nicht `Gronwall`). Modul baut.
