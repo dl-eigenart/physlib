@@ -760,3 +760,9 @@ theorem_lint grün; Temp-Branch gelöscht. Hinweis: theorem_lint braucht ein fri
 PR-Text-Entwurf: `18-hydrogen-radial-completeness.md`.
 Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf master rebasen
 (nach Merge von radial/quantisation oder mit dem ganzen Stapel).
+
+### 2026-10-22 15:27: Gepusht (nach Daniels „ja“) — Pause
+- `fork/hydrogen-bound-states-split` = 850eaba2 (force-with-lease gegen f67ddc47, Stapel auf master).
+- `fork/hydrogen-radial-completeness` = ad29c408 (neu, Sicherung, alte Basis e9f670d4).
+- Entscheidung: Rebase auf master erst nach Merge des Radialfunktionen-PRs, dann der ganze
+  Wasserstoff-Stapel in einem Durchgang. Bis dahin Pause.
