@@ -88,6 +88,12 @@ Literaturangaben selbst prüfen (§2.1).
 - **L·A = 0 in Physlib bewiesen** (`lrl-angular-cyclic`, `bdf8396`, alle d, alle ε). PR-Text: `16-lrl-angular-cyclic.md` (PR gegen Physlib, nicht Alpha).
 - E3: Plan in `stand-wasserstoff.md` (L², lineare Unabhängigkeit, schwache Eigenwertgleichung, H†). Noch kein Code.
 
+## Physlib-PRs (nicht Alpha)
+
+- **offen: #1930** Dichter Definitionsbereich des Wasserstoff-Hamiltonians (`hydrogen-dense-domain`, Text 17).
+  Danach: Alpha-Stapel `hydrogen-bound-states-split` auf master rebasen (Cherry-Pick der Dichtheit faellt weg).
+- bereit, nicht eingereicht: L·A = 0 (`lrl-angular-cyclic`, Text 16).
+
 ## Koordination
 
 - **Philippe Kevorkian** (GitHub `KevorkianPhilippe`, per E-Mail, 21.10.): arbeitet außerhalb von physlib
