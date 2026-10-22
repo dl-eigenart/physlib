@@ -271,3 +271,45 @@ damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
 - `lake build EnsdfCheck.Certificates` grün, zusätzlich `lake env lean` auf die Datei.
 - Gegenprobe: Ein absichtlich falsches Zertifikat (9/2→5/2, λ = 2, erlaubt) wird abgelehnt
   („`decide` proved that the proposition ¬TriangleRule (2 * 2) 9 5 is false“).
+
+## S6 Gegenprobe — Liste für Daniel (2026-10-22 18:20)
+Die ersten 10 A-Treffer in Dateireihenfolge. Daten: `ensdf_261001`; „Zeile“ = Zeile der Gamma-Zeile
+in `~/ensdf/data_261001/ensdf.NNN`. Die Vermutungen stammen aus den Rohzeilen (Level, Gamma,
+Kommentare direkt dahinter). **Keine Bewertung „Fehler in ENSDF“ — Daniel prüft gegen die
+NNDC-Webausgabe.**
+
+| # | Nuklid | Übergang | E_γ, M | Datensatz, Zeile | Was verletzt | Vermutung |
+|---|---|---|---|---|---|---|
+| 1 | ⁹Be | 6760 9/2+ → 0.0 3/2- | 6757, E2 | Adopted, 009:987 | λ=2 < ΔJ=3 | **echter Widerspruch** in den Jπ-Daten: Der Level-Kommentar nennt Jπ=(5/2-) aus ¹⁰Be(e,e'p); mit 5/2- wäre E2 erlaubt. |
+| 2 | ⁹Be | 16977.1 1/2- → 2.78E+3 1/2- | 14535.1, E2 | Adopted, 009:1097 | λ=2 bei 1/2→1/2 | **Werkzeugfehler (Zuordnung)**: E_i−E_γ = 2442 keV; das passt zum 2429-keV-Level, wenn man den Rückstoß (≈12,5 keV) mitnimmt. Ohne Korrektur trifft nur das breite Niveau 2.78 MeV (σ = 120 keV). Kein ENSDF-Befund. |
+| 3 | ¹⁹F | 3998.7 7/2- → 1458.7 3/2- | 2540.0, M1 | Adopted, 019:2059 | M1 bei ΔJ=2 | Tippfehler (E2?) oder echter Widerspruch; in der Folgezeile steht `BM1W=0.012`. |
+| 4 | ²⁵Mg | 5116.4 1/2- → 585.0 1/2+ | 4531.4, D+Q | ²⁴Mg(d,pγ), 025:5350 | Q bei 1/2→1/2 | **Formatfall/echter Widerspruch**: „D+Q“ aus einer Winkelverteilung (A2, A4 von 1969So09) passt nicht zu den Spins. |
+| 5 | ³⁰P | 3019.2 1+ → 677.01 0+ | 2342.3, M1+E2 | ³⁰S EC decay, 030:10190 | E2 bei 1→0 | **Formatfall/Tippfehler**: Eine E2-Beimischung ist bei 1→0 unmöglich. Wohl Standardangabe für die Konversionsrechnung (CC folgt). |
+| 6 | ⁵³Cr | 1006.27 5/2- → 564.03 1/2- | 442.7, M1+E2 | Adopted, 053:1276 | M1 bei ΔJ=2 | Tippfehler (E2?). |
+| 7 | ⁵³Cr | 7613.8 25/2(-) → 6009.1 21/2(-) | 1604.7, D | (HI,xnγ), 053:3010 | D bei ΔJ=2 | Widerspruch zwischen DCO (=0.58) und Spinzuordnung, oder Doppellinie: Es gibt eine parallele Linie 1605.0 mit `?`. |
+| 8 | ⁵³Fe | 2339.24 11/2- → 0.0 7/2- | 2338.3, M1+E2 | Adopted, 053:8745 | M1 bei ΔJ=2 | Tippfehler (E2?). |
+| 9 | ⁹⁰Nb | 854.32 2- → 651.19 4(+) | 203.13, E1 | Adopted, 090:11281 | E1 bei ΔJ=2 | **echter Widerspruch, in ENSDF vermerkt**: Kommentar „Inconsistent with ce measurements … M1+E2“. |
+| 10 | ¹⁰²Rh | 476.6 7+ → 263.7 5+ | 213.0, D | ⁷⁰Zn(³⁶S,p3nγ), 102:5087 | D bei ΔJ=2 | **echter Widerspruch, in ENSDF vermerkt**: Kommentar „D in conflict with Jπ initial and final state“. |
+
+In Zahlen: 1 Werkzeugfehler (#2), 2 von den Evaluatoren selbst vermerkt (#9, #10), 7 offen
+(Tippfehler, Formatfall oder echter Widerspruch). Einen Parserfehler habe ich bei diesen 10 nicht
+gefunden: Die Spalten (E, DE, J) stimmen auch bei rechtsbündigen Energien wie `   1006.27 5`.
+
+### Vorschlag (nicht umgesetzt, Daniel entscheidet)
+Die Zuordnung robuster machen, ohne den Rückstoß anzuwenden: Nur zuordnen, wenn
+E_i − E_γ und E_i − E_γ − E_γ²/(2Mc²) denselben einzigen Kandidaten ergeben; sonst „mehrdeutig“
+(C). Das verschiebt nur Fälle von A/B nach C und hätte #2 aussortiert. Laut Auftrag gibt es
+ohne Vorgabe im Handbuch keine Rückstoßkorrektur, daher nur als Vorschlag.
+
+## Zusammenfassung
+- S0–S6 erledigt. Branch `ensdf-check` (lokal, **nicht gepusht**), Commits S1–S5 auf ae59f621:
+  `Tools/EnsdfCheck/{Rules,Parse,Assign,Classify,Main,Certificates}.lean`, dazu der lakefile-Eintrag.
+- Ergebnis: A 28, A′ 17, B 146, C 67,173, P 206, N 5,430, ok 160,102 (von 233,102).
+  Lean-gestützt ist nur A (28 Kern-geprüfte Zertifikate).
+- Offen für Daniel:
+  - Gegenprobe der Liste oben.
+  - Lesarten aus S2 (`(+E2)`, `O`, `32/2`).
+  - Vorschlag Rückstoß-Robustheit.
+  - Push.
+  - Ob und wo veröffentlicht wird.
+- Wasserstoff: #1909 bei Abschluss noch nicht gemergt, also kein Rebase fällig.
