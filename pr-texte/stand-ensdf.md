@@ -512,11 +512,9 @@ Adopted-Rohzeilen, wörtlich aus `ensdf.030` (Adopted-Satz ab Zeile 6826):
   (geprüft: Spalte 77 = `*`, Zeilenlänge 80). Laut Handbuch III.B.14 heißt das „The symbol `*`
   denotes a multiply-placed γ ray“, und mehrfach platzierte Gammas zählen im Werkzeug nicht als
   fest platziert.
-- Ein zweites 2342-keV-Gamma gibt es im Adopted-Satz von ³⁰P aber **nicht**. Im Satz stehen 9
-  Gammas mit `*` in Spalte 77, und für `*` gibt es keine Fußnoten-Definition (andere Flags wie
-  `E(X)`, `E(Q)` sind als Kommentare definiert). Ob `*` hier wirklich „mehrfach platziert“ meint,
-  kann ich aus den Daten nicht klären. **Daniel bitte prüfen**: Handbuchbedeutung oder anderer
-  Gebrauch des `*`?
+- ~~Ein zweites 2342-keV-Gamma gibt es im Adopted-Satz von ³⁰P aber nicht.~~ **Falsch, korrigiert
+  unten** („Korrektur ³⁰P“): Das 2342.3 steht zweimal im Adopted-Satz; meine Handsuche hat den
+  eingerückten zweiten Eintrag übersehen.
 - Am Rande: Die Evaluatoren vermerken selbst „B(E2)(W.u.)=7×10² … exceeds RUL=100 if E2“, halten
   einen reinen E2-Anteil also für unplausibel.
 - Eine Regeländerung habe ich nicht vorgenommen; ³⁰P bleibt in Adopted B, mit dem Grund oben.
@@ -538,3 +536,94 @@ gamma, marks slight deviations**, lokal):
 Bilanz jetzt: A — 0 „nicht gefunden“, 1 „energy deviates slightly“ (¹⁴⁴Nd). A′ — 2 „nicht gefunden“
 (⁴¹K: Gamma fehlt in Adopted; ⁴⁸Ti: Level 1,22 keV daneben). Kategorienzahlen unverändert
 (A 29, A′ 24, …), 29 Zertifikate bauen. Bericht `~/ensdf/bericht.md`, Kopie `bericht_v4.md`.
+
+## Korrektur ³⁰P und Parser-Prüfung eingerückter Energien (2026-10-22 19:20)
+**Daniels Klarstellung**: `*` in Spalte 77 heißt „multiply-placed“ wie im Handbuch. Alle 9
+`*`-Gammas im ³⁰P-Adopted-Satz sind Mehrfachplatzierungen: 627.0 ×2, 1463.8 ×3, 2342.3 ×2, 3184 ×2.
+Die Regel „`*` → nicht fest platziert → B“ bleibt.
+
+**Meine falsche Aussage** („ein zweites 2342-keV-Gamma gibt es nicht“) kam aus einer
+**Handsuche mit awk**, nicht aus dem Werkzeug: Das Muster war an Spalte 10 verankert
+(`substr($0,10,6) ~ /^234/`). Der zweite Eintrag hat das Energiefeld eingerückt:
+```
+7037:  30P   G 2342.3    8    100    M1+E2                   0.00044 5            *
+7901:  30P   G  2342.3   8     29.111  D+Q     -0.4    1                          *
+```
+Der Record selbst ist **nicht verschoben** (`G` in Spalte 8, `*` in Spalte 77). Nur der Inhalt von
+Spalte 10–19 beginnt eine Stelle weiter rechts.
+
+**Parser geprüft** (`/tmp/t30.lean`, ruft `parseFile`/`placeGamma` direkt auf). Alle 9 `*`-Gammas
+werden richtig gelesen und platziert, z. B.
+- 7037: E 2342.3, DE 8, M1+E2, von 3019.8 → 677.11;
+- 7901: E ` 2342.3` → 2342.3, DE 8, D+Q, MR −0.4, von 7286.8 → 4946.3;
+- 7365: ` 627.0`, (D,Q), 5573.5 → 4946.3;
+- 8280/8296: ` 3184`, 7920.3/7920.4 → 4736.11.
+
+**Datenbankweit**:
+- Eingerückte Energiefelder in L/G-Records sind häufig: 165,593 Gammas und 106,137 Levels.
+- Kein Gamma hat eine unlesbare Energie.
+- Bei den Levels habe ich alle sonst nicht lesbaren Formen einzeln gegen den Parser geprüft.
+  Gefunden habe ich **eine echte Lücke**: ein Leerzeichen vor dem Offset (`3138  +X`, `881.6 +X`).
+  Behoben: Leerzeichen innerhalb des Feldes werden ignoriert. Commit **ensdf-check: ignore blanks
+  inside energy fields**.
+- Weiter unlesbar sind **65** Level-Energien, alle nicht im Handbuch vorgesehen:
+  - `SN+X`/`SN+Y` (Offset auf Offset);
+  - `SN-…` (V.18 kennt nur `SN+NUM`);
+  - `0+x`, `0.0+x` (kleines `x`, nicht belegt).
+- Lauf danach: A 29 und A′ 24 unverändert (dieselben Records); C 66,889 → 66,886, ok 160,361 →
+  160,364. 29 Zertifikate bauen.
+
+## Entscheidungen Daniel (2026-10-22 19:10)
+- **Breite-Schwelle 10 keV festgelegt.** Begründung und die Tabelle der Läufe mit 5, 10, 20 und
+  50 keV stehen als Anhang in `bericht.md`. Die exe berechnet beides selbst und vergleicht die
+  A- und A′-Records gegen 10 keV:
+  - A ist bei allen vier Schwellen identisch.
+  - A′ kommt ab 20 keV um ¹¹B 011:3762 und 011:3763 dazu. Grund: grobe Schreibweise `5.02E3`
+    bzw. `4.44E3` ohne Unsicherheit. Adopted widerspricht beiden (E1+M2, erlaubt; geprüft im
+    20-keV-Lauf).
+  - Verweis auf `~/ensdf/sweep/`.
+  - `broadKeV`-Docstring entsprechend.
+- **⁴⁸Ti: 1-keV-Grenze bleibt.** Der nächste Kandidat (3699.52, Δ = 1,22 keV = 3,9σ; Gamma 2715.81
+  (E1)) steht im Bericht.
+- **³⁰P**: `*` = mehrfach platziert, die Regel bleibt (siehe oben).
+
+## Abschluss (2026-10-22 19:25)
+**Stand des Werkzeugs** (Branch `ensdf-check`, lokal, **nicht gepusht**, 13 Commits auf ae59f621 =
+fork/pr/projection-selection):
+- `Tools/EnsdfCheck/`:
+  - `Rules.lean`: bewiesen, kein `sorry`, Standardaxiome.
+  - `Parse.lean`, `Assign.lean`, `Classify.lean`, `Main.lean`: unbewiesener Code.
+  - `Certificates.lean`: 29 Kern-geprüfte Zertifikate.
+- `lakefile.toml`: `lean_lib EnsdfCheck`, `lean_exe ensdf-check`. PR-08-Dateien und
+  `PhyslibAlpha.lean` unverändert.
+- Aufruf: `lake exe ensdf-check ~/ensdf/data_261001 ~/ensdf/bericht.md --certificates
+  Tools/EnsdfCheck/Certificates.lean` (≈ 25 s inkl. Schwellenanhang).
+
+**Daten und Quellen**: ENSDF `ensdf_261001` (NNDC); Handbuch BNL-NCS-51655-01/02-Rev (2001); IAEA
+Evaluators Guidelines 2021 (ORNL/TM-2022/1835); CODATA 2022 u c² (NIST). Hashes und URLs stehen
+oben.
+
+**Endergebnis** (233,102 Gamma-Übergänge mit Multipolarität, Schwelle 10 keV, Rückstoß
+korrigiert):
+
+| A | A′ | B | C | S | P | N | ok |
+|---|---|---|---|---|---|---|---|
+| 29 | 24 | 131 | 66,886 | 3 | 206 | 5,459 | 160,364 |
+
+- **A (Lean-gestützt)**: 29 Records, alle mit Endniveau aus der Energiedifferenz.
+  - Daniels NuDat-Prüfung, vom Werkzeug nachgebildet (29/29 übereinstimmend):
+    - 17 auch in Adopted identisch;
+    - 11 in Adopted bereinigt;
+    - 1 in Adopted nur vorläufig (¹⁰⁶Pd).
+  - Kandidaten für eine Meldung sind die 17 Fälle, die auch in Adopted identisch sind. Ob gemeldet
+    wird und wie, entscheidet Daniel; der Kontakt nach außen liegt nur bei ihm.
+- **A′ (Parität, nur Definition in PR 08)**: 24, davon 13 selbst Adopted, 2 auch dort A′,
+  7 von Adopted widersprochen, 2 nicht gefunden (⁴¹K, ⁴⁸Ti).
+- **S**: 5 Level-Records, darunter 2 Tippfehler `,` statt `/` (¹⁵C, ⁸³Kr), `32/2-` (¹²⁷La) und
+  `58/2+` (¹⁷¹Re).
+- Bericht: `~/ensdf/bericht.md` = `bericht_final.md`. Zwischenstände: `bericht_v2.md` bis
+  `bericht_v4.md`; Schwellenläufe in `~/ensdf/sweep/`.
+
+**Offen für Daniel**: Push des Branches und der Notizen; ob und wo veröffentlicht wird
+(physlib-PR, eigenes Repo, Preprint); Meldung an NNDC; Folgeauftrag 3j²/6j² (laut Auftrag
+„Danach“).
