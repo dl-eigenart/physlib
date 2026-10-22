@@ -503,3 +503,42 @@ Das reelle Korollar bleibt (billig) stehen, das komplexe kommt dazu.
 `finrank_span_range_boundStateMapHS_three` (finrank ℂ des ℂ-Spanns = (n+1)²),
 `exists_finrank_eigenvectors_adjoint_three_complex`. Build grün, Axiome Standard, Linter grün.
 Commit lokal 1cc27d88. Als Nächstes: Vorschlag zur Aufteilung (Punkt 2).
+
+### Vorschlag Punkt 2: Aufteilung von `BoundStatesL2.lean` (≈1450 Zeilen) — wartet auf Daniel
+Inventar: §A IsPolyBounded (l. 76–168); §B Integrierbarkeit (177–320), danach in §B aber schon
+Green G1 + Regularisierung (328–646); §C/§D L², Unabhängigkeit, ℂ-Dimension (654–846);
+§E Adjungierte (860–1446), darin Dichtheit (1308–1331).
+
+(a) `PhyslibAlpha/QuantumMechanics/Hydrogen/PolyBounded.lean` (~250 Z.) — `IsPolyBounded` +
+    Integrierbarkeit: `one_add_pow_mul_exp_neg_le`, `integrable_sq_of_le_mul_exp`,
+    `IsPolyBounded.integrable_ofReal_mul_schwartz`, `integrable_inv_norm_mul_one_add_norm_pow`,
+    `Polynomial.exists_abs_eval_le`, `IsPolyBounded.integrable_abs_mul_norm_schwartz`,
+    `IsPolyBounded.integrable_inv_norm_mul`. Inhaltlich nicht wasserstoffspezifisch (nur `Space d`);
+    später ggf. nach `PhyslibAlpha/SpaceAndTime/Space/…` — für diesen PR im Hydrogen-Ordner lassen.
+(b) `BoundStatesL2.lean` (Name bleibt, ~230 Z.) — §C, §D inkl. `linearIndependent_complex_of_real_inner`,
+    `im_inner_boundStateMapHS`, `finrank_span_range_boundStateMapHS_three`. Importiert (a).
+(c) `BoundStatesAdjoint.lean` (~900 Z.) — Green G1 + Regularisierung (`deriv_ofReal`,
+    `deriv_schwartz`, `integral_ofReal_mul_sum_deriv_deriv`, `deriv_radial_mul`, `regG…`,
+    `laplacian_regBoundState`, …), §E ohne Dichtheit (schwache Eigenwertgleichung, `H†`, ganzes
+    Niveau, d=3-Korollare reell/komplex). Importiert (b) und (d).
+    Optional (c) weiter teilen: (c1) `GreenIdentity.lean` (G1/G2/G3, ~550 Z.), (c2) Rest (~350 Z.).
+    Empfehlung: ja, sonst ist (c) wieder die längste Datei.
+(d) Dichtheit: **gehört nach Physlib**. Begründung: sie benutzt nur Physlib-API
+    (`radiusPowOperator_domain_ge`, `momentumSqOperator_domain_eq`, `PolyBddSchwartzSubmodule.dense`,
+    `HydrogenAtom.potential_eq`), nichts aus PhyslibAlpha; `Physlib/QuantumMechanics/Hydrogen/Basic.lean`
+    importiert `Operators.Position` schon; sie ist ein natürlicher erster Schritt zu den dortigen
+    TODOs (wesentliche Selbstadjungiertheit). Vorschlag: in `Hydrogen/Basic.lean` als
+    `hamiltonianOperator_hasDenseDomain : H.hamiltonianOperator.HasDenseDomain` (Physlib-Prädikat aus
+    `Unbounded.lean`) + `polyBddSchwartzSubmodule_le_hamiltonianOperator_domain`, im Namespace
+    `QuantumMechanics.HydrogenAtom`.
+    Folge: eigener kleiner Physlib-PR (strengere Prüfung, `theorem_lint` greift dort); die
+    Alpha-Dateien hängen davon ab, bis er gemergt ist. Alternative: vorerst in Alpha (eigene Datei
+    `HamiltonianDomain.lean`) und erst später verschieben.
+
+Commit-Struktur (Punkt 1), neu aufgebaut auf `hydrogen-degeneracy-analytic` 7ad91892
+(= Basis von 53805fce; die gepushten Branches `hydrogen-bound-states-l2`, `…-degeneracy-analytic`
+bleiben unverändert): (d) → (a) → (b) → (c1) → (c2), ein Commit je Teil, jeder Commit einzeln
+baubar. Inhalt am Ende identisch zu 1cc27d88 (Prüfung per `git diff` gegen 1cc27d88 bis auf die
+Verschiebung).
+Hinweis: Basis a46a93e9 ist alt (origin/master jetzt 8a6ce260); Rebase separat, nach Punkt 4.
+Offene Fragen an Daniel: (i) (d) nach Physlib oder vorerst Alpha? (ii) (c) in c1/c2 teilen?
