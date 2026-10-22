@@ -90,9 +90,11 @@ Literaturangaben selbst prüfen (§2.1).
 
 ## Physlib-PRs (nicht Alpha)
 
-- **offen: #1930** Dichter Definitionsbereich des Wasserstoff-Hamiltonians (`hydrogen-dense-domain`, Text 17).
+- **gemergt: #1930** Dichter Definitionsbereich des Wasserstoff-Hamiltonians (`hydrogen-dense-domain`, Text 17).
   Danach: Alpha-Stapel `hydrogen-bound-states-split` auf master rebasen (Cherry-Pick der Dichtheit faellt weg).
-- bereit, nicht eingereicht: L·A = 0 (`lrl-angular-cyclic`, Text 16).
+- **offen: #1932** L·A = 0 (`lrl-angular-cyclic`, Text 16).
+- **offen: #1933** (Alpha) Paulis Herleitung (`hydrogen-pauli`, Text 15).
+- In Arbeit (agents-pc): E4 Vollständigkeit der radialen Lösungen (`hydrogen-radial-completeness`).
 
 ## Koordination
 
