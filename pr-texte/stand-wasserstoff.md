@@ -443,3 +443,18 @@ Branch `hydrogen-bound-states-adjoint` (lokal, 20 Commits über `hydrogen-bound-
   Hypothese. (2) Die Datei ist lang; vor einem PR evtl. teilen (L²-Teil / Adjungierten-Teil) und
   Hilfslemmata (IsPolyBounded, Integrierbarkeit, `deriv_ofReal`, `deriv_schwartz`,
   Green G1) an passendere Orte verschieben. (3) Viele `wip:`-Commits — vor Push zusammenfassen.
+
+### 2026-10-22 11:30: Zustand nach Verbindungsabbruch geprüft; Plan-Schritt 6 erledigt
+- Arbeitsbaum war sauber (keine halbfertigen Änderungen), HEAD f1a4ee9e. `lake build` des Moduls
+  jetzt bestätigt grün (3337 Jobs), kein `sorry`.
+- Schritt 6 (ganzes Niveau): `boundStateMap_single`, `boundStateMapHS_single`
+  (`Ps = Σ Pi.single l (Ps l)` statt `Lp`-Summen — Mathlib hat kein `Lp.coeFn_sum`),
+  `inner_boundStateMapHS_hamiltonianOperator`, `boundStateMapHS_mem_adjoint_domain`,
+  `adjoint_boundStateMapHS` (Hypothese dom H dicht),
+  `exists_finrank_eigenvectors_adjoint_three`: in d = 3 enthält der Eigenraum von `H†` zu `E_n`
+  einen **reellen** Unterraum der Dimension `(n+1)²` (ℂ-Dimension nicht formuliert).
+  Axiome Standard, `lint-style.py` grün. Commits lokal db1522f0 (wip), 196fb4c7; nicht gepusht.
+- Nächster Schritt: Hypothese „dom H dicht“ abbauen. physlib hat
+  `PolyBddSchwartzSubmodule d a` (Schwartz mit `‖x‖^{-k}|f| ≤ C_k`, k ≤ a) und
+  `PolyBddSchwartzSubmodule.dense`. Plan: `PolyBddSchwartzSubmodule d 1 ≤ dom H`
+  (`|f|/‖x‖` beschränkt und schnell fallend ⇒ `Vf ∈ L²`), daraus Dichtheit für alle d ≥ 1.
