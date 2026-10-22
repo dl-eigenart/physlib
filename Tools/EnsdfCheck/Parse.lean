@@ -330,6 +330,7 @@ structure LevelRec where
   j : List Char
   /-- Column 80: `?` questionable level, `S` separation energy or expected level. -/
   q : Char
+  deriving Inhabited
 
 /-- A gamma record with its continuation records. -/
 structure GammaRec where
@@ -353,6 +354,7 @@ structure GammaRec where
   fl : Option (List Char)
   /-- The index of the level record it follows, if any. -/
   level : Option Nat
+  deriving Inhabited
 
 /-- An ENSDF data set: the records between an identification record and an end record. -/
 structure Dataset where
@@ -391,7 +393,8 @@ def parseFile (file : String) (contents : String) : Array Dataset := Id.run do
       continue
     match cur with
     | none =>
-      cur := some ⟨file, n, String.ofList (trimL (cols r 1 5)), String.ofList (trimL (cols r 10 39)),
+      cur := some ⟨file, n, String.ofList (trimL (cols r 1 5)),
+        String.ofList (trimL (cols r 10 39)),
         #[], #[]⟩
     | some d =>
       let c6 := col r 6

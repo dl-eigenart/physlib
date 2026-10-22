@@ -3,7 +3,7 @@ Copyright (c) 2026 Daniel Leonforte. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Daniel Leonforte
 -/
-import EnsdfCheck.Parse
+import EnsdfCheck.Assign
 
 /-!
 
@@ -93,8 +93,41 @@ def parseStats (dir : System.FilePath) : IO Unit := do
   mt.print "Multipolarity fields"
   et.print "Unreadable energies"
 
+/-- The category of a placement for the statistics. -/
+def placeKey : Placement → String
+  | .ok _ true false => "ok via FL="
+  | .ok _ true true => "ok via FL= with ?"
+  | .ok _ false _ => "ok via E_i - E_γ"
+  | .unplaced => "unplaced"
+  | .flUnknown => "FL=?"
+  | .flNotFound => "FL= not found"
+  | .badEnergy => "energy unreadable or offset"
+  | .noMatch => "no matching level"
+  | .ambiguous => "ambiguous"
+
+/-- Statistics of the final level assignment, for gammas with a multipolarity. -/
+def placementStats (dir : System.FilePath) : IO Unit := do
+  let entries ← dir.readDir
+  let files := (entries.filter fun e => e.fileName.startsWith "ensdf.").qsort
+    (fun a b => a.fileName < b.fileName)
+  let mut pt : Tally := {}
+  let mut ptAll : Tally := {}
+  for f in files do
+    for d in parseFile f.fileName (← readAscii f.path) do
+      let levelE := d.levels.map fun l => parseEnergy l.e
+      for g in d.gammas do
+        let p := placeGamma d levelE g
+        let ex := s!"{f.fileName}:{g.line} [{String.ofList (trimL g.e)}]"
+        ptAll := ptAll.add (placeKey p) ex 4
+        match parseM g.m with
+        | .empty => pure ()
+        | _ => pt := pt.add (placeKey p) ex
+  pt.print "Placement of gammas with a multipolarity"
+  ptAll.print "Placement of all gammas"
+
 /-- Entry point. -/
 def main (args : List String) : IO UInt32 := do
   match args with
   | [dir, "--parse-stats"] => parseStats dir; return 0
-  | _ => IO.eprintln "usage: ensdf-check <dir> --parse-stats"; return 1
+  | [dir, "--placement-stats"] => placementStats dir; return 0
+  | _ => IO.eprintln "usage: ensdf-check <dir> (--parse-stats | --placement-stats)"; return 1
