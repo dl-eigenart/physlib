@@ -494,3 +494,47 @@ Neue Option `--broad <keV>`. Berichte in `~/ensdf/sweep/`. Die Zertifikate wurde
 
 Code: Commit **ensdf-check: --broad option; Adopted matching with 1 keV floor** (lokal). Der
 Standardlauf ist unverändert (A 29, A′ 24, …), die 29 Zertifikate bauen.
+
+## Rückfragen zum Adopted-Abgleich (bericht_v3), beantwortet 2026-10-22 19:20
+
+### 1. ³⁰P 3019 → 677: Was ist in Adopted vorläufig?
+Adopted-Rohzeilen, wörtlich aus `ensdf.030` (Adopted-Satz ab Zeile 6826):
+```
+6899:  30P   L 677.11    10 0+               93 FS     10
+7033:  30P   L 3019.8     8 1+               2 FS      1
+7037:  30P   G 2342.3    8    100    M1+E2                   0.00044 5            *
+7038:  30P F G FLAG=A
+7041:  30P  cG $B(M1)(W.u.)=0.9 {I+8-3} if M1
+7042:  30P  cG $B(E2)(W.u.)=7|*10{+2} {I+6-3} exceeds RUL=100 if E2
+```
+- **Jπ und Multipolarität sind nicht vorläufig**: 1+, 0+, M1+E2 ohne Klammern, wie in NuDat.
+- Das B kommt aus **meiner Platzierungsregel**: In der Gamma-Zeile steht in **Spalte 77 ein `*`**
+  (geprüft: Spalte 77 = `*`, Zeilenlänge 80). Laut Handbuch III.B.14 heißt das „The symbol `*`
+  denotes a multiply-placed γ ray“, und mehrfach platzierte Gammas zählen im Werkzeug nicht als
+  fest platziert.
+- Ein zweites 2342-keV-Gamma gibt es im Adopted-Satz von ³⁰P aber **nicht**. Im Satz stehen 9
+  Gammas mit `*` in Spalte 77, und für `*` gibt es keine Fußnoten-Definition (andere Flags wie
+  `E(X)`, `E(Q)` sind als Kommentare definiert). Ob `*` hier wirklich „mehrfach platziert“ meint,
+  kann ich aus den Daten nicht klären. **Daniel bitte prüfen**: Handbuchbedeutung oder anderer
+  Gebrauch des `*`?
+- Am Rande: Die Evaluatoren vermerken selbst „B(E2)(W.u.)=7×10² … exceeds RUL=100 if E2“, halten
+  einen reinen E2-Anteil also für unplausibel.
+- Eine Regeländerung habe ich nicht vorgenommen; ³⁰P bleibt in Adopted B, mit dem Grund oben.
+
+### 2. „Nicht gefunden“ in bericht_v3 (1 A, 2 A′)
+Neue Ausgabe im Bericht (Commit **ensdf-check: Adopted matching reports nearest level and
+gamma, marks slight deviations**, lokal):
+- Bei jedem Treffer stehen jetzt das nächste Adopted-Level und -Gamma mit Δ in keV und in σ.
+- Δ < 1 keV, aber > 3σ zählt als zugeordnet, mit der neuen Unterkategorie **„energy deviates
+  slightly (…)“**.
+- Der stille 1-keV-Boden aus der letzten Runde ist dadurch ersetzt.
+
+| Treffer | Rohzeilen des Treffers | Nächstes in Adopted | Ergebnis |
+|---|---|---|---|
+| **A** ¹⁴⁴Nd 2109.4 4+ → 696.49 2+, 1413.0 D+Q, (n,γ) (144:5356) | `144ND  L 2109.4      4+`, `144ND  G 1413.0     156.0     2D+Q       +0.29   6` | Level `2109.79 3` 4+ (Zeile 3285): Δ = 0,39 keV = 3,7σ; Endniveau `696.561 10` 2+ (3180): Δ = 0,071 keV = 5,0σ; Gamma `1413.40 9` E2 (3294), innerhalb 3σ | **energy deviates slightly** → zugeordnet; Adopted widerspricht (E2, erlaubt). Stimmt mit Daniels Befund „bereinigt, E2“ überein. |
+| **A′** ⁴¹K 9658 3/2- → 1582.10 3/2-, 8076 E1(+M2), ⁴⁰Ar(p,γ) (041:6882) | `41K   L 9658         3/2-`, `41K   G 8076         11.2      E1(+M2)   -5     10` | Level `9626 15` 1/2-,3/2- (Zeile 4433): Δ = 32 keV = 2,1σ (9658 hat kein DE, also σ = 1 keV); **dieses Level hat in Adopted kein Gamma**; nächstes Gamma in Adopted überhaupt: 8445.5 von 9740.70, Δ = 369,5 keV | **gamma not in Adopted** (keine leichte Abweichung) |
+| **A′** ⁴⁸Ti 3698.3 1- → 983.65 2+, 2714.9 M1+E2, (p,p'γ) (048:12014) | `48TI  L 3698.3    3  1-`, `48TI  G 2714.9       65     2  M1+E2    +0.9    +14-5` | Level `3699.52 8` 1(-) (Zeile 6134): Δ = 1,22 keV = 3,9σ; Gamma dort `2715.81 13` (E1) (6145): Δ = 0,91 keV = 5,5σ | Level über 1 keV → bleibt **level not in Adopted**. Aus den Rohzeilen sieht man aber: Adopted hat 1(-) und (E1), also erlaubt. Würde man das Level zuordnen, wäre es „Adopted widerspricht“. **Daniel**: 1-keV-Grenze so lassen? |
+
+Bilanz jetzt: A — 0 „nicht gefunden“, 1 „energy deviates slightly“ (¹⁴⁴Nd). A′ — 2 „nicht gefunden“
+(⁴¹K: Gamma fehlt in Adopted; ⁴⁸Ti: Level 1,22 keV daneben). Kategorienzahlen unverändert
+(A 29, A′ 24, …), 29 Zertifikate bauen. Bericht `~/ensdf/bericht.md`, Kopie `bericht_v4.md`.
