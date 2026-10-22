@@ -90,3 +90,37 @@ Alle Records haben 80 Spalten.
 ### Nächster Schritt
 S1: Branch `ensdf-check` von `fork/pr/projection-selection`, Datei `Tools/EnsdfCheck/Rules.lean`.
 Wasserstoff-Stand: #1909 noch nicht gemergt (origin/master = 8d676858), also kein Rebase fällig.
+
+## S1 Kern in Lean — erledigt (2026-10-22 17:35), Branch `ensdf-check` (lokal, nicht gepusht)
+Branch von `fork/pr/projection-selection` (ae59f621; Basis 8a6ce260). Commit **ensdf-check S1**.
+`lakefile.toml`: neue `[[lean_lib]] EnsdfCheck` mit `srcDir = "Tools"`. Das `lean_exe` folgt in S4,
+damit S1 ohne Linken baut. `PhyslibAlpha.lean` und PR 08 sind unverändert.
+
+`Tools/EnsdfCheck/Rules.lean` (Namespace `EnsdfCheck`):
+- Datentypen:
+  - `SpinParity` mit `twoJ : ℕ` und `parity : ℤˣ`.
+  - `Firmness` mit firm / tentative `( )` / assumed `[ ]` / list / unknown. `assumed` ist
+    zusätzlich zum Auftrag dazugekommen (eckige Klammern).
+  - `Component` = `typed t l` (Eλ/Mλ, `t : MultipoleType` aus PR 08) oder `untyped l` (D = 1,
+    Q = 2), und `Multipolarity := List Component`. Damit gehen auch Mischungen wie `E0+M1+E2`.
+- `Verdict`, nach Schwere geordnet: `allowed` < `untypedOk` (D/Q, Dreiecksregel erfüllt, Parität
+  offen) < `special` (E0) < `parityViolation` < `angularViolation`. `checkTransition` prüft jede
+  Komponente und gibt das schwerste Urteil zurück.
+- Berechenbar über `Bool` (`triangleB`, `multipoleParity : ℤˣ`), weil PR 08 in einer
+  `noncomputable section` steht. Bewiesen äquivalent: `triangleB_iff`
+  (↔ `TriangleRule`), `coe_multipoleParity` (↔ `MultipoleType.parity`).
+- Bewiesene Lemmata:
+  - `checkTransition_eq_violation_iff`: für einen Eλ/Mλ mit λ ≥ 1 gilt Urteil ∈ {parity, angular}
+    ⇔ `¬ IsAllowedMultipole` (wie im Auftrag gefordert).
+  - `checkComponent_isViolation_iff`: dasselbe je Komponente.
+  - `checkTransition_isViolation_iff` und `checkTransition_eq_angular_iff`: Gemischte
+    Multipolaritäten verletzen genau dann, wenn eine Komponente verletzt.
+  - `not_isAllowedMultipole_of_typed_eq_angular` und `…_untyped_eq_angular`: Ein
+    Drehimpuls-Urteil (Kategorie A) heißt, dass weder E noch M dieser Ordnung erlaubt sind; das
+    deckt auch D/Q.
+- Beispiele mit dem Hf-178-Isomer (16⁺→13⁻: E3 erlaubt, M3 Parität, E2 Drehimpuls) per `decide`.
+  `#eval` läuft, der Code ist also ausführbar.
+- Kein `sorry`. Axiome: propext, Quot.sound, für das Hauptlemma zusätzlich Classical.choice
+  (Standard). `lake build EnsdfCheck.Rules` grün.
+- Umsetzung der S0-Befunde 1–3: A und A′ sind getrennt (angular/parity), Parität ist `ℤˣ` mit
+  Umwandlung, E0 ist `special`. Für Befund 4 (`M1(+E2)`) kommt die Regel in S2.
