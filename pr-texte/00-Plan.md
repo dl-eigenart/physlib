@@ -31,7 +31,7 @@ master ─┬─ 01 spin-orbit ──────────────┐
 
 | Welle | PR | Branch | Zeilen | Wartet auf |
 |---|---|---|---|---|
-| **offen: #1899** (rebased, ready-to-merge) | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
+| **Merge-Queue: #1899** | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
 | **gemergt: #1900** | 02 generalised Laguerre polynomials | `pr/laguerre` | 383 | nichts |
 | **offen: #1909** | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
 | nach #1909 | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
@@ -100,3 +100,5 @@ Literaturangaben selbst prüfen (§2.1).
   sein normiertes 6j = unser `sixJSym` (dann BE für alle Spins, Symmetrien übertragen sich).
   **Zusage:** Daniel schreibt ihm, sobald die 6j-PRs (12a/12b, 14) offen sind. Fork-Branches nicht genannt.
 - Unsere `invForm` (#1911) ist die kontravariante Form, nicht die invariante – keine Dopplung.
+- **22.10.: Philippe hat die Aufteilung angenommen.** Seine Reihenfolge: invariante Form auf V(n) und
+  Bezug zu `invForm` (sobald #1911 gemergt ist), dann Binor-Vertex, Brückensatz 6j, Biedenharn–Elliott.
