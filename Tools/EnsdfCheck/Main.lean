@@ -3,14 +3,16 @@ Copyright (c) 2026 Daniel Leonforte. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Daniel Leonforte
 -/
-import EnsdfCheck.Assign
+import EnsdfCheck.Classify
 
 /-!
 
 # ENSDF check: command line
 
-`lake exe ensdf-check <dir> --parse-stats` reads all files `ensdf.*` in `<dir>` and reports how
-the Jπ and multipolarity fields were read.
+`lake exe ensdf-check <dir> [report.md]` checks all gamma transitions in the files `ensdf.*` of
+`<dir>` and writes the report (default `<dir>/../bericht.md`) with tab-separated lists of the A, A'
+and B hits next to it. `--parse-stats` and `--placement-stats` report how the fields were read and
+how the final levels were found.
 
 -/
 
@@ -125,9 +127,102 @@ def placementStats (dir : System.FilePath) : IO Unit := do
   pt.print "Placement of gammas with a multipolarity"
   ptAll.print "Placement of all gammas"
 
+/-- One row of the hit lists. -/
+structure Hit where
+  /-- Category. -/
+  cat : Category
+  /-- File and line of the gamma record. -/
+  loc : String
+  /-- Nuclide. -/
+  nucid : String
+  /-- Data set identification. -/
+  dsid : String
+  /-- Initial level energy and Jπ. -/
+  ei : String
+  ji : String
+  /-- Final level energy and Jπ. -/
+  ef : String
+  jf : String
+  /-- Gamma energy and multipolarity. -/
+  eg : String
+  m : String
+  /-- Certificate data for `A`. -/
+  cert : Option (Nat × Nat × Nat)
+
+/-- Markdown-safe text of a field. -/
+def fld (l : List Char) : String :=
+  (String.ofList (trimL l)).replace "|" "/"
+
+/-- Run the check and write the report. -/
+def runCheck (dir : System.FilePath) (out : System.FilePath) : IO Unit := do
+  let entries ← dir.readDir
+  let files := (entries.filter fun e => e.fileName.startsWith "ensdf.").qsort
+    (fun a b => a.fileName < b.fileName)
+  let mut total : Nat := 0
+  let mut cats : Tally := {}
+  let mut hits : Array Hit := #[]
+  let mut bHits : Array Hit := #[]
+  for f in files do
+    for d in parseFile f.fileName (← readAscii f.path) do
+      let levelE := d.levels.map fun l => parseEnergy l.e
+      for g in d.gammas do
+        match classify d levelE g with
+        | none => pure ()
+        | some r =>
+          total := total + 1
+          let loc := s!"{f.fileName}:{g.line}"
+          cats := cats.add s!"{r.cat.name}	{r.reason}" loc 3
+          if r.cat == .a || r.cat == .a' || r.cat == .b then
+            let li := g.level.map (d.levels[·]!)
+            let lf := r.final.map (d.levels[·]!)
+            let h : Hit := ⟨r.cat, loc, d.nucid, d.dsid,
+              (li.map (fld ·.e)).getD "", (li.map (fld ·.j)).getD "",
+              (lf.map (fld ·.e)).getD "", (lf.map (fld ·.j)).getD "",
+              fld g.e, fld g.m, r.cert⟩
+            if r.cat == .b then bHits := bHits.push h else hits := hits.push h
+  -- report
+  let byCat (cat : Category) : Nat :=
+    cats.counts.fold (fun n k v => if k.startsWith (cat.name ++ "\t") then n + v else n) 0
+  let mut s := "# ENSDF check against the selection rules of `SelectionRules.lean`\n\n"
+  s := s ++ s!"Data: `{dir}`. Gamma transitions with a multipolarity: {total}.\n\n"
+  s := s ++ "Only category A rests on a theorem (`IsTensorOperator.triangleRule`); A' uses the " ++
+    "parity rule, which is a definition in PR 08. The parser and the final level assignment " ++
+    "are unverified code.\n\n"
+  s := s ++ "| Category | Count |\n|---|---|\n"
+  for cat in [Category.a, .a', .b, .c, .p, .n, .ok] do
+    s := s ++ s!"| {cat.name} | {byCat cat} |\n"
+  s := s ++ "\n## Subcategories\n\n| Category | Reason | Count | Examples |\n|---|---|---|---|\n"
+  let l := cats.counts.toList.toArray.qsort (fun a b => a.1 < b.1)
+  for (k, n) in l do
+    let parts := k.splitOn "\t"
+    s := s ++ s!"| {parts.headD ""} | {parts.getD 1 ""} | {n} | " ++
+      s!"{", ".intercalate (cats.examples.getD k #[]).toList} |\n"
+  for (cat, title) in [(Category.a, "A: angular momentum rule violated, everything firm"),
+      (.a', "A': only the parity rule violated, everything firm")] do
+    s := s ++ s!"\n## {title}\n\n" ++
+      "| Nuclide | E_i | Jπ_i | E_f | Jπ_f | E_γ | M | Data set | Record |\n" ++
+      "|---|---|---|---|---|---|---|---|---|\n"
+    for h in hits.filter (·.cat == cat) do
+      s := s ++ s!"| {h.nucid} | {h.ei} | {h.ji} | {h.ef} | {h.jf} | {h.eg} | {h.m} | " ++
+        s!"{h.dsid} | {h.loc} |\n"
+  IO.FS.writeFile out s
+  -- tab-separated lists for further use
+  let tsv (hs : Array Hit) : String := hs.foldl (fun acc h =>
+    acc ++ s!"{h.cat.name}\t{h.nucid}\t{h.ei}\t{h.ji}\t{h.ef}\t{h.jf}\t{h.eg}\t{h.m}\t" ++
+      s!"{h.dsid}\t{h.loc}\t" ++
+      (match h.cert with | some (x, y, l) => s!"{x} {y} {l}" | none => "") ++ "\n") ""
+  IO.FS.writeFile (out.withExtension "AA.tsv") (tsv hits)
+  IO.FS.writeFile (out.withExtension "B.tsv") (tsv bHits)
+  IO.println (s!"{total} transitions; A {byCat .a}, A' {byCat .a'}, B {byCat .b}, " ++
+    s!"C {byCat .c}, P {byCat .p}, N {byCat .n}, ok {byCat .ok}")
+
 /-- Entry point. -/
 def main (args : List String) : IO UInt32 := do
   match args with
   | [dir, "--parse-stats"] => parseStats dir; return 0
   | [dir, "--placement-stats"] => placementStats dir; return 0
-  | _ => IO.eprintln "usage: ensdf-check <dir> (--parse-stats | --placement-stats)"; return 1
+  | [dir] => runCheck dir ((System.FilePath.mk dir) / ".." / "bericht.md"); return 0
+  | [dir, out] => runCheck dir out; return 0
+  | _ =>
+    IO.eprintln "usage: ensdf-check <dir> [report.md] | <dir> (--parse-stats | --placement-stats)"
+    return 1

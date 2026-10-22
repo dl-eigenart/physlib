@@ -32,7 +32,7 @@ structure SpinParity where
   twoJ : ℕ
   /-- The parity `±1`. -/
   parity : ℤˣ
-  deriving DecidableEq, Repr
+  deriving DecidableEq, Repr, Inhabited
 
 /-- How firmly an ENSDF assignment is made. -/
 inductive Firmness

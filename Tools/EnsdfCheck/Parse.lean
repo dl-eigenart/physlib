@@ -144,7 +144,7 @@ structure SpinCand where
   jTent : Bool
   /-- The parity is in brackets. -/
   pTent : Bool
-  deriving Repr, BEq
+  deriving Repr, BEq, Inhabited
 
 /-- The result of reading a Jπ field. -/
 inductive JParse
