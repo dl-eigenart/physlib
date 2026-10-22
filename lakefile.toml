@@ -25,6 +25,10 @@ moreLeanArgs = ["-Dweak.says.verify=true"]
 name = "QuantumInfo"
 moreLeanArgs = ["-Dweak.says.verify=true"]
 
+[[lean_lib]]
+name = "EnsdfCheck"
+srcDir = "Tools"
+
 [[lean_exe]]
 name = "get_cache"
 srcDir = "scripts/dev"
