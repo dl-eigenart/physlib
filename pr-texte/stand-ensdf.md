@@ -392,3 +392,56 @@ ohne Vorgabe im Handbuch keine Rückstoßkorrektur, daher nur als Vorschlag.
 
 Keine Bewertung „Fehler in ENSDF“ ohne Daniels Prüfung. Bericht: `~/ensdf/bericht.md`
 (Kopie `bericht_v2.md`), Listen `bericht.AA.tsv` und `bericht.B.tsv`.
+
+## S6 Gegenprobe — Ergebnis von Daniel (NuDat 3, Adopted, Web 22.10.2026)
+Daniels Nummern beziehen sich auf die **erste** Liste (Runde 1, Abschnitt „S6 Gegenprobe — Liste für
+Daniel“). Zur Sicherheit stehen die Nuklide dabei.
+
+| # (Runde 1) | Nuklid, Übergang | Daniels Befund |
+|---|---|---|
+| 1 | ⁹Be 6760 9/2+ → 0 3/2-, E2 | auch in Adopted identisch |
+| 2 | ⁹Be 16977.1 → 2.78E+3, E2 | **Werkzeugfehler**; Web: 14535.1 → 2429.4 5/2- (seit Runde 2 durch Rückstoß und Regel „breite Niveaus“ in C) |
+| 3 | ¹⁹F 3998.7 7/2- → 1458.7 3/2-, M1 | auch in Adopted identisch |
+| 4 | ²⁵Mg 5116.4 1/2- → 585.0 1/2+, D+Q, (d,pγ) | nur Einzeldatensatz; Adopted ohne Widerspruch (Adopted **E1**) |
+| 5 | ³⁰P 3019.2 1+ → 677.01 0+, M1+E2, ³⁰S EC | auch in Adopted identisch |
+| 6 | ⁵³Cr 1006.27 5/2- → 564.03 1/2-, M1+E2 | auch in Adopted identisch |
+| 7 | ⁵³Cr 7613.8 25/2(-) → 6009.1 21/2(-), D, (HI,xnγ) | auch in Adopted identisch (nicht nur HI) |
+| 8 | ⁵³Fe 2339.24 11/2- → 0 7/2-, M1+E2 | auch in Adopted identisch |
+| 9 | ⁹⁰Nb 854.32 2- → 651.19 4(+), E1 | auch in Adopted identisch |
+| 10 | ¹⁰²Rh 476.6 7+ → 263.7 5+, D, (³⁶S,p3nγ) | nur Einzeldatensatz; Adopted **ohne Multipolarität**, Endniveau (5+) |
+
+Bilanz: 7 auch in Adopted (#1, 3, 5, 6, 7, 8, 9), 2 nur im Einzeldatensatz (#4, #10),
+1 Werkzeugfehler (#2).
+
+## Runde 3 (2026-10-22 18:55), Commit **ensdf-check: compare A and A' hits with the Adopted data set** (lokal)
+- **Rückstoß**: wird seit Runde 2 immer angewendet (`placeGamma`). Der neue Lauf ergibt
+  unveränderte Zahlen: A 29, A′ 24, B 131, C 66,889, S 3, P 206, N 5,459, ok 160,361;
+  29 Zertifikate, Build grün.
+- **Neue Spalten** für alle A- und A′-Treffer: „also in Adopted“ und „Adopted contradicts“.
+  Regel (`adoptedCompare` in `Main.lean`):
+  - Im Adopted-Satz desselben Nuklids werden Anfangsniveau, Gamma und Endniveau über die Energie
+    zugeordnet (3σ, jeweils der nächste Treffer).
+  - Das Endniveau wird auf den zum Treffer passenden Adopted-Level festgelegt; dann wird das
+    Adopted-Gamma genauso klassifiziert.
+  - **auch in Adopted** = Adopted ist A, A′ oder B. **Adopted widerspricht** = Adopted ist erlaubt
+    oder hat keine Multipolarität. Sonst „unclear“; nicht gefundene Levels oder Gammas werden
+    vermerkt.
+  - Erster Entwurf hatte zwei Fehlurteile (³⁰P: Adopted-B als Widerspruch; ⁵³Cr 7613.8: mehrdeutige
+    Adopted-Zuordnung als Widerspruch). Beides korrigiert; danach **stimmen alle 10 mit Daniels
+    NuDat-Prüfung überein**. ³⁰P steht in Adopted als B: Die Verletzung ist da, aber ein Teil ist dort
+    vorläufig.
+- **Bilanz der Spalten:**
+
+  | Kategorie | ist selbst Adopted | auch in Adopted (als A bzw. A′ / als B) | Adopted widerspricht | nicht gefunden |
+  |---|---|---|---|---|
+  | A (29) | 12 | 4 / 2 | 10 | 1 (Level) |
+  | A′ (24) | 13 | 2 / 0 | 7 | 2 (1 Level, 1 Gamma) |
+
+  „Adopted widerspricht“ heißt in 7 von 10 A-Fällen „Adopted gibt eine erlaubte Multipolarität“
+  (²⁵Mg E1, ⁴⁷Ti [E2], ¹⁰⁶Cd Q, ¹¹¹Sn E2, ¹⁴⁹Gd (Q), ¹⁶²Dy 2× E2) und sonst „Adopted ohne
+  Multipolarität“ (⁴¹Sc, ¹⁰²Rh, ¹¹³Cd).
+- Bericht `~/ensdf/bericht.md` (Kopie `bericht_v3.md`); `bericht.AA.tsv` hat die zwei Spalten
+  zusätzlich.
+- Damit stehen 18 der 29 A-Treffer auch im Adopted-Satz (12 sind selbst Adopted, 6 dort ebenfalls
+  verletzt). Das sind die Kandidaten für einen etwaigen Bericht an NNDC; Entscheidung und
+  Kontakt nach außen: Daniel.
