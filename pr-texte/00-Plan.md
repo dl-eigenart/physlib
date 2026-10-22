@@ -31,12 +31,12 @@ master ─┬─ 01 spin-orbit ──────────────┐
 
 | Welle | PR | Branch | Zeilen | Wartet auf |
 |---|---|---|---|---|
-| **Merge-Queue: #1899** | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
+| **gemergt: #1899** | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
 | **gemergt: #1900** | 02 generalised Laguerre polynomials | `pr/laguerre` | 383 | nichts |
 | **offen: #1909** | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
 | nach #1909 | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
 | nach #1909 | 05 bound states of the d-dimensional hydrogen atom | `pr/hydrogen-bound-states` | 329 | 03 |
-| nach #1899+#1909 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
+| nach #1909 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
 | **offen: #1910** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
 | **offen: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
 | nach #1911 | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
