@@ -704,3 +704,26 @@ E4-PR anpassen oder in PR 04 selbst? (iii) Branchname ok?
   runPhyslibAlphaLinters, module_doc_lint, alphaFileImports, noAlphaImports, lint_style,
   alpha_python, codespell OK, sorry 0. Alle 8 Module neu gebaut (Oleans 14:44).
 - Push von `hydrogen-bound-states-split` (force, da rebased) wartet auf „ja“.
+
+## E4, Branch `hydrogen-radial-completeness` (lokal, von fork/pr/hydrogen-quantisation e9f670d4)
+Daniels Entscheidungen: Randbedingung `u → 0` bei `0⁺`; Docstring von PR 04 im E4-PR anpassen
+(PR 04 selbst bleibt); Branchname ok. Datei `PhyslibAlpha/QuantumMechanics/Hydrogen/RadialCompleteness.lean`.
+Lokale WIP-Commits, am Ende zu einem Commit zusammenfassen.
+
+### 2026-10-22 14:46: S1 erledigt — alle Aussagen mit `sorry`, Modul baut
+Deklarationen: `radialPot`, `regCoeff`, `radialRec_regCoeff`, `entireCoeff_regCoeff`,
+`radial_ode_of_radialRec`, `regSol_near_zero`, `wronskian_const`, `wronskian_eq_zero_of_tendsto`,
+`exists_eqOn_near_zero_of_tendsto`, `eqOn_zero_of_eqOn_Ioo`, `radial_regular_solution`,
+`radial_quantization_of_tendsto`. Lösungen in `HasDerivAt`-Form (`u`, `u'`); nur die beiden
+Hauptsätze in `deriv`-Form wie PR 04. Hinweis: auf dieser Basis steht noch `-Dwarn.sorry=false`
+im lakefile, `sorry`-Warnungen sieht man nur mit `lake env lean`.
+
+### S2 erledigt — Umkehrung der Rekursion, Existenz der regulären Lösung
+`radialRec_regCoeff` (field_simp), `entireCoeff_regCoeff` (`summable_of_ratio_norm_eventually_le`
+mit Quotient ≤ 1/2 ab `k ≥ ⌈4(|κ|+1)r⌉`), `radial_ode_of_radialRec` (gleiche Reihe `d` wie in
+`recursion_of_radial_ode`, hier identisch 0, dann `radial_identity`). Modul baut.
+
+### S3 erledigt — Asymptotik bei 0, Wronski konstant
+`regSol_near_zero` (δ = min(ε/2, 1), a = e^(-|κ|)/2, b = 3e^(|κ|)/2), Hilfslemma
+`exists_const_of_hasDerivAt_zero` (über `IsOpen.exists_is_const_of_deriv_eq_zero`),
+`wronskian_const`. Modul baut.
