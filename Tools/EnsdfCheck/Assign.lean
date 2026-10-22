@@ -54,7 +54,9 @@ def sigma (d : Dec) (de : List Char) : Float :=
 /-- The atomic mass constant in keV (CODATA 2022, `931.494 103 72(29) MeV`, NIST). -/
 def uKeV : Float := 931494.10372
 
-/-- Levels with an energy uncertainty or a width of at least this many keV count as broad. -/
+/-- Levels with an energy uncertainty or a width of at least this many keV count as broad. Fixed at
+10 keV after runs with 5, 10, 20 and 50 keV (appendix of the report): category A is the same for
+all four, A' changes from 20 keV on by two cases with coarsely written energies. -/
 def broadKeV : Float := 10.0
 
 /-- Locate the final level of gamma `g` in data set `ds`. `levelE` holds the parsed level

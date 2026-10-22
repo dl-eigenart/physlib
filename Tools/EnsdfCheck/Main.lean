@@ -290,6 +290,54 @@ def certificates (dir : System.FilePath) (hits : Array Hit) : String := Id.run d
         "  fun _ _ _ h => absurd h.2.1 (by decide)\n"
   return s ++ "\nend EnsdfCheck.Certificates\n"
 
+/-- Counts per category and the records of the A and A' hits for one breadth threshold. -/
+def sweepRun (all : Array (String × Array Dataset)) (broad : Float) :
+    Std.HashMap String Nat × Array String × Array String := Id.run do
+  let mut counts : Std.HashMap String Nat := {}
+  let mut aRecs : Array String := #[]
+  let mut a'Recs : Array String := #[]
+  for (file, dss) in all do
+    for d in dss do
+      let levelE := d.levels.map fun l => parseEnergy l.e
+      for g in d.gammas do
+        if let some r := classify d levelE g broad then
+          counts := counts.insert r.cat.name (counts.getD r.cat.name 0 + 1)
+          let loc := s!"{d.nucid} {file}:{g.line}"
+          if r.cat == .a then aRecs := aRecs.push loc
+          if r.cat == .a' then a'Recs := a'Recs.push loc
+  return (counts, aRecs, a'Recs)
+
+/-- The appendix on the breadth threshold: the check with 5, 10, 20 and 50 keV. -/
+def sweepAppendix (all : Array (String × Array Dataset)) : String := Id.run do
+  let thresholds : List Float := [5.0, 10.0, 20.0, 50.0]
+  let runs := thresholds.map fun b => (b, sweepRun all b)
+  let cats := [Category.a, .a', .b, .c, .s, .p, .n, .ok]
+  let mut s := "\n## Appendix: breadth threshold\n\n" ++
+    "A level whose energy uncertainty or width is at least the threshold is never accepted as " ++
+    "the only candidate for the final level. The threshold is fixed at **10 keV**. Reason: " ++
+    "category A is the same at 5, 10, 20 and 50 keV (the same records, not only the same " ++
+    "number); A' changes from 20 keV on only by the cases listed below. Runs with " ++
+    "`lake exe ensdf-check <dir> <report> --broad <keV>`, reports in `~/ensdf/sweep/`.\n\n" ++
+    "| Threshold |" ++ String.join (cats.map fun cat => s!" {cat.name} |") ++ "\n|---|" ++
+    String.join (cats.map fun _ => "---|") ++ "\n"
+  for (b, (counts, _, _)) in runs do
+    s := s ++ s!"| {b.toUInt64} keV |" ++
+      String.join (cats.map fun cat => s!" {counts.getD cat.name 0} |") ++ "\n"
+  let ref := (runs.find? (·.1 == 10.0)).map (·.2)
+  if let some (_, a10, a'10) := ref then
+    for (b, (_, aR, a'R)) in runs do
+      if b != 10.0 then
+        let sameA := aR.qsort (· < ·) == a10.qsort (· < ·)
+        let plus := a'R.filter (!a'10.contains ·)
+        let minus := a'10.filter (!a'R.contains ·)
+        s := s ++ s!"\n- {b.toUInt64} keV against 10 keV: A records " ++
+          (if sameA then "identical" else "DIFFERENT") ++ "; A' added: " ++
+          (if plus.isEmpty then "none" else ", ".intercalate plus.toList) ++ "; A' removed: " ++
+          (if minus.isEmpty then "none" else ", ".intercalate minus.toList) ++ "."
+  return s ++ "\n\nThe two A' cases added from 20 keV on are ¹¹B (γ,γ): the final levels are " ++
+    "written `5.02E3` and `4.44E3` without uncertainty, so one unit of the last digit gives " ++
+    "σ = 10 keV; the Adopted data set contradicts both (E1+M2, allowed).\n"
+
 /-- Run the check and write the report. -/
 def runCheck (dir : System.FilePath) (out : System.FilePath)
     (cert : Option System.FilePath := none) (broad : Float := broadKeV) : IO Unit := do
@@ -301,8 +349,10 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
   let mut hits : Array Hit := #[]
   let mut bHits : Array Hit := #[]
   let mut sLevels : Array String := #[]
+  let mut all : Array (String × Array Dataset) := #[]
   for f in files do
     let dss := parseFile f.fileName (← readAscii f.path)
+    all := all.push (f.fileName, dss)
     for d in dss do
       let levelE := d.levels.map fun l => parseEnergy l.e
       if let some a := d.massNumber then
@@ -371,6 +421,7 @@ def runCheck (dir : System.FilePath) (out : System.FilePath)
     "| Nuclide | E | Jπ | Jπ firm | Data set | Record |\n|---|---|---|---|---|---|\n"
   for r in sLevels do
     s := s ++ r ++ "\n"
+  s := s ++ sweepAppendix all
   IO.FS.writeFile out s
   -- tab-separated lists for further use
   let tsv (hs : Array Hit) : String := hs.foldl (fun acc h =>
