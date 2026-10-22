@@ -30,6 +30,11 @@ name = "EnsdfCheck"
 srcDir = "Tools"
 
 [[lean_exe]]
+name = "ensdf-check"
+root = "EnsdfCheck.Main"
+srcDir = "Tools"
+
+[[lean_exe]]
 name = "get_cache"
 srcDir = "scripts/dev"
 
