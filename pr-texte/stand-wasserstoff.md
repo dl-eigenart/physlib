@@ -802,3 +802,51 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   `pr/hydrogen-quantisation` e9f670d4 → **8b087409** (per `ls-remote` bestätigt). Nicht gepusht: E3, E4,
   rational-6j, racah-6j, ensdf-check. Hinweis: fork/master stand beim Push laut `ls-remote` noch auf
   96a6bc5e (12 hinter origin/master c7d9ebb4).
+
+## Anpassung an #1936 „explicit quantum system dimension“ (2026-10-23 20:10)
+### Was #1936 geändert hat (aus `git show ea8496e6`, nicht geraten)
+- `structure SpaceDQuantumSystem (d : ℕ)`: das Feld `d` ist weg, die Dimension ist Typparameter;
+  `HS (_ : SpaceDQuantumSystem d) := SpaceDHilbertSpace d`.
+- `structure HydrogenAtom (d : ℕ) extends SpaceDQuantumSystem d`; Abschnittsvariable `{d : ℕ} (H : HydrogenAtom d)`.
+- `Rydberg.lean`: `levelIndex` hängt nicht mehr von `H` ab: `HydrogenAtom.levelIndex (d : ℕ) (n : ℕ) : ℝ`,
+  `levelIndex_eq : levelIndex d n = n + (d - 1)/2`; `levelIndex_pos (hd : 2 ≤ d) n`, `levelIndex_nonneg [NeZero d]`,
+  `levelIndex_strictMono d`, `levelIndex_monotone d`; `energyLevel_eq : H.energyLevel n = -H.rydbergEnergy /
+  levelIndex d n ^ 2`; alle `hd : 2 ≤ H.d` → `hd : 2 ≤ d`.
+- `RadialFunctions.lean` (upstream): `bohrRadius (H : HydrogenAtom d)`; `radialFun_schrodinger (H : HydrogenAtom 3)`
+  ohne `hd`. PöschlTeller: `toSpaceDQuantumSystem : SpaceDQuantumSystem 1`, `toSpaceDQuantumSystem_d` entfällt.
+
+### Übersetzung (Skript `~/physlib_ci/scripts1936/adapt1936.py`, Rest von Hand)
+`(H : HydrogenAtom)` → `HydrogenAtom d` (bzw. `HydrogenAtom 3`, wo die ganze Datei `H.d = 3` voraussetzt);
+`H.d` → `d`; `H.levelIndex n` → `HydrogenAtom.levelIndex d n`; `H.levelIndex_pos hd` →
+`HydrogenAtom.levelIndex_pos hd`. Wo `HydrogenAtom 3`: Hypothesen `hd : H.d = 3` und ihre Argumente entfernt.
+
+### hydrogen-pauli (PR 15) — rebased, **gepusht** (freigegeben)
+- Sicherung `backup/hydrogen-pauli-pre-1936-rebase` = `fd5f5b4e`.
+- Rebase-Konflikt nur in `PhyslibAlpha.lean` (Importliste, neben `RadialFunctions`), beide Importe behalten.
+- `PauliSpectrum.lean` wie vom Reviewer beschrieben: `PauliSystem (Hy : HydrogenAtom 3)`, `variable {Hy : HydrogenAtom 3}`,
+  `kappa (Hy : HydrogenAtom 3)`; `hd : Hy.d = 3` aus `exists_energyLevel_of_H_eq` und `exists_energyLevel` entfernt,
+  ebenso `hd` im `simp only`. PR-Text 15 erwähnt `hd` nicht, keine Änderung nötig.
+- check_pr.sh (`REVIEW_rb36-pauli.txt`): alle 10 Schritte OK, sorry 0.
+- `git push fork --force-with-lease=hydrogen-pauli:fd5f5b4e`: fd5f5b4e → **`c9926216`** (per ls-remote bestätigt).
+
+### Lokal rebased, nicht gepusht (Sicherungen `backup/<branch>-pre-1936-rebase`)
+| Branch | neu | alt | Anpassung |
+|---|---|---|---|
+| `pr/hydrogen-quantisation` (04) | `9cf8d612` | `8b087409` | keine nötig |
+| `pr/hydrogen-bound-states` (05) | `93579de6` | `99a2a911` | `Eigenfunctions.lean`: `HydrogenAtom d`, `levelIndex d` |
+| `pr/fine-structure` (06) | `3b645637` | `1a348f67` | `HydrogenAtom 3`, 4× `hd : H.d = 3` entfernt |
+| `hydrogen-pauli-degeneracy` | `d1990b06` | `b07c9efd` | auf neues hydrogen-pauli; Konflikt in `PauliSpectrum.lean` mit der Fassung des Degenerations-Commits gelöst, dann `HydrogenAtom 3`, 5× `hd` entfernt; Diff des Commits gleich dem alten bis auf `hd` (geprüft) |
+| `hydrogen-bound-states-split` (E3) | `d76f2523` | `83377cd9` | auf neues 05; jeder Commit einzeln angepasst und gebaut (`--exec`); `HydrogenAtom d`; Lemmas mit `hd : H.d = 3` behalten `hd : d = 3` (kleinste Änderung; Alternative `HydrogenAtom 3`) |
+| `hydrogen-radial-completeness` (E4) | `c091c588` | `1348df99` | auf neues 04; keine Anpassung nötig |
+
+- check_pr.sh (`REVIEW_rb36-{04,05,06,pdeg,E3,E4}.txt`): je 10/10 OK (Build, alle Linter, theorem_lint,
+  codespell), sorry 0. Keine Zeile über 100 Zeichen in den geänderten Dateien.
+- PR-Texte 05/06 an die neue API angepasst (`HydrogenAtom.levelIndex d n`, `HydrogenAtom 3`, Hinweis „assume `H.d = 3`“
+  ersetzt). In 04 und 15 keine Stelle betroffen.
+
+### #1911 (pr/clebsch-gordan, Kopf `35cf02e4`) — nur geprüft, nicht geändert
+- Benutzt weder `HydrogenAtom` noch `SpaceDQuantumSystem`/`levelIndex`: von #1936 nicht betroffen.
+- `git merge-tree origin/master fork/pr/clebsch-gordan`: Konflikt nur in `PhyslibAlpha.lean`, Importliste
+  AngularMomentum: master hat dort `ProjectionTheorem`, `SelectionRules` (aus der Projektions-PR), der Branch
+  `ClebschGordanCoefficients`, `NormalizedBasis`. Lösung wäre: alle vier, alphabetisch. GitHub meldet
+  `mergeable = unknown`.
