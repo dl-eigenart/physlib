@@ -871,3 +871,7 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   im Lemma `SpaceDHilbertSpace 3`, `harmonicSubmodule 3`; Aufrufe ohne `hd`. Gesamtdiff 13+/13−.
 - Neue Spitze **`f28a0649`** (Commits 5e1cc3bc, 13f91ba9, 81e84c8d, da8639a3, f28a0649 auf 05 `93579de6`).
 - check_pr.sh (`REVIEW_rb36-E3b.txt`): 10/10 OK, sorry 0.
+- **Push 04/05/06 (2026-10-23 22:38, freigegeben):** vorher geprüft, dass lokal = 9cf8d612/93579de6/3b645637 und
+  Fork = 8b087409/99a2a911/1a348f67; je `--force-with-lease` gegen den vollen alten Fork-Hash.
+  `pr/hydrogen-quantisation` 8b087409 → **9cf8d612**, `pr/hydrogen-bound-states` 99a2a911 → **93579de6**,
+  `pr/fine-structure` 1a348f67 → **3b645637** (ls-remote bestätigt). Sonst nichts gepusht.
