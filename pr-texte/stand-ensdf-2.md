@@ -712,3 +712,17 @@ ensdf.080:11565  [(HI,XNG)]  Ji=8 Jf=7 (vorlaeufig/vorlaeufig/M fest) L=(1, 1) d
   (Lean `#eval`, kompiliert, kein Beweis).
 - Ergebnis: **758 verwendete Racah-W, 0 Abweichungen** (70 s).
 - Damit sind alle im T4-Lauf verwendeten 3j- und 6j-Werte gegen die Lean-Definitionen abgeglichen.
+
+## Gegenprobe-Liste T4 (2026-10-23 12:25)
+`~/ensdf/t4a/gegenprobe.tsv` (sha256 969b5f34…6131), erzeugt mit `~/ensdf/t4a/gegenprobe.py` aus
+`voll2_faelle.txt` (Lauf voll2b) und den Quelldateien `~/ensdf/data_261001/ensdf.*`.
+- 67 Zeilen: T4-δ 15, T4-Vorzeichen 2, T4-Dipol-A4 50 (dieselben Zählungen wie oben).
+- Spalten: Kategorie, Nr, Nuklid, DSID (NNDC-Datensatzkennung aus dem ID-Satz, Spalten 10–39),
+  Datei:Zeile(cG), E_i/dE_i/Jπ_i, E_γ/dE_γ, E_f/dE_f/Jπ_f, M, δ/dδ (MR/DMR), A2/dA2, A4/dA4 (Unsicherheit wie
+  im Satz, `{In}` = Einheiten der letzten Stelle), Keynumber, Keynumber-Quelle, DSREF, Kommentar (vollständig,
+  mit Fortsetzungszeilen).
+- Alle Felder nach den festen ENSDF-Spalten aus den Originalzeilen; jede L-, G- und cG-Zeile ist wörtlich im
+  jeweiligen Datensatz der Quelle vorhanden (0 Abweichungen).
+- Keynumber-Quelle: 37× im A2/A4-Kommentar genannt; 26× nicht genannt → DSREF des ID-Satzes (alle Referenzen
+  des Datensatzes, die konkrete ist dann offen); 4× Adopted-Kommentar nennt die Reaktion → DSREF dieses
+  Reaktions-Datensatzes (203Pb: 202HG(A,3NG); 207Po: 208PB(A,5NG),206PB(A,3NG)).
