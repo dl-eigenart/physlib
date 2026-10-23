@@ -850,3 +850,24 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   AngularMomentum: master hat dort `ProjectionTheorem`, `SelectionRules` (aus der Projektions-PR), der Branch
   `ClebschGordanCoefficients`, `NormalizedBasis`. Lösung wäre: alle vier, alphabetisch. GitHub meldet
   `mergeable = unknown`.
+
+## #1911 rebased und gepusht; E3 auf HydrogenAtom 3 (2026-10-23 22:20)
+### pr/clebsch-gordan (#1911) — **gepusht** (freigegeben)
+- Ausgangspunkt fork/pr/clebsch-gordan `35cf02e4` (der lokale `pr/clebsch-gordan` `33c27278` war veraltet;
+  gesichert als `backup/clebsch-gordan-lokal-alt`, Fork-Stand als `backup/clebsch-gordan-pre-1910-rebase`).
+- `git rebase origin/master` (`ea8496e6`): in beiden Commits nur der Import-Konflikt in `PhyslibAlpha.lean`, gelöst als
+  Vereinigung, alphabetisch (`~/physlib_ci/scripts1936/resolve_imports.py`): `ClebschGordanCoefficients`,
+  `NormalizedBasis`, `ProjectionTheorem`, `SelectionRules`.
+- Neue Commits `fcfc11ce` (normalised basis), **`18a496c2`** (Clebsch-Gordan); `fcfc11ce` baut auch allein.
+- check_pr.sh (`REVIEW_rb10-cg.txt`): 10/10 OK, sorry 0. PR-Text 09 unverändert (weiter zutreffend).
+- `git push fork --force-with-lease=pr/clebsch-gordan:35cf02e4`: 35cf02e4 → **`18a496c2`** (ls-remote bestätigt).
+
+### E3 hydrogen-bound-states-split: `HydrogenAtom 3` statt `hd : d = 3` (nicht gepusht)
+- Sicherung des vorigen Stands `backup/hydrogen-bound-states-split-hd-d3` = `d76f2523`.
+- Fünf Lemmas (je im Commit, der sie einführt; `--exec` mit `~/physlib_ci/scripts1936/e3_dim3.py`, jeder Commit
+  einzeln gebaut): `finrank_range_boundStateMap_three` (Degeneracy), `finrank_range_boundStateMapHS_three`,
+  `finrank_span_range_boundStateMapHS_three` (BoundStatesL2), `exists_finrank_eigenvectors_adjoint_three`,
+  `exists_finrank_eigenvectors_adjoint_three_complex` (BoundStatesAdjoint): `(H : HydrogenAtom 3)`, `hd` entfernt,
+  im Lemma `SpaceDHilbertSpace 3`, `harmonicSubmodule 3`; Aufrufe ohne `hd`. Gesamtdiff 13+/13−.
+- Neue Spitze **`f28a0649`** (Commits 5e1cc3bc, 13f91ba9, 81e84c8d, da8639a3, f28a0649 auf 05 `93579de6`).
+- check_pr.sh (`REVIEW_rb36-E3b.txt`): 10/10 OK, sorry 0.
