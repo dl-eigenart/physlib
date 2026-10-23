@@ -665,3 +665,18 @@ korrigiert):
   `pr/wigner-eckart-cg`, `pr/six-j-symmetry` sind ältere Stände): alle auf Basis `8a6ce260`, keiner berührt
   die Dateien aus #1910 (ProjectionTheorem, SelectionRules, WignerEckartIrreducible) → durch den Merge von #1910
   ist kein Rebase nötig. Rebase von 10–14 nach dem Merge von #1911, ausgehend von den Fork-Ständen.
+
+## Entscheidung Daniel (2026-10-23 19:56): `69c44da4` bleibt, kein Force-Push
+Der Querverweis in der Projektions-PR existiert schon und ginge durch einen Force-Push nicht weg.
+Stattdessen pre-push-Hook (2026-10-23 19:57):
+- Datei `~/physlib_ci/physlib/.git/hooks/pre-push`. Weil `physlib-notes` ein Worktree von
+  `~/physlib_ci/physlib` ist, liegt der Hook im gemeinsamen Hook-Verzeichnis und läuft bei jedem Push aus
+  beiden. Er prüft deshalb **nur Refs unter `refs/heads/notes/*`** (lokal oder Ziel), sonst würden
+  PR-Branches mit Upstream-Commits wie „(…#1939)“ blockiert.
+- Geprüft werden die Commits, die auf dem Ziel-Remote noch fehlen (`git rev-list <neu> --not <alt>
+  --remotes=<remote>`); enthält eine Nachricht `#[0-9]`, bricht der Push mit Exit 1 und Liste der Commits ab.
+  Löschen eines Branches wird nicht geprüft.
+- Getestet ohne Push (Hook direkt mit simulierter Eingabe): aktueller Notizstand → durchgelassen; Commit mit
+  „#1234“ auf notes/pr-texte und auf neuem notes-Branch → abgebrochen; nur schon gepushte Commits (darunter
+  `69c44da4`) → durchgelassen; PR-Branch mit Upstream-#NNNN → durchgelassen; Löschen → durchgelassen.
+- Der Hook ist nicht versioniert (`.git/hooks`); bei einem neuen Klon muss er neu angelegt werden.
