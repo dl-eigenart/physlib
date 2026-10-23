@@ -761,8 +761,10 @@ verschiedenen Referenzen werden nie gepaart; mehrere Messungen in einem Kommenta
     Messung im Kommentar, die v2 nicht sah.
   - 37Cl 10293.0 bleibt T4-δ, jetzt mit Referenz 1966Ko23 ausgewiesen (δ = −0.06(1) im G-Satz).
 
-**Korrektur 2:** `~/ensdf/t4a/gegenprobe.tsv` (= `voll3_gegenprobe.tsv`, sha256 effcb1cc…539ab676) direkt aus
-den ausgewerteten Werten; neue Spalten Referenz, Referenz_Quelle, Treffer_dieser_Referenz,
+**Korrektur 2:** `~/ensdf/t4a/gegenprobe.tsv` (= `voll3_gegenprobe.tsv`, sha256 3db9a7b3…4aedfc44) direkt aus
+den ausgewerteten Werten; Referenz in jeder Zeile (39× aus dem A2/A4-Kommentar; 26× DSREF des Datensatzes,
+konkrete Referenz dann offen; 4× Adopted ohne Keynumber → DSREF des im Kommentar genannten Reaktions-Datensatzes,
+203Pb: 202HG(A,3NG), 207Po: 208PB(A,5NG),206PB(A,3NG)); neue Spalten Referenz, Referenz_Quelle, Treffer_dieser_Referenz,
 Evaluatoren_Kommentar (ja/leer), Stichworte, Kommentar_A2A4, Kommentare_zum_Gamma. Zählung je Referenz in
 `voll3.txt` (häufigste:
        5  1993BL02
