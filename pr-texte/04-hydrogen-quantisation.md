@@ -1,8 +1,10 @@
 # feat(PhyslibAlpha): quantisation of the hydrogen levels
 
-Branch: `pr/hydrogen-quantisation` · Base: master, after the radial functions PR is merged · Depends on: `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it #1900
+Branch: `pr/hydrogen-quantisation` · Base: master
 
-This PR proves that the bound-state energies of hydrogen are discrete within the power series ansatz. If `u(ρ) = ρ^(l+1) e^(-κρ) Σ_k c_k ρ^k`, with an everywhere convergent series, `c_0 ≠ 0` and `κ > 0`, solves the radial equation `u'' = (l(l+1)/ρ² - 2/ρ + κ²) u` on `(0, ∞)` and is square integrable, then `κ = 1/ν` for a natural number `ν > l` and `u` is a multiple of `u_{νl}`. It builds on `radialU` and `eval_radialPoly` from the radial functions PR and on `laguerreCoeff` from the Laguerre PR.
+Builds on #1909 (radial functions of the hydrogen atom) and #1900 (generalised Laguerre polynomials), both merged.
+
+This PR proves that the bound-state energies of hydrogen are discrete within the power series ansatz. If `u(ρ) = ρ^(l+1) e^(-κρ) Σ_k c_k ρ^k`, with an everywhere convergent series, `c_0 ≠ 0` and `κ > 0`, solves the radial equation `u'' = (l(l+1)/ρ² - 2/ρ + κ²) u` on `(0, ∞)` and is square integrable, then `κ = 1/ν` for a natural number `ν > l` and `u` is a multiple of `u_{νl}`. It builds on `radialU` and `eval_radialPoly` of `RadialFunctions.lean` and on `laguerreCoeff` of `Laguerre.lean`.
 
 ## Main results
 
@@ -67,7 +69,7 @@ All declarations are in the namespace `PhyslibAlpha.Hydrogen`.
 ## Notes
 
 - The module docstring states what is assumed: the power series ansatz, i.e. that the solution regular at the origin is `ρ^(l+1) e^(-κρ)` times an entire function. That every solution regular at the origin has this form, and that the second, singular solution is excluded by the boundary condition at `ρ = 0`, is not formalised.
-- The statement is in Rydberg units (energy `-κ²`); the connection to physical units is `radialFun_schrodinger` of the radial functions PR.
+- The statement is in Rydberg units (energy `-κ²`); the connection to physical units is `radialFun_schrodinger` in `RadialFunctions.lean`.
 - `not_integrableOn_of_nonterminating` is a single long proof (about 150 lines) with comments marking its four steps; it has not been split into lemmas.
 
 ---

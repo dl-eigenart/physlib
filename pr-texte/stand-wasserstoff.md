@@ -766,3 +766,34 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
 - `fork/hydrogen-radial-completeness` = ad29c408 (neu, Sicherung, alte Basis e9f670d4).
 - Entscheidung: Rebase auf master erst nach Merge des Radialfunktionen-PRs, dann der ganze
   Wasserstoff-Stapel in einem Durchgang. Bis dahin Pause.
+
+## Rebase nach Merge von #1909 (2026-10-23 11:30), lokal, nicht gepusht
+- `git fetch origin`: origin/master = `c7d9ebb4` (enthält #1909 `7f1556a0`, #1899 `8a6ce260`, #1900 `a46a93e9`).
+- **fork/master liegt 12 Commits zurück**, darunter Workflow-Änderung `a353ac40` (#1805, `.github/workflows`)
+  → Daniel: „Sync fork“.
+- Rebase in einem Durchgang, konfliktfrei. Weggefallen: die Kopien von „radial functions“ (#1909;
+  `a20754c1`, `d588e09d`, `d82876a0`), „generalised Laguerre polynomials“ (#1900; `21da4ea5`) und
+  „spin-orbit coupling“ (#1899; `b0ddc7c3`, Datei identisch mit upstream). Inhaltsgleichheit vorher geprüft
+  (`git diff` leer). E3 steht jetzt auf dem neuen 05, E4 auf dem neuen 04 (vorher eigene, inhaltsgleiche Kopien).
+  Sicherung: `backup/<branch>-pre-1909-rebase`.
+
+| Branch | neu | alt | Commits über origin/master |
+|---|---|---|---|
+| `pr/hydrogen-quantisation` (04) | `8b087409` | `7222a740` | 1 |
+| `pr/hydrogen-bound-states` (05) | `99a2a911` | `349128d0` | 1 |
+| `pr/fine-structure` (06) | `1a348f67` | `3487e3a3` | 1 |
+| `hydrogen-bound-states-split` (E3) | `83377cd9` | `850eaba2` | 6 (auf 05) |
+| `hydrogen-radial-completeness` (E4) | `1348df99` | `ad29c408` | 2 (auf 04) |
+
+- `check_pr.sh` je Branch (`~/physlib_ci/REVIEW_rb-{04,05,06,E3,E4}.txt`): build_modules, build_alpha,
+  runPhyslibAlphaLinters, module_doc_lint, alphaFileImports, noAlphaImports, lint_style, alpha_python,
+  codespell OK; sorry 0 in allen geänderten Dateien.
+- theorem_lint im ersten Lauf FEHLER bei allen fünf: 13 upstream-Namen (`Hₛ_*`, `HermitianMat.log*`) „not
+  theorems“, weil die lokalen QuantumInfo-Oleans veraltet waren (check_pr.sh baut QuantumInfo nicht).
+  Nach `lake build QuantumInfo`: theorem_lint OK bei allen fünf (`~/physlib_ci/THEOREM_LINT_rb.txt`).
+- PR-Texte 04/05/06: Kopfzeile jetzt „Base: master“ plus eigene Zeile „Builds on … both merged“
+  (04/05: #1909 und #1900; 06: #1899 und #1909). Eine `-blocked-by-PR`-Zeile gab es in den Texten nicht.
+  Verweise „the radial functions PR“ / „the Laguerre PR“ durch Dateinamen ersetzt; in 06 den Satz
+  „Only the last commit … is new“ entfernt (jetzt ein Commit). Deklarationslisten gegen die rebasten
+  Dateien geprüft: vollständig, Art und Reihenfolge stimmen (33/22/11). Reviewer-Map: Abschnitte §A–§E
+  stimmen mit den Dateien; referenzierte Upstream-Namen existieren auf origin/master.

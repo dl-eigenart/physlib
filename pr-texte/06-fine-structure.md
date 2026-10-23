@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): fine structure of hydrogen
 
-Branch: `pr/fine-structure` · Base: master, after the spin-orbit and radial functions PRs are merged · Depends on: #1899 (spin-orbit coupling), `pr/hydrogen-radial` (radial functions of the hydrogen atom), and through it #1900
+Branch: `pr/fine-structure` · Base: master
+
+Builds on #1899 (spin-orbit coupling) and #1909 (radial functions of the hydrogen atom), both merged.
 
 This PR defines the three first-order fine-structure corrections of the hydrogen level `(ν, l)`, relativistic kinetic, spin-orbit and Darwin, in terms of the radial expectation values `⟨1/ρ⟩`, `⟨1/ρ²⟩`, `⟨1/ρ³⟩` and `|R(0)|²`, and proves that their sum equals `E_ν α²/ν² (ν/(j + 1/2) - 3/4)` for `j = l ± 1/2`. Consequently the levels `(ν, l, l + 1/2)` and `(ν, l + 1, l + 1/2)` have the same shift. It builds on the radial integrals of `RadialFunctions.lean` and on the `L · S` eigenvalues `Sl2.spinOrbitValue` of `SpinOrbit.lean`.
 
@@ -11,8 +13,6 @@ This PR defines the three first-order fine-structure corrections of the hydrogen
 - `fineStructureShift_upper_eq_lower`: for `l + 1 < ν` the shifts of `(ν, l, j = l + 1/2)` and `(ν, l + 1, j = l + 1/2)` coincide; for `ν = 2`, `l = 0` this is the degeneracy of `2s_{1/2}` and `2p_{1/2}`.
 
 ## Reviewer map
-
-Only the last commit, `feat(PhyslibAlpha): fine structure of hydrogen`, is new; the earlier commits belong to the PRs listed above.
 
 1. `PhyslibAlpha/QuantumMechanics/Hydrogen/FineStructure.lean` §A The three first-order corrections: check that `relativisticShift`, `spinOrbitShift` and `darwinShift` are the stated physical formulas, including the factors of the Bohr radius and the normalisation `radialMoment ν 0 0` in the Darwin term.
 2. `PhyslibAlpha/QuantumMechanics/Hydrogen/FineStructure.lean` §B The fine-structure formula: the helper lemmas `levelIndex_sub_one`, `ls_upper`, `ls_lower`, then the case split `l = 0` / `l ≥ 1` in `fineStructureShift_upper` and the hypotheses on `ls`.
