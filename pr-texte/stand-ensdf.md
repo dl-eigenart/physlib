@@ -650,3 +650,18 @@ korrigiert):
   Der lokale Branch `pr/projection-selection` ist durch den Merge erledigt (nicht gelöscht).
 - Nichts gepusht. `fork/ensdf-check` steht noch auf `7f47e6c2` (Push braucht force-with-lease, Daniel).
 - Nächstes: Merge von #1911 hat Vorrang.
+
+## Prüfung des Stands (2026-10-23 19:55, Folgesitzung)
+- origin/master = `ea8496e6`, enthält #1910 (`b7d9ceb5`). #1911 laut GitHub-API offen (Kopf `35cf02e4`,
+  = fork/pr/clebsch-gordan). Der in der Vorsitzung erwähnte Hintergrundjob (API-Abfrage alle 5 min) läuft
+  nicht mehr.
+- `ensdf-check` lokal = fork = **`6bae81b3`**, 12 Commits über origin/master; fork/notes/pr-texte =
+  **`69c44da4`**. Abweichend vom Eintrag oben („Nichts gepusht“) sind beide inzwischen auf dem Fork
+  (Push in der Vorsitzung um 19:49).
+- **Regelverstoß:** Die Commit-Nachricht von `69c44da4` enthält „#1910“, obwohl Notiz-Commits keine #NNNN
+  enthalten sollen. Der Commit ist schon gepusht; ändern ginge nur mit Force-Push des Notizen-Branches.
+  Daniel entscheidet; bis dahin unverändert. Ältere Plan-Commits mit #NNNN stammen von vor der Regel.
+- Stapel 09–14 (maßgeblich sind die Fork-Branches, die lokalen `pr/clebsch-gordan`, `pr/wigner-3j`,
+  `pr/wigner-eckart-cg`, `pr/six-j-symmetry` sind ältere Stände): alle auf Basis `8a6ce260`, keiner berührt
+  die Dateien aus #1910 (ProjectionTheorem, SelectionRules, WignerEckartIrreducible) → durch den Merge von #1910
+  ist kein Rebase nötig. Rebase von 10–14 nach dem Merge von #1911, ausgehend von den Fork-Ständen.
