@@ -347,3 +347,50 @@ R3c zurückgestellt. 2. PR = R3b + R4 ohne `sorry`; Abschnitt D in eigene Datei,
   Abfrage nicht umgangen. Kein PDF, daher noch keine Lizenzangabe, kein sha256, nichts zitiert.
 - Bitte: PDF im Browser laden und nach `~/ensdf/sources_3j6j/` legen; dann sha256, Lizenz (Impressum)
   und Kap. 9 ins Protokoll.
+
+## Quelle Varshalovich (2026-10-23 11:45)
+- D. A. Varshalovich, A. N. Moskalev, V. K. Khersonskii, *Quantum Theory of Angular Momentum*,
+  World Scientific; `~/ensdf/sources_3j6j/9789814415491.pdf`, von Daniel im Browser geladen von
+  library.oapen.org/handle/20.500.12657/50493 (automatischer Abruf scheitert an der Bot-Abfrage).
+- Nachgerechnet: 20,748,080 Bytes, **sha256 1b3ffec7f8e0dd70986c37b10d893891e32d191d0ad8967941194b089e4be655**
+  (stimmt mit Daniels Angabe). 528 Seiten, ABBYY-OCR (Text für Formeln unbrauchbar, Formeln von Seitenbildern
+  gelesen: `~/ensdf/sources_3j6j/pages/v-NNN.png`, NNN = PDF-Seite).
+- **Lizenz im PDF selbst:** Impressum (Text Z. 58–63) „converted to Open Access in 2021 through the sponsorship
+  of SCOAP3, licensed under the terms of the Creative Commons Attribution 4.0 International License“; Kapitel-
+  kopf S. 290: „2021 © The Author(s). … (CC BY 4.0). https://doi.org/10.1142/9789814415491_0010“ (DOI vom
+  Seitenbild abgeschrieben, nicht aus dem Gedächtnis). Deckt sich mit der OAPEN-Angabe CC BY 4.0.
+- Seitenzuordnung: PDF-Seite = gedruckte Seite + 13.
+
+### Kap. 9 gelesen (§9.1, §9.2, §9.6, §9.7; gedruckte S. 290–296, 303–305)
+- §9.1.1 Gl. (5), (8), S. 291: Definition über die Recoupling-Matrix bzw. die Summe über vier CG.
+- §9.2.1 Gl. (1), S. 293: **Racahs Formel**, Beleg „(Racah [91])“; Gl. (2) durch n → a+b+d+e−n.
+  Bedingung: alle vier Triaden erfüllen das Dreieck. Δ(abc) nach Gl. 8.2(1).
+- §9.2.1 Gl. (3)–(6), S. 294: weitere Einfachsummen „which cannot be easily reduced to (1) and (2)“ [45, 50].
+- §9.2.2 Gl. (7), S. 294: Bargmann-Formel [53] im R-Symbol; reduziert sich mit x_i = A_i − n,
+  y_α = n − B_α auf (1).
+- §9.2.4 Gl. (13), S. 296: 6j als Summe über vier 3jm (entspricht unserer `sixJSym`-Definition).
+- §9.6.2 Gl. (5), S. 304: Dreiterm-Rekursion in c (Schritt 1), Gl. (6), (7) Spezialfälle; §9.6.1 Gl. (1)–(4),
+  S. 303–304: Rekursionen mit Schritt 1/2.
+- §9.7 Gl. (1), (2), S. 305: erzeugende Funktion (Bargmann [53]).
+- **Ergebnis: Kap. 9 enthält keine Herleitung von Racahs Formel.** Gl. 9.2(1) wird mit Verweis auf Racah [91]
+  angegeben, die Rekursionen in §9.6 ohne Beweis. Die einzigen „Wege“ im Kapitel sind Verweise: Racah [91],
+  Bargmann [53] (erzeugende Funktion), [45, 50].
+- Numerisch geprüft (`~/physlib_ci/checks/r3c/varsh/rec965.py`): Abschrift von 9.6(5) gegen sympy
+  `wigner_6j`, 1,500 zulässige Fälle (Spins ≤ 4), 0 Abweichungen.
+
+### R3c auf diesem Weg — Bewertung, **Abbruch nach Regel** (2026-10-23 11:55)
+Weg „Rekursion + Startwert“ mit 9.6(5) hätte zwei Hälften:
+1. `racahSumQ` (mit √C) erfüllt 9.6(5): rein rational, per Zeilberger/WZ-Zertifikat machbar (Maxima liegt
+   bereit; der vollsymbolische Lauf brauchte > 600 s, mit festen Parametern kleiner).
+2. `sixJSumQ` bzw. `sixJSym` erfüllt 9.6(5): **das ist der Kern, und dafür gibt Kap. 9 nichts her.** Physikalisch
+   kommt 9.6(5) aus der Matrix von J₂·J₃ in der Basis |(j₁j₂)j₁₂ j₃; J⟩ (tridiagonal in j₁₂). In Lean fehlt dafür
+   die Theorie: Skalarprodukte zweier Spins in einem gekoppelten Dreispin-Zustand mit expliziten Nebendiagonal-
+   elementen (vorhanden sind nur `recoupling_*`, `sum_sixJ_mul_sixJ`, `cgCoeff_rec` und L·S für zwei Spins in
+   `SpinOrbit`). Schätzung: mehrere Tage, also deutlich über dem halben Tag.
+Verbrauchte Zeit R3c′ gesamt ≈ 1 h. R3c bleibt zurückgestellt (`racah-6j`, `43ff6944`, 1 `sorry`).
+
+**Optionen (Daniel entscheidet):**
+- (a) Edmonds Kap. 6 und Racah 1942 (Phys. Rev.) prüfen, ob dort eine Herleitung aus der CG-Summe ausgeführt ist.
+- (b) Den Weg über J₂·J₃ als eigenes Projekt (mehrere Tage): Dreispin-Skalarprodukt, Tridiagonalität, 9.6(5) für
+  `sixJSym`, dazu Zeilberger-Zertifikat für `racahSumQ`, Startwert c = |a − b|.
+- (c) R3c ruhen lassen; der 2. PR braucht es nicht.
