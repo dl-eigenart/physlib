@@ -726,3 +726,15 @@ ensdf.080:11565  [(HI,XNG)]  Ji=8 Jf=7 (vorlaeufig/vorlaeufig/M fest) L=(1, 1) d
 - Keynumber-Quelle: 37× im A2/A4-Kommentar genannt; 26× nicht genannt → DSREF des ID-Satzes (alle Referenzen
   des Datensatzes, die konkrete ist dann offen); 4× Adopted-Kommentar nennt die Reaktion → DSREF dieses
   Reaktions-Datensatzes (203Pb: 202HG(A,3NG); 207Po: 208PB(A,5NG),206PB(A,3NG)).
+
+## Gegenprobe T4 gegen NuDat Adopted (Daniel, 2026-10-23 12:29)
+- T4-δ (15): 13 auch in Adopted mit gleicher M/δ; 37Ar: Adopted ohne M; 37Cl: Parserfehler.
+- T4-Vorzeichen (2): beide nicht so in Adopted (31P nicht gefunden; 59Ni: Adopted 13/2+ → 11/2−, E1+M2).
+- T4-Dipol-A4 (50): 32 Adopted fest rein, 8 Adopted vorläufig, 6 Adopted gemischt (143Eu 798.89, 205Bi 176.1,
+  206Pb 537.5/343.5/313.7, 122Xe 294.7), 4 nicht in Adopted (22Na ×2, 92Mo 557.0, 166Yb 687.8).
+- Korrekturen (Auftrag):
+  1. Parser: A2 und A4 nur aus derselben Messung paaren (Referenz im Kommentar). Beispiel 37Cl 10293.0:
+     A2 aus 1984No06, A4 aus 1966Ko23.
+  2. Bericht: Spalte Referenz, Zählung der Treffer je Referenz; Treffer markieren, zu denen die Evaluatoren
+     selbst einen Kommentar haben (z. B. „incorrectly“, „suggests“, „isotropic“).
+  Danach Neulauf.
