@@ -627,3 +627,26 @@ korrigiert):
 **Offen für Daniel**: Push des Branches und der Notizen; ob und wo veröffentlicht wird
 (physlib-PR, eigenes Repo, Preprint); Meldung an NNDC; Folgeauftrag 3j²/6j² (laut Auftrag
 „Danach“).
+
+## Rebase auf origin/master nach Merge von #1910 (2026-10-23 19:45)
+- `git fetch origin`: origin/master = `ea8496e6` (#1936). #1910 ist als Squash `b7d9ceb5` enthalten;
+  inhaltlich gleich mit fork/pr/projection-selection `ae59f621` (einziger Unterschied:
+  `PhyslibAlpha.lean`, dort nur Einträge von späteren master-Commits).
+- Sicherung: `backup/ensdf-check-pre-1910-rebase` = `7f47e6c2`.
+- `git rebase --onto origin/master ae59f621 ensdf-check`: ohne Konflikte, die 3 Commits aus #1910
+  fallen weg, 12 Commits bleiben, neue Spitze **`6bae81b3`**. `git diff origin/master ensdf-check`
+  ist Zeile für Zeile gleich `git diff ae59f621 7f47e6c2`.
+- Build: `lake build EnsdfCheck.{Rules,Parse,Assign,Classify,Main,Certificates} ensdf-check` grün,
+  kein `sorry`. (Hinweis: `lake build EnsdfCheck` allein scheitert, weil es keine Wurzeldatei
+  `Tools/EnsdfCheck.lean` gibt; das war vor dem Rebase genauso.)
+- Lauf: `lake exe ensdf-check ~/ensdf/data_261001 ~/ensdf/bericht_rebase1910.md --certificates
+  Tools/EnsdfCheck/Certificates.lean` (24 s):
+  `233102 transitions; A 29, A' 24, B 131, C 66886, S 3, P 206, N 5459, ok 160364` —
+  **unverändert**. `bericht_rebase1910.md` ist byte-gleich mit `bericht.md`; das neu erzeugte
+  `Certificates.lean` ist unverändert (kein git-Diff), die 29 Zertifikate bauen.
+- Andere lokale Branches auf pr/projection-selection: **keine** (weder auf `5537924c` noch auf
+  `ae59f621`). Die `sl2-*`-Branches enthalten ältere Fassungen derselben Commits, sind aber der
+  Ausgangsstapel vom 19./20.10. (00-Plan.md), nicht darauf aufgebaut → kein Rebase, kein check_pr.
+  Der lokale Branch `pr/projection-selection` ist durch den Merge erledigt (nicht gelöscht).
+- Nichts gepusht. `fork/ensdf-check` steht noch auf `7f47e6c2` (Push braucht force-with-lease, Daniel).
+- Nächstes: Merge von #1911 hat Vorrang.
