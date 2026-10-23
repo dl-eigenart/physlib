@@ -875,3 +875,22 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   Fork = 8b087409/99a2a911/1a348f67; je `--force-with-lease` gegen den vollen alten Fork-Hash.
   `pr/hydrogen-quantisation` 8b087409 → **9cf8d612**, `pr/hydrogen-bound-states` 99a2a911 → **93579de6**,
   `pr/fine-structure` 1a348f67 → **3b645637** (ls-remote bestätigt). Sonst nichts gepusht.
+
+## Regel „keine Zeile Claude-Session:“ (Daniel, 2026-10-23 23:00)
+- PRs 04/05/06 sind von Daniel eröffnet.
+- Ab sofort in allen neuen Commit-Nachrichten (physlib-Branches und Notizen) keine Zeile `Claude-Session:`;
+  `Co-Authored-By:` bleibt. Schon gepushte Commits werden nicht geändert. Vermerkt in `README.md` (Regeln).
+- Bestand: 137 Commits im Repo haben die Zeile, darunter 20 Squash-Commits auf origin/master. Die heute
+  rebasten und gepushten `18a496c2`, `fcfc11ce` (#1911), `9cf8d612`, `93579de6`, `3b645637` (04/05/06) haben
+  die Zeile aus den Original-Commits übernommen (Rebase behält die Nachricht); bleiben so. `c9926216`
+  (hydrogen-pauli) hat sie nicht. Lokal noch nicht gepushte Commits (E3, E4, pauli-degeneracy, rational-6j,
+  racah-6j): keiner mit der Zeile. Stapel 10–14 auf dem Fork: 33 von 37 Commits mit der Zeile → beim
+  Rebase nach dem Merge von #1911 wird die Zeile gestrichen (neue Commits), sonst bricht der Hook ab.
+- pre-push-Hook erweitert (`~/physlib_ci/physlib/.git/hooks/pre-push`, gilt für physlib und physlib-notes):
+  Regel 2 prüft für jeden gepushten Ref die Commits, die auf **keinem** Remote liegen
+  (`git rev-list <neu> --not --remotes`), auf eine Zeile `^Claude-Session:`; Treffer → Abbruch mit Liste.
+  So bleiben Upstream-Squash-Commits mit der Zeile (fork/master hinkt origin nach) und schon gepushte
+  Commits erlaubt. Regel 1 (`#[0-9]` nur auf notes/*) unverändert.
+- Test ohne Push, 9 Fälle: neuer Commit mit `Claude-Session:` → Abbruch; nur `Co-Authored-By` → ok;
+  rational-6j → ok; schon gepushter 9cf8d612 → ok; pr/clebsch-gordan auf origin/master (Upstream mit Zeile)
+  → ok; alter Fork-Stapel → ok; notes aktuell → ok; notes mit #1234 → Abbruch; notes mit `Claude-Session:` → Abbruch.
