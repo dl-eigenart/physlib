@@ -738,3 +738,41 @@ ensdf.080:11565  [(HI,XNG)]  Ji=8 Jf=7 (vorlaeufig/vorlaeufig/M fest) L=(1, 1) d
   2. Bericht: Spalte Referenz, Zählung der Treffer je Referenz; Treffer markieren, zu denen die Evaluatoren
      selbst einen Kommentar haben (z. B. „incorrectly“, „suggests“, „isotropic“).
   Danach Neulauf.
+
+## T4 Volllauf 3 (2026-10-23 12:45): Paarung je Messung, Referenzspalte, Evaluatoren-Kommentare
+**Befund 37Cl 10293.0:** Der T4-Lauf v2 hatte A2/A4 richtig aus derselben Messung (1966Ko23: +0.210 {I13},
++0.230 {I2}). Falsch war meine Gegenprobe-Liste: `gegenprobe.py` nahm das erste A2 im Kommentar (+0.29 aus
+1984No06) zum A4 aus 1966Ko23. Die alte Liste ist als `~/ensdf/t4a/gegenprobe_v2.tsv` aufbewahrt (A2-Spalte
+dort nicht verlässlich, wo mehrere Messungen im Kommentar stehen).
+
+**Korrektur 1** (`volllauf3_t4a.py`, Ausgaben `voll3*`): ganzer Kommentarblock (Anfangskarte und Fortsetzungen)
+statt einer Zeile. Messung = unmittelbar benachbartes Paar `A{-2}=x {Iu}, A{-4}=y {Iu}` (Trenner Komma oder
+„and“), Referenz = nächste folgende Klammer mit Keynumber; ohne Klammer-Referenz im Block Keynumbers ohne
+Klammer (Quelle-Spalte sagt das), sonst DSREF. Paare nach der letzten Referenz verworfen. A2 und A4 aus
+verschiedenen Referenzen werden nie gepaart; mehrere Messungen in einem Kommentar werden einzeln ausgewertet.
+- 15,840 Messungen (v2: 15,079 Einzeilen-Records); 4,305 Blöcke ohne gültiges Paar (überwiegend Verhältnisformen
+  `A{-2}/A{-0}` oder Werte ohne Unsicherheit, wie in v2 auch nicht verwendet), Liste `voll3_ungepaart.txt`.
+- Kategorien v3 (v2): T4-δ **14** (15), T4-Vorzeichen **3** (2), T4-Dipol-A4 **52** (50), T4-rein-sonst 102 (91).
+- Unterschiede Treffer für Treffer:
+  - weg (T4-δ): 203Pb 595.3 (Adopted). Das A2/A4-Paar „in 202Hg(α,3nγ)“ steht nach der einzigen Referenz
+    (1976Ri10, gehört zu α(K)), hat also keinen eigenen Keynumber → nach Regel verworfen.
+  - neu (T4-Vorzeichen): 35Cl 882.3, 35CL(P,P'G), 1970Ta02, zweites Paar („different beam energies“).
+  - neu (T4-Dipol-A4): 78Se 1199.3, 76GE(A,2NG), 1982Ma45; 206Po 901.8 (Adopted), 1986Ra24, jeweils zweite
+    Messung im Kommentar, die v2 nicht sah.
+  - 37Cl 10293.0 bleibt T4-δ, jetzt mit Referenz 1966Ko23 ausgewiesen (δ = −0.06(1) im G-Satz).
+
+**Korrektur 2:** `~/ensdf/t4a/gegenprobe.tsv` (= `voll3_gegenprobe.tsv`, sha256 effcb1cc…539ab676) direkt aus
+den ausgewerteten Werten; neue Spalten Referenz, Referenz_Quelle, Treffer_dieser_Referenz,
+Evaluatoren_Kommentar (ja/leer), Stichworte, Kommentar_A2A4, Kommentare_zum_Gamma. Zählung je Referenz in
+`voll3.txt` (häufigste:
+       5  1993BL02
+       4  DSREF:
+       3  DSREF:1982DE05
+       3  1986RA24
+       2  1995MA07
+       2  1970OL03
+       2  1982MA45
+  …). Evaluatoren-Kommentar (Stichwortsuche in allen Kommentaren zum Gamma: incorrect, suggest, isotropic,
+  inconsistent, discrepan, doubtful, contradict, not adopted, …): 5 Treffer, alle T4-Dipol-A4:
+  129Xe 411.5 [isotropic], 143Eu 798.89 [contradict], 196Pb 357.8 [suggest], 206Pb 1778.9 [incorrect],
+  212At 478.6 [suggest]. Stichwortsuche ist grob; Treffer ohne Markierung können trotzdem kommentiert sein.
