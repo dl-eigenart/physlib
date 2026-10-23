@@ -797,3 +797,8 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   „Only the last commit … is new“ entfernt (jetzt ein Commit). Deklarationslisten gegen die rebasten
   Dateien geprüft: vollständig, Art und Reihenfolge stimmen (33/22/11). Reviewer-Map: Abschnitte §A–§E
   stimmen mit den Dateien; referenzierte Upstream-Namen existieren auf origin/master.
+- **Push (2026-10-23 11:44, freigegeben):** nur 04/05/06 nach `fork`, `--force-with-lease` auf die alten Köpfe:
+  `pr/fine-structure` b72cce7f → **1a348f67**, `pr/hydrogen-bound-states` 349128d0 → **99a2a911**,
+  `pr/hydrogen-quantisation` e9f670d4 → **8b087409** (per `ls-remote` bestätigt). Nicht gepusht: E3, E4,
+  rational-6j, racah-6j, ensdf-check. Hinweis: fork/master stand beim Push laut `ls-remote` noch auf
+  96a6bc5e (12 hinter origin/master c7d9ebb4).
