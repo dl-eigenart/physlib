@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): closed formulas for Clebsch-Gordan coefficients
 
-Branch: `pr/clebsch-gordan-formula` · Base: master after merge of #1911 · Depends on: #1911 (and through it #1876)
+Branch: `pr/clebsch-gordan-formula` · Base: master
+
+Builds on #1911 (normalised basis and Clebsch-Gordan coefficients) and #1876 (the Wigner-Eckart theorem for sl2), both merged.
 
 This PR builds on the coupled basis `|J, M⟩` and the coefficients `cgCoefficient` of
 #1911. It proves completeness of the coupled basis and the second orthogonality

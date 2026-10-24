@@ -1,6 +1,6 @@
 # feat(PhyslibAlpha): Wigner-Eckart theorem with Clebsch-Gordan coefficients
 
-Branch: `pr/wigner-eckart-cg` · Base: master after merge of `pr/wigner-3j` and `pr/six-j` · Depends on: `pr/wigner-3j`, `pr/six-j` (and through them `pr/clebsch-gordan-formula`, #1911 and #1876)
+Branch: `pr/wigner-eckart-cg` · Base: master after merge of `pr/wigner-3j` and `pr/six-j` · Depends on: `pr/wigner-3j`, `pr/six-j` (and through them `pr/clebsch-gordan-formula`; #1911 and #1876 are merged)
 
 This PR writes the Wigner-Eckart theorem of #1876, `T x y = c • cgProj (x ⊗ y)`, in the orthonormal bases: the matrix elements of a tensor operator are one reduced matrix element times a Clebsch-Gordan coefficient, `⟨J' M' | T^κ_μ | J M⟩ = R · ⟨κ μ J M | J' M'⟩`. Combined with the multipole sum rule it shows that the total strength `Σ_{μ M'} |⟨J' M' | T^κ_μ | J M⟩|²` does not depend on `M`. It uses `embed` from `pr/six-j`, and the 3j symmetries and `sum_sq_cgCoefficient_initial` from `pr/wigner-3j`.
 

@@ -394,3 +394,35 @@ Verbrauchte Zeit R3c′ gesamt ≈ 1 h. R3c bleibt zurückgestellt (`racah-6j`, 
 - (b) Den Weg über J₂·J₃ als eigenes Projekt (mehrere Tage): Dreispin-Skalarprodukt, Tridiagonalität, 9.6(5) für
   `sixJSym`, dazu Zeilberger-Zertifikat für `racahSumQ`, Startwert c = |a − b|.
 - (c) R3c ruhen lassen; der 2. PR braucht es nicht.
+
+## Stapel 10–14 nach dem Merge von #1911 auf master umgesetzt (2026-10-24 16:40), nicht gepusht
+- origin/master beim Umsetzen: `c78d49e5` (über `4d63576c` hinaus: #1784, #1905, #1948, #1901).
+- Ausgangspunkt die Fork-Stände (Basis altes #1911 `35cf02e4`); Sicherungen `backup/<branch>-pre-1911-rebase`
+  = Fork-Köpfe. Die veralteten lokalen Branches gesichert als `backup/{wigner-3j,wigner-eckart-cg,six-j-symmetry}-lokal-alt`.
+- Skript `~/physlib_ci/scripts1911/rebase_stack.sh`: je Commit cherry-pick; Konflikt nur in `PhyslibAlpha.lean`
+  (Importvereinigung, alphabetisch, `resolve_imports.py`); Zeile `Claude-Session:` aus allen Nachrichten gestrichen
+  (danach 0 Treffer in origin/master..Branch). 13 und 14 teilen die Commits 11 + 12a + 12b (gleiche Hashes bis `33e61d14`).
+- Alle Lean-Dateien jedes Branches byte-identisch mit dem Fork-Stand (`git diff` 0 Zeilen); geändert nur die Importliste.
+
+| PR | Branch | Fork alt | neu | check_pr.sh |
+|---|---|---|---|---|
+| 10 | `pr/clebsch-gordan-formula` | `4d2919d1` | `b50cbcd6` | 10/10 OK, sorry 0 |
+| 11 | `pr/wigner-3j` | `5ee8561a` | `32cce545` | 10/10 OK, sorry 0 |
+| 12a | `pr/coupling-schemes` | `468b74a6` | `b1c34a37` | 10/10 OK, sorry 0 |
+| 12b | `pr/six-j` | `7d2bb3ac` | `6ddf4a76` | 10/10 OK, sorry 0 |
+| 13 | `pr/wigner-eckart-cg` | `8cd698cd` | `a0213a75` | 10/10 OK, sorry 0 |
+| 14 | `pr/six-j-symmetry` | `d041872f` | `f1b9048e` | 10/10 OK, sorry 0 |
+
+Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Base: master“ + „Builds on #1911 … and
+#1876 …, both merged“; 11, 12a, 13, 14 „#1911 and #1876 are merged“; 12b unverändert.
+
+### rational-3j6j, rational-6j, racah-6j auf das neue 14 umgesetzt (nicht gepusht)
+- `git rebase --onto pr/six-j-symmetry d041872f racah-6j`, Konflikte nur in der Importliste; die beiden anderen
+  Branches auf die entsprechenden neuen Commits gesetzt. Sicherungen `backup/<branch>-pre-1911-rebase`.
+  Lean-Dateien (`Wigner3jRational`, `SixJRational`, `SixJRacah`) unverändert.
+
+| Branch | alt | neu | Ergebnis |
+|---|---|---|---|
+| `rational-3j6j` | `b6347087` | `a735d244` | check_pr.sh 10/10 OK, sorry 0 |
+| `rational-6j` | `51c86ed2` | `f43f74cc` | check_pr.sh 10/10 OK; check_r34.sh alle OK, Axiome nur propext/choice/Quot.sound, sorry 0 |
+| `racah-6j` | `43ff6944` | `7abb5d90` | `lake build PhyslibAlpha` grün, einzige Warnung das bekannte `sorry` (SixJRacah.lean:64); mit `-KCI` Abbruch wegen dieser Warnung |

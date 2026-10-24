@@ -1,8 +1,10 @@
 # feat(PhyslibAlpha): completeness of the regular radial solutions of hydrogen
 
-Branch: `hydrogen-radial-completeness` · Base: master, after the quantisation PR is merged · Depends on: `pr/hydrogen-quantisation` (quantisation of the hydrogen levels), and through it `pr/hydrogen-radial`
+Branch: `hydrogen-radial-completeness` · Base: master
 
-The quantisation PR assumes the power series ansatz `u(ρ) = ρ^(l+1) e^(-κρ) Σ_k c_k ρ^k`. This PR removes that assumption. Every solution of the radial equation `u'' = (l(l+1)/ρ² - 2/ρ + κ²) u` on `(0, ∞)` with `u(ρ) → 0` as `ρ → 0⁺` has the ansatz form, with an everywhere convergent series whose coefficients satisfy the recursion. Combined with `radial_quantization`, a non-zero square integrable solution vanishing at the origin exists only for `κ = 1/ν` with `ν > l`, and it is a multiple of `u_{νl}`.
+Builds on #1947 (quantisation of the hydrogen levels) and #1909 (radial functions of the hydrogen atom), both merged.
+
+`radial_quantization` in `RadialQuantization.lean` assumes the power series ansatz `u(ρ) = ρ^(l+1) e^(-κρ) Σ_k c_k ρ^k`. This PR removes that assumption. Every solution of the radial equation `u'' = (l(l+1)/ρ² - 2/ρ + κ²) u` on `(0, ∞)` with `u(ρ) → 0` as `ρ → 0⁺` has the ansatz form, with an everywhere convergent series whose coefficients satisfy the recursion. Combined with it, a non-zero square integrable solution vanishing at the origin exists only for `κ = 1/ν` with `ν > l`, and it is a multiple of `u_{νl}`.
 
 The origin is a regular singular point with exponents `l + 1` and `-l`. Only the Frobenius solution for `l + 1` is constructed. The second solution, which has a logarithmic term because `2l + 1` is an integer, is never built; it is excluded by a Wronskian argument.
 

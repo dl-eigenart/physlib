@@ -894,3 +894,19 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
 - Test ohne Push, 9 Fälle: neuer Commit mit `Claude-Session:` → Abbruch; nur `Co-Authored-By` → ok;
   rational-6j → ok; schon gepushter 9cf8d612 → ok; pr/clebsch-gordan auf origin/master (Upstream mit Zeile)
   → ok; alter Fork-Stapel → ok; notes aktuell → ok; notes mit #1234 → Abbruch; notes mit `Claude-Session:` → Abbruch.
+
+## E4 und E3 nach dem Merge von 04 (#1947) und 05 (#1948) auf master umgesetzt (2026-10-24 16:40), nicht gepusht
+- origin/master `c78d49e5`. Inhalt der Merges gegen die lokalen Basen geprüft: #1947 = `9cf8d612`, #1948 = `93579de6`
+  (Hydrogen-Dateien ohne Unterschied). Daher `git rebase --onto origin/master <alte Basis>`; Konflikte nur in der
+  Importliste (`resolve_imports.py`). Keine Zeile `Claude-Session:` in den neuen Commits.
+- Lean-Dateien der Branches unverändert gegenüber dem alten Stand (`git diff` 0 Zeilen).
+
+| Branch | alt | neu | check_pr.sh |
+|---|---|---|---|
+| `hydrogen-radial-completeness` (E4) | `c091c588` | `769a0429` (1 Commit) | 10/10 OK, sorry 0 |
+| `hydrogen-bound-states-split` (E3) | `f28a0649` | `91b3d8e6` (5 Commits c02f79a0, 986edd0a, 84c8de2d, 29e712f3, 91b3d8e6) | 10/10 OK, sorry 0 |
+
+- Sicherungen `backup/hydrogen-radial-completeness-pre-1947-rebase`, `backup/hydrogen-bound-states-split-pre-1948-rebase`.
+  Berichte `~/physlib_ci/REVIEW_rb1948-<branch>.txt`. Nur der Kopf von E3 geprüft, nicht jeder Commit einzeln.
+- PR-Text 18: Kopfzeile „Base: master“ + „Builds on #1947 … and #1909 …, both merged“; „The quantisation PR assumes“
+  durch `radial_quantization` in `RadialQuantization.lean` ersetzt. Für E3 gibt es noch keinen PR-Text.
