@@ -931,3 +931,10 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   PR-Text 16 nennt `H.d` nicht. Push nicht ausgeführt, weil es eine Codeänderung ist, nicht nur die Importliste.
 - Sicherungen: `backup/fine-structure-pre-1949-rebase`, `backup/hydrogen-pauli-pre-9b58-rebase`, `backup/<branch>-pre-9b58-rebase`.
 - `hydrogen-pauli-degeneracy` (auf altem hydrogen-pauli) nicht umgesetzt.
+
+## lrl gepusht, E2 umgesetzt (2026-10-25 20:06)
+- `lrl-angular-cyclic` (16) **gepusht** (freigegeben): `--force-with-lease` gegen bdf8396d, bdf8396d → **`b9f0ba1c`** (ls-remote bestätigt).
+- `hydrogen-pauli-degeneracy` (E2) auf das neue `hydrogen-pauli` `4b8eee87` umgesetzt (move.sh, kein Konflikt):
+  `d1990b06` → **`d7506bf8`**. `PauliSpectrum.lean` gleich dem alten Stand, keine `Claude-Session:`-Zeile.
+  Sicherung `backup/hydrogen-pauli-degeneracy-pre-9b58-rebase`. check_pr.sh (`REVIEW_rb9b58-hydrogen-pauli-degeneracy.txt`):
+  10/10 OK, sorry 0. Nicht gepusht.
