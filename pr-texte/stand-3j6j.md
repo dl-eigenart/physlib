@@ -426,3 +426,21 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
 | `rational-3j6j` | `b6347087` | `a735d244` | check_pr.sh 10/10 OK, sorry 0 |
 | `rational-6j` | `51c86ed2` | `f43f74cc` | check_pr.sh 10/10 OK; check_r34.sh alle OK, Axiome nur propext/choice/Quot.sound, sorry 0 |
 | `racah-6j` | `43ff6944` | `7abb5d90` | `lake build PhyslibAlpha` grün, einzige Warnung das bekannte `sorry` (SixJRacah.lean:64); mit `-KCI` Abbruch wegen dieser Warnung |
+
+## Erneut umgesetzt auf origin/master `9b583cb6` und gepusht (2026-10-25 19:50)
+- `~/physlib_ci/scripts1911/move.sh` je Branch von der Basis `c78d49e5`; Lean-Dateien unverändert, keine `Claude-Session:`-Zeile.
+  Sicherungen `backup/<branch>-pre-9b58-rebase`. Berichte `~/physlib_ci/REVIEW_rb9b58-<branch>.txt`.
+
+| PR | Branch | Fork alt | neu | check_pr.sh | Push |
+|---|---|---|---|---|---|
+| 10 | `pr/clebsch-gordan-formula` | `4d2919d1` | `1f0ce3f3` | 10/10 OK, sorry 0 | ja |
+| 11 | `pr/wigner-3j` | `5ee8561a` | `a2f712ac` | 10/10 OK, sorry 0 | ja |
+| 12a | `pr/coupling-schemes` | `468b74a6` | `62cb4a2a` | 10/10 OK, sorry 0 | ja |
+| 12b | `pr/six-j` | `7d2bb3ac` | `d9b8967f` | 10/10 OK, sorry 0 | ja |
+| 13 | `pr/wigner-eckart-cg` | `8cd698cd` | `059c243a` | 10/10 OK, sorry 0 | ja |
+| 14 | `pr/six-j-symmetry` | `d041872f` | `43799477` | 10/10 OK, sorry 0 | ja |
+| – | `rational-3j6j` | lokal `a735d244` | `5eaf449f` | 10/10 OK, sorry 0 | nein |
+| – | `rational-6j` | lokal `f43f74cc` | `f98c7128` | 10/10 OK, sorry 0 | nein |
+| – | `racah-6j` | lokal `7abb5d90` | `9163d8bd` | Build grün, 1 bekanntes `sorry` | nein |
+
+- Pushes je `--force-with-lease` gegen den vollen Fork-Hash, per `ls-remote` bestätigt.

@@ -910,3 +910,24 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   Berichte `~/physlib_ci/REVIEW_rb1948-<branch>.txt`. Nur der Kopf von E3 geprüft, nicht jeder Commit einzeln.
 - PR-Text 18: Kopfzeile „Base: master“ + „Builds on #1947 … and #1909 …, both merged“; „The quantisation PR assumes“
   durch `radial_quantization` in `RadialQuantization.lean` ersetzt. Für E3 gibt es noch keinen PR-Text.
+
+## Umsetzen auf origin/master `9b583cb6` (2026-10-25 19:45)
+- Neu auf master seit `c78d49e5`: #1915, #1944, #1956, #1952, #1931, #1864. Werkzeug `~/physlib_ci/scripts1911/move.sh`
+  (cherry-pick, Importvereinigung in `PhyslibAlpha.lean`, Zeile `Claude-Session:` gestrichen). Lean-Dateien unverändert
+  (`git diff` 0 Zeilen), außer bei lrl (s. u.). Berichte `~/physlib_ci/REVIEW_rb9b58-<branch>.txt`.
+
+| Branch | alt | neu | check_pr.sh | Push |
+|---|---|---|---|---|
+| `pr/fine-structure` (06) | `3b645637` | `c6ea3318` | 10/10 OK, sorry 0 | ja, Lease gegen 3b645637 |
+| `hydrogen-pauli` (15) | `c9926216` | `4b8eee87` | 10/10 OK, sorry 0 | ja, Lease gegen c9926216 (1. Versuch „remote rejected (failed)“, 2. ok) |
+| `hydrogen-radial-completeness` (E4) | Fork `ad29c408`, lokal `769a0429` | `be33afa4` | 10/10 OK, sorry 0 | ja, Lease gegen ad29c408 |
+| `hydrogen-bound-states-split` (E3) | Fork `850eaba2`, lokal `91b3d8e6` | `cc13db99` | 10/10 OK, sorry 0 | ja, Lease gegen 850eaba2 |
+| `lrl-angular-cyclic` (16) | `bdf8396d` | `b9f0ba1c` | 10/10 OK, sorry 0 | **nein**, wartet auf Daniel |
+
+- 06 und 15: Konflikt nur in der Importliste (FineStructure bzw. PauliSpectrum neben Eigenfunctions).
+- **lrl (16):** textuell konfliktfrei, aber auf master **nicht baubar**: `H.d` gibt es seit #1936 nicht mehr
+  (6 Stellen in `LaplaceRungeLenzVector.lean`, nur in den neuen Zeilen). Angepasst `H.d` → `d` (Abschnittsvariable
+  `{d : ℕ} (H : HydrogenAtom d)`), in den einen Commit eingearbeitet. Sicherung `backup/lrl-angular-cyclic-pre-1936-fix`.
+  PR-Text 16 nennt `H.d` nicht. Push nicht ausgeführt, weil es eine Codeänderung ist, nicht nur die Importliste.
+- Sicherungen: `backup/fine-structure-pre-1949-rebase`, `backup/hydrogen-pauli-pre-9b58-rebase`, `backup/<branch>-pre-9b58-rebase`.
+- `hydrogen-pauli-degeneracy` (auf altem hydrogen-pauli) nicht umgesetzt.
