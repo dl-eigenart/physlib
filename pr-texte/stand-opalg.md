@@ -129,3 +129,18 @@ Muster übrig bleiben.
 
 Empfehlung zur Reihenfolge: (a) klein und isoliert (eigener PR gegen Physlib), dann (b) an LRL ausprobieren und die
 gesparten Zeilen messen; (c) nur nach Rücksprache mit gloges.
+
+## Stufe (a) umgesetzt (2026-10-26 16:35), lokal, nicht gepusht
+- Freigabe Daniel 26.10. Branch `opalg-commute` auf origin/master `7823e144`, ein Commit **`10fb29af`**,
+  `Physlib/QuantumMechanics/Operators/Commutation.lean` +20 Zeilen (keine Löschung):
+  `commute_of_commutation_eq_zero` (`commute_iff_lie_eq.mpr`), `Commute.comp_left_comm`, `Commute.comp_right_comm`
+  (`_root_`, Term-Beweise über `Commute.left_comm`/`right_comm`), Docstrings; Hinweis im Overview des Moduldocstrings.
+  Bestehende Beweise unverändert; `hxp`/`hr` erst nach dem Merge der LRL-PR (eigener Commit).
+- Vorher per `#check` geprüft (Scratch unter `/tmp`, gelöscht): `commute_iff_lie_eq`, `Commute.left_comm`,
+  `Commute.right_comm`, `ContinuousLinearMap.mul_def`, `comp_eq_comp_add_commute`; Namen in Mathlib/Physlib/Alpha frei.
+  Anwendungsproben mit `rw [(…).comp_left_comm]` und `simp only [← comp_assoc, (…).comp_right_comm]` grün.
+- Nebenbefund: PhyslibAlpha hat `commute_of_lie_eq_zero` für `Module.End` (`Sl2/BivariateBasis.lean:63`).
+- Prüfung: check_pr.sh (`REVIEW_opalg-opalg-commute.txt`) 10/10 OK, sorry 0; zusätzlich die Physlib-CI-Schritte
+  (`REVIEW_opalg-physlib.txt`): `lake build -KCI --iofail`, runPhyslibLinters, check_dup_tags, check_file_imports,
+  pseudo_lint und theorem_lint (Physlib, QuantumInfo), api_map_lint, forMathlib_lint, auxillary_script_test – alle OK.
+- PR-Text-Entwurf `19-opalg-commute.md` (mit KI-Offenlegung).
