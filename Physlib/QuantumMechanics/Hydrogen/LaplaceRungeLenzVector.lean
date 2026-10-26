@@ -133,7 +133,9 @@ lemma angularMomentumSqr_commutation_lrlSqr (ε : ℝˣ) :
     ⁅𝐋²[d], H.lrlOperator ε ⬝ᵥ H.lrlOperator ε⁆ = 0 := by
   simp [angularMomentumOperatorSqr, sum_lie, leibniz_lie]
 
-/-- `𝐋ᵢⱼ𝐀(ε)ₖ + 𝐋ⱼₖ𝐀(ε)ᵢ + 𝐋ₖᵢ𝐀(ε)ⱼ = 0`; in three dimensions this is `𝐋 · 𝐀(ε) = 0`. -/
+/-- `𝐋ᵢⱼ𝐀(ε)ₖ + 𝐋ⱼₖ𝐀(ε)ᵢ + 𝐋ₖᵢ𝐀(ε)ⱼ = 0`; in three dimensions this is `𝐋 · 𝐀(ε) = 0`.
+  The identity is trivial unless `i`, `j`, `k` are pairwise distinct, so it has no content in
+  fewer than three dimensions. -/
 lemma angularMomentum_cyclic_lrl (ε : ℝˣ) (i j k : Fin d) :
     𝐋 i j ∘L H.lrlOperator ε k + 𝐋 j k ∘L H.lrlOperator ε i + 𝐋 k i ∘L H.lrlOperator ε j = 0 := by
   have hxp (a b : Fin d) (Z : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)) :
@@ -154,7 +156,9 @@ lemma angularMomentum_cyclic_lrl (ε : ℝˣ) (i j k : Fin d) :
         rw [angularMomentum_cyclic_position, angularMomentum_cyclic_momentum]
         simp
 
-/-- `𝐀(ε)ₖ𝐋ᵢⱼ + 𝐀(ε)ᵢ𝐋ⱼₖ + 𝐀(ε)ⱼ𝐋ₖᵢ = 0`; in three dimensions this is `𝐀(ε) · 𝐋 = 0`. -/
+/-- `𝐀(ε)ₖ𝐋ᵢⱼ + 𝐀(ε)ᵢ𝐋ⱼₖ + 𝐀(ε)ⱼ𝐋ₖᵢ = 0`; in three dimensions this is `𝐀(ε) · 𝐋 = 0`.
+  The identity is trivial unless `i`, `j`, `k` are pairwise distinct, so it has no content in
+  fewer than three dimensions. -/
 lemma lrl_cyclic_angularMomentum (ε : ℝˣ) (i j k : Fin d) :
     H.lrlOperator ε k ∘L 𝐋 i j + H.lrlOperator ε i ∘L 𝐋 j k + H.lrlOperator ε j ∘L 𝐋 k i = 0 := by
   have h := H.angularMomentum_cyclic_lrl ε i j k

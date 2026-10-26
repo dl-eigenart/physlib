@@ -47,11 +47,11 @@ Notation:
 - C. Special cases in low dimensions
 - D. Hilbert-space angular momentum operator
   - D.1. Angular momentum squared on the Hilbert space
-- E. Commutation relations
+- E. Algebraic relations
   - E.1. Angular momentum / position
   - E.2. Angular momentum / momentum
   - E.3. Angular momentum / angular momentum
-  - E.4. Cyclic sums and the dilation operator
+  - E.4. Angular momentum / dilation operator
 
 ## iv. References
 
@@ -291,7 +291,7 @@ lemma angularMomentumSqOperator_isUnbounded : (angularMomentumSqOperator (d := d
     angularMomentumSqOperator_hasDenseDomain
 
 /-!
-## E. Commutation relations
+## E. Algebraic relations
 -/
 
 open Complex KroneckerDelta Bracket ContinuousLinearMap
@@ -330,6 +330,18 @@ lemma angularMomentumSqr_commutation_radiusRegPow : ⁅𝐋²[d], 𝐫₀[d] ε 
 lemma angularMomentumSqr_comp_radiusRegPow_commute : 𝐋² ∘L 𝐫₀[d] ε s = 𝐫₀ ε s ∘L 𝐋² := by
   rw [comp_eq_comp_add_commute, angularMomentumSqr_commutation_radiusRegPow, add_zero]
 
+/-- `𝐋ᵢⱼ𝐱ₖ + 𝐋ⱼₖ𝐱ᵢ + 𝐋ₖᵢ𝐱ⱼ = 0`; in three dimensions this is `𝐋 · 𝐱 = 0`.
+  The identity is trivial unless `i`, `j`, `k` are pairwise distinct, so it has no content in
+  fewer than three dimensions. -/
+lemma angularMomentum_cyclic_position :
+    𝐋 i j ∘L 𝐱 k + 𝐋 j k ∘L 𝐱 i + 𝐋 k i ∘L 𝐱 j = 0 := by
+  simp only [angularMomentumCLM, sub_comp, comp_assoc, momentum_comp_position_eq, comp_sub,
+    comp_smul, comp_id]
+  simp only [← comp_assoc]
+  rw [position_comp_commute k i, position_comp_commute k j, position_comp_commute j i,
+    symm k j, symm k i, symm j i]
+  module
+
 /-!
 
 ### E.2. Angular momentum / momentum
@@ -358,6 +370,15 @@ lemma momentumSqr_comp_angularMomentum_commute : (𝐩 ⬝ᵥ 𝐩) ∘L 𝐋 i 
 @[simp]
 lemma angularMomentumSqr_commutation_momentumSqr : ⁅𝐋²[d], 𝐩[d] ⬝ᵥ 𝐩⁆ = 0 := by
   simp [angularMomentumOperatorSqr, sum_lie, leibniz_lie]
+
+/-- `𝐋ᵢⱼ𝐩ₖ + 𝐋ⱼₖ𝐩ᵢ + 𝐋ₖᵢ𝐩ⱼ = 0`; in three dimensions this is `𝐋 · 𝐩 = 0`.
+  The identity is trivial unless `i`, `j`, `k` are pairwise distinct, so it has no content in
+  fewer than three dimensions. -/
+lemma angularMomentum_cyclic_momentum :
+    𝐋 i j ∘L 𝐩 k + 𝐋 j k ∘L 𝐩 i + 𝐋 k i ∘L 𝐩 j = 0 := by
+  simp only [angularMomentumCLM, sub_comp, comp_assoc]
+  rw [momentum_comp_commute k j, momentum_comp_commute k i, momentum_comp_commute j i]
+  abel
 
 /-!
 
@@ -388,27 +409,11 @@ lemma angularMomentumSqr_commutation_angularMomentum : ⁅𝐋²[d], 𝐋 i j⁆
 
 /-!
 
-### E.4. Cyclic sums and the dilation operator
+### E.4. Angular momentum / dilation operator
 
-The cyclic sums `𝐋ᵢⱼ𝐱ₖ + 𝐋ⱼₖ𝐱ᵢ + 𝐋ₖᵢ𝐱ⱼ` and `𝐋ᵢⱼ𝐩ₖ + 𝐋ⱼₖ𝐩ᵢ + 𝐋ₖᵢ𝐩ⱼ` vanish (in `d = 3` these say
-`𝐋 · 𝐱 = 𝐋 · 𝐩 = 0`), and angular momentum commutes with the dilation operator `𝐱 · 𝐩`.
+Angular momentum commutes with the dilation operator `𝐱 · 𝐩`.
 
 -/
-
-lemma angularMomentum_cyclic_position :
-    𝐋 i j ∘L 𝐱 k + 𝐋 j k ∘L 𝐱 i + 𝐋 k i ∘L 𝐱 j = 0 := by
-  simp only [angularMomentumCLM, sub_comp, comp_assoc, momentum_comp_position_eq, comp_sub,
-    comp_smul, comp_id]
-  simp only [← comp_assoc]
-  rw [position_comp_commute k i, position_comp_commute k j, position_comp_commute j i,
-    symm k j, symm k i, symm j i]
-  module
-
-lemma angularMomentum_cyclic_momentum :
-    𝐋 i j ∘L 𝐩 k + 𝐋 j k ∘L 𝐩 i + 𝐋 k i ∘L 𝐩 j = 0 := by
-  simp only [angularMomentumCLM, sub_comp, comp_assoc]
-  rw [momentum_comp_commute k j, momentum_comp_commute k i, momentum_comp_commute j i]
-  abel
 
 @[simp]
 lemma angularMomentum_commutation_positionDotMomentum : ⁅𝐋 i j, 𝐱[d] ⬝ᵥ 𝐩⁆ = 0 := by
