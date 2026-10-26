@@ -938,3 +938,15 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
   `d1990b06` → **`d7506bf8`**. `PauliSpectrum.lean` gleich dem alten Stand, keine `Claude-Session:`-Zeile.
   Sicherung `backup/hydrogen-pauli-degeneracy-pre-9b58-rebase`. check_pr.sh (`REVIEW_rb9b58-hydrogen-pauli-degeneracy.txt`):
   10/10 OK, sorry 0. Nicht gepusht.
+
+## E4 und E3 nach dem Merge von 06 auf master umgesetzt und gepusht (2026-10-26 10:10)
+- origin/master `2ccd1951` (neu: 06 fine structure, #1957). E4 ist jetzt eigener PR; 10 (`pr/clebsch-gordan-formula`) ebenfalls offen.
+- move.sh von der Basis `9b583cb6`; Konflikt nur in der Importliste (`FineStructure` neben `RadialCompleteness` bzw. den E3-Modulen).
+  Lean-Dateien unverändert, keine `Claude-Session:`-Zeile. Sicherungen `backup/<branch>-pre-1949-rebase`.
+
+| Branch | alt (Fork) | neu | check_pr.sh | Push |
+|---|---|---|---|---|
+| `hydrogen-radial-completeness` (E4) | `be33afa4` | `2a31197a` | 10/10 OK, sorry 0 | ja, Lease gegen be33afa4 |
+| `hydrogen-bound-states-split` (E3) | `cc13db99` | `7430cfca` | 10/10 OK, sorry 0 | ja, Lease gegen cc13db99 |
+
+Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
