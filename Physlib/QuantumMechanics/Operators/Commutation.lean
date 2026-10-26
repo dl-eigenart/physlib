@@ -23,6 +23,10 @@ Commutator lemmas come in three flavors:
   - 2. `a_comp_b_commute` and `a_comp_commute` lemmas are of the form `a ∘ b = b ∘ a`.
   - 3. `a_comp_b_eq` lemmas are of the form `a ∘ b = b ∘ a + (⋯)`.
 
+Operators with vanishing commutator commute in the sense of `Commute`
+(`commute_of_commutation_eq_zero`); `Commute.comp_left_comm` and `Commute.comp_right_comm` reorder
+them inside longer compositions.
+
 ## ii. Key results
 
 - `position_commutation_momentum` : The canonical commutation relations.
@@ -81,6 +85,22 @@ lemma comp_eq_comp_sub_commute (A B : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d,
     A ∘L B = B ∘L A - ⁅B, A⁆ := by
   dsimp only [Bracket.bracket]
   simp only [ContinuousLinearMap.mul_def, sub_sub_cancel]
+
+/-- Operators whose commutator vanishes commute, `⁅A, B⁆ = 0 → A ∘ B = B ∘ A`, in the sense of
+  `Commute`. -/
+lemma commute_of_commutation_eq_zero {A B : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)}
+    (h : ⁅A, B⁆ = 0) : Commute A B :=
+  commute_iff_lie_eq.mpr h
+
+/-- If `A` and `B` commute, then `A ∘ (B ∘ C) = B ∘ (A ∘ C)`. -/
+lemma _root_.Commute.comp_left_comm {A B : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)} (h : Commute A B)
+    (C : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)) : A ∘L (B ∘L C) = B ∘L (A ∘L C) :=
+  h.left_comm C
+
+/-- If `B` and `C` commute, then `(A ∘ B) ∘ C = (A ∘ C) ∘ B`. -/
+lemma _root_.Commute.comp_right_comm {B C : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)} (h : Commute B C)
+    (A : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)) : (A ∘L B) ∘L C = (A ∘L C) ∘L B :=
+  h.right_comm A
 
 /-!
 
