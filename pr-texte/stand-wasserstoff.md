@@ -959,3 +959,11 @@ Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
   (`REVIEW_rb1949-hydrogen-pauli-degeneracy.txt`) 10/10 OK, sorry 0. Nicht gepusht. Sicherung `backup/hydrogen-pauli-degeneracy-pre-1949-rebase`.
 - Daueranweisung zu Import-Konflikten in `00-Plan.md` eingetragen; Hintergrund-Check eingerichtet. Erster Lauf 12:06:
   E4 clean, 10 clean, 15 unstable (CI nach Push), 16 clean.
+
+## Daueranweisung: E4 nach dem Merge von 15 umgesetzt und gepusht (2026-10-26 14:50)
+- Hintergrund-Check 14:48: E4 `dirty(lokal)`; 15 (`hydrogen-pauli`) als `7823e144` auf origin/master gemergt.
+  Konflikt nur in `PhyslibAlpha.lean` (`PauliSpectrum` neben `RadialCompleteness`) → Daueranweisung.
+- `hydrogen-radial-completeness` `2a31197a` → **`f99d3fbe`** (move.sh), Lean-Dateien Byte für Byte unverändert,
+  keine `Claude-Session:`-Zeile. check_pr.sh (`REVIEW_rb7823-hydrogen-radial-completeness.txt`) 10/10 OK, sorry 0.
+  **Gepusht**, `--force-with-lease` gegen 2a31197a, ls-remote bestätigt. Sicherung `backup/hydrogen-radial-completeness-pre-7823e144-rebase`.
+- `hydrogen-pauli-degeneracy` (E2, `37065db6`) basiert noch auf dem Branch-Stand 8e530748 von 15, nicht auf dem Squash; kein offener PR, nicht angefasst.
