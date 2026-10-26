@@ -984,3 +984,21 @@ Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
 - `hydrogen-pauli-degeneracy` (E2) auf origin/master `7823e144` (15 gemergt, Inhalt = 8e530748): `37065db6` → **`e5da5ba6`**,
   Datei unverändert, check_pr.sh (`REVIEW_rb7823-hydrogen-pauli-degeneracy.txt`) 10/10 OK, sorry 0. Nicht gepusht.
   Sicherung `backup/hydrogen-pauli-degeneracy-pre-7823e144-rebase`.
+
+## PR-Texte E3 (20) und E2 (21), opalg-commute gepusht (2026-10-26 16:46)
+- Freigegeben und gepusht: Notizen `97ad0c4e` (Fast-forward), Branch `opalg-commute` `10fb29af` (neu auf dem Fork, kein PR).
+- **E3** `hydrogen-bound-states-split`: Fork = lokal = `7430cfca`, Basis `2ccd1951`, also 2 Commits hinter origin/master
+  `7823e144` (10 und 15 gemergt). `git merge-tree`: Konflikt nur in `PhyslibAlpha.lean` (Importliste). Kein offener PR,
+  daher nicht umgesetzt (Auftrag: nur melden). Letzte Prüfung check_pr.sh am 26.10. 10:09 auf `7430cfca` (10/10 OK).
+  PR-Text `20-hydrogen-bound-states-split.md`: Inhalt aus den Moduldocstrings und Deklarationen der fünf Dateien;
+  Deklarationstabellen automatisch aus den Docstrings erzeugt (77 mit, 38 ohne Docstring als Namensliste), alle
+  Namen gegen Branch bzw. master geprüft. Abhängigkeiten: baut auf 05 (`Eigenfunctions.lean`) und der Dichtheits-PR
+  (`hamiltonianOperator_hasDenseDomain`, 3× benutzt), beide gemergt; importiert nichts aus E4 (unabhängig von E4).
+  Literatur: keine eigene Angabe im Text; erwähnt nur die Axler–Bourdon–Ramey-Angabe aus `Degeneracy.lean`
+  (Metadaten per CrossRef geprüft, Quelle nicht heruntergeladen).
+- **E2** `hydrogen-pauli-degeneracy`: lokal `e5da5ba6` auf origin/master `7823e144` (aktuell); Fork hat noch den alten
+  Stand `b07c9efd`. check_pr.sh (`REVIEW_e2-hydrogen-pauli-degeneracy.txt`) 10/10 OK, sorry 0; CI-Schritte
+  (`REVIEW_e2-physlib.txt`, Skript `scripts1911/ci_physlib.sh`): Physlib-Build, runPhyslibLinters, check_dup_tags,
+  check_file_imports, pseudo_lint (Physlib/QuantumInfo, Alpha), theorem_lint (Physlib/QuantumInfo, Alpha), api_map_lint,
+  forMathlib_lint, auxillary_script_test – alle OK. Bisher kein PR-Text; neu `21-hydrogen-pauli-degeneracy.md`
+  (aus dem Diff des Commits; Abhängigkeiten 15 und die sl2-PR mit `BivariateBasis.lean`, beide gemergt). Nicht gepusht.
