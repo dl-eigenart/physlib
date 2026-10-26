@@ -444,3 +444,8 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
 | – | `racah-6j` | lokal `7abb5d90` | `9163d8bd` | Build grün, 1 bekanntes `sorry` | nein |
 
 - Pushes je `--force-with-lease` gegen den vollen Fork-Hash, per `ls-remote` bestätigt.
+
+## 10 gemergt (2026-10-26, festgestellt 13:18 im Hintergrund-Check)
+- `pr/clebsch-gordan-formula` als Squash `9db4bcc9` auf origin/master. Offene PRs (E4, 15, 16) laut `git merge-tree`
+  konfliktfrei mit dem neuen master; GitHub meldet vorerst `unknown`. 11–14 basieren noch auf `1f0ce3f3` (altes 10),
+  sind keine offenen PRs; Umsetzen erst auf Daniels Auftrag.
