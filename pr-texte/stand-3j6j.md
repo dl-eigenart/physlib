@@ -449,3 +449,10 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
 - `pr/clebsch-gordan-formula` als Squash `9db4bcc9` auf origin/master. Offene PRs (E4, 15, 16) laut `git merge-tree`
   konfliktfrei mit dem neuen master; GitHub meldet vorerst `unknown`. 11–14 basieren noch auf `1f0ce3f3` (altes 10),
   sind keine offenen PRs; Umsetzen erst auf Daniels Auftrag.
+
+## 11 nach dem Merge von 10 auf master umgesetzt und gepusht (2026-10-26 15:46)
+- origin/master `7823e144`; Squash von 10 (`9db4bcc9`) inhaltsgleich mit `1f0ce3f3` (ClebschGordanFormula.lean 0 Diffzeilen).
+- `pr/wigner-3j` `a2f712ac` → **`1c24e593`** (3 Commits, move.sh, Dateien unverändert, keine `Claude-Session:`-Zeile).
+  check_pr.sh (`REVIEW_rb7823-wigner-3j.txt`) 10/10 OK, sorry 0. **Gepusht**, `--force-with-lease` gegen a2f712ac, ls-remote bestätigt.
+  Sicherung `backup/wigner-3j-pre-7823e144-rebase`. PR-Text 11: „Base: master“, „Builds on #1962 … and #1911 …, both merged“.
+- 12a, 12b, 13, 14 und die rational-Branches liegen noch auf dem alten 10 (`1f0ce3f3`).

@@ -967,3 +967,20 @@ Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
   keine `Claude-Session:`-Zeile. check_pr.sh (`REVIEW_rb7823-hydrogen-radial-completeness.txt`) 10/10 OK, sorry 0.
   **Gepusht**, `--force-with-lease` gegen 2a31197a, ls-remote bestätigt. Sicherung `backup/hydrogen-radial-completeness-pre-7823e144-rebase`.
 - `hydrogen-pauli-degeneracy` (E2, `37065db6`) basiert noch auf dem Branch-Stand 8e530748 von 15, nicht auf dem Squash; kein offener PR, nicht angefasst.
+
+## Review gloges zu 16 (lrl) umgesetzt und gepusht; E2 auf master (2026-10-26 15:46)
+- Review (gelesen über die API, nichts kommentiert): (a) Docstring: Identität trivial, wenn i, j, k nicht paarweise
+  verschieden, daher ohne Inhalt für d < 3; (b) Gliederung von §E in AngularMomentum.lean (seine Option 1); (c) Bemerkung
+  zu hxp/hr (Operator-Automatisierung) – bleibt unverändert.
+- Neuer Commit **`c17ae84c`** auf b9f0ba1c (Sicherung `backup/lrl-angular-cyclic-pre-review`):
+  - `AngularMomentum.lean`: §E „Commutation relations“ → „Algebraic relations“ (Überschrift und Inhaltsverzeichnis);
+    `angularMomentum_cyclic_position` ans Ende von E.1, `angularMomentum_cyclic_momentum` ans Ende von E.2, je mit Docstring
+    (Aussage, d = 3, trivial außer bei paarweise verschiedenen i, j, k); altes E.4 „Cyclic sums and the dilation operator“ →
+    „E.4. Angular momentum / dilation operator“ mit `angularMomentum_commutation_positionDotMomentum` (Beweis braucht E.1 und E.2).
+  - `LaplaceRungeLenzVector.lean`: Docstrings von `angularMomentum_cyclic_lrl` und `lrl_cyclic_angularMomentum` um den Satz ergänzt.
+  - Geprüft: alle Deklarationen (46 bzw. 13) Zeichen für Zeichen gleich, Code ohne Kommentare als Zeilen-Multimenge gleich.
+    Diff 32+/23−. check_pr.sh (`REVIEW_review-lrl-angular-cyclic.txt`) 10/10 OK, sorry 0.
+  - **Gepusht** (freigegeben), `--force-with-lease` gegen b9f0ba1c, ls-remote bestätigt. PR-Text 16 angepasst (§E, Trivialität).
+- `hydrogen-pauli-degeneracy` (E2) auf origin/master `7823e144` (15 gemergt, Inhalt = 8e530748): `37065db6` → **`e5da5ba6`**,
+  Datei unverändert, check_pr.sh (`REVIEW_rb7823-hydrogen-pauli-degeneracy.txt`) 10/10 OK, sorry 0. Nicht gepusht.
+  Sicherung `backup/hydrogen-pauli-degeneracy-pre-7823e144-rebase`.

@@ -8,12 +8,12 @@ This PR proves that the angular momentum and the (regularised) Laplace-Runge-Len
 
 - `HydrogenAtom.angularMomentum_cyclic_lrl`: `𝐋ᵢⱼ𝐀(ε)ₖ + 𝐋ⱼₖ𝐀(ε)ᵢ + 𝐋ₖᵢ𝐀(ε)ⱼ = 0`.
 - `HydrogenAtom.lrl_cyclic_angularMomentum`: `𝐀(ε)ₖ𝐋ᵢⱼ + 𝐀(ε)ᵢ𝐋ⱼₖ + 𝐀(ε)ⱼ𝐋ₖᵢ = 0`.
-- `angularMomentum_cyclic_position`, `angularMomentum_cyclic_momentum`: the same cyclic sums with `𝐱` and `𝐩` vanish.
+- `angularMomentum_cyclic_position`, `angularMomentum_cyclic_momentum`: the same cyclic sums with `𝐱` and `𝐩` vanish. All cyclic identities are trivial unless `i`, `j`, `k` are pairwise distinct, so they have no content in fewer than three dimensions.
 - `angularMomentum_commutation_positionDotMomentum`: `⁅𝐋ᵢⱼ, 𝐱 · 𝐩⁆ = 0`.
 
 ## Reviewer map
 
-1. `Physlib/QuantumMechanics/Operators/AngularMomentum.lean` §E.4 Cyclic sums and the dilation operator: three short lemmas from the existing commutators of `𝐋` with `𝐱` and `𝐩`. `angularMomentum_commutation_positionDotMomentum` is tagged `@[simp]`; PhyslibAlpha was rebuilt to check that no existing `simp` call changes.
+1. `Physlib/QuantumMechanics/Operators/AngularMomentum.lean` §E (now "Algebraic relations"): the cyclic sums with `𝐱` and `𝐩` at the end of §E.1 and §E.2, the commutator with `𝐱 · 𝐩` in §E.4 Angular momentum / dilation operator; three short lemmas from the existing commutators of `𝐋` with `𝐱` and `𝐩`. `angularMomentum_commutation_positionDotMomentum` is tagged `@[simp]`; PhyslibAlpha was rebuilt to check that no existing `simp` call changes.
 2. `Physlib/QuantumMechanics/Hydrogen/LaplaceRungeLenzVector.lean`, `angularMomentum_cyclic_lrl`: `𝐀(ε)ₖ` is expanded with `lrlOperator_eq`; `𝐋` is moved past `𝐱 · 𝐩` and past `𝐫₀(ε)⁻¹`, leaving combinations of the two cyclic sums of step 1.
 3. Same file, `lrl_cyclic_angularMomentum`: follows from the previous lemma and `angularMomentum_commutation_lrl`; the Kronecker-delta terms cancel cyclically.
 

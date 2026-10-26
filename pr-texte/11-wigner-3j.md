@@ -1,8 +1,10 @@
 # feat(PhyslibAlpha): Wigner 3j symbols and the multipole sum rule
 
-Branch: `pr/wigner-3j` · Base: master after merge of `pr/clebsch-gordan-formula` · Depends on: `pr/clebsch-gordan-formula` (#1911 and #1876 are merged)
+Branch: `pr/wigner-3j` · Base: master
 
-This PR defines the Wigner 3j symbol of a Regge square by Racah's formula, proves its column, row and Regge symmetries, and identifies it with the Clebsch-Gordan coefficients `cgCoefficient`. From this it derives the two orthogonality relations of the 3j symbols and the sum rule `Σ_{μ M_f} ⟨J_i M_i λ μ | J_f M_f⟩² = (2J_f + 1)/(2J_i + 1)` for multipole transitions. It builds on Racah's formula `cgCoefficient_racah` of `pr/clebsch-gordan-formula` and the orthogonality relations `sum_cgCoefficient_mul` and `sum_cgCoefficient_mul_cgCoefficient` of #1911 and `pr/clebsch-gordan-formula`.
+Builds on #1962 (closed formulas for Clebsch-Gordan coefficients) and #1911 (normalised basis and Clebsch-Gordan coefficients), both merged.
+
+This PR defines the Wigner 3j symbol of a Regge square by Racah's formula, proves its column, row and Regge symmetries, and identifies it with the Clebsch-Gordan coefficients `cgCoefficient`. From this it derives the two orthogonality relations of the 3j symbols and the sum rule `Σ_{μ M_f} ⟨J_i M_i λ μ | J_f M_f⟩² = (2J_f + 1)/(2J_i + 1)` for multipole transitions. It builds on Racah's formula `cgCoefficient_racah` of #1962 and the orthogonality relations `sum_cgCoefficient_mul` and `sum_cgCoefficient_mul_cgCoefficient` of #1911 and #1962.
 
 ## Main results
 
