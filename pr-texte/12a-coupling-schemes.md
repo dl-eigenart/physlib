@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): the two coupling schemes of three angular momenta
 
-Branch: `pr/coupling-schemes` · Base: master after merge of `pr/clebsch-gordan-formula` · Depends on: `pr/clebsch-gordan-formula` (#1911 and #1876 are merged; independent of `pr/wigner-3j`)
+Branch: `pr/coupling-schemes` · Base: master
+
+Builds on #1962 (closed formulas for Clebsch-Gordan coefficients) and #1911 (normalised basis and Clebsch-Gordan coefficients), both merged; independent of #1964 (Wigner 3j symbols).
 
 This PR constructs the two coupling schemes `|(j₁ j₂) j₁₂, j₃; J M⟩` and `|j₁, (j₂ j₃) j₂₃; J M⟩` on `V(a) ⊗ V(b) ⊗ V(c)`. It repackages the isomorphism `cgEquiv` as isometric intertwining embeddings `embed : V(m + n - 2k) → V(m) ⊗ V(n)` of the irreducible components, introduces the triple tensor product with its contravariant form, total `E`, `F`, `H` and Casimir operator, and shows that these structures are transported through both schemes. The recoupling coefficients and 6j symbols follow in the next PR (`pr/six-j`).
 

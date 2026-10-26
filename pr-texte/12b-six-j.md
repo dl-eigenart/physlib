@@ -2,6 +2,8 @@
 
 Branch: `pr/six-j` · Base: master after merge of `pr/coupling-schemes` · Depends on: `pr/coupling-schemes`
 
+Builds on #1962 (closed formulas for Clebsch-Gordan coefficients) and #1911 (normalised basis and Clebsch-Gordan coefficients), both merged.
+
 This PR defines the recoupling coefficients between the two coupling schemes of `pr/coupling-schemes` as the contravariant form between them, and proves that they do not depend on `M` and form an orthogonal matrix. The 6j symbol `sixJ` is defined from the recoupling coefficient at `M = J`, and its orthogonality relation follows.
 
 ## Main results

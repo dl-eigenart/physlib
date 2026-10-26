@@ -456,3 +456,16 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   check_pr.sh (`REVIEW_rb7823-wigner-3j.txt`) 10/10 OK, sorry 0. **Gepusht**, `--force-with-lease` gegen a2f712ac, ls-remote bestätigt.
   Sicherung `backup/wigner-3j-pre-7823e144-rebase`. PR-Text 11: „Base: master“, „Builds on #1962 … and #1911 …, both merged“.
 - 12a, 12b, 13, 14 und die rational-Branches liegen noch auf dem alten 10 (`1f0ce3f3`).
+
+## 12a und 12b nach dem Merge von 10 auf master umgesetzt (2026-10-26 16:09), nicht gepusht
+- 11 ist jetzt als eigener PR offen. Ausgangspunkt die Fork-Stände (= lokal), Sicherungen `backup/{coupling-schemes,six-j}-pre-1962-rebase`.
+- origin/master `7823e144`; move.sh von der alten Basis `1f0ce3f3` (Squash von 10 inhaltsgleich). Dateien unverändert, keine `Claude-Session:`-Zeile.
+
+| PR | Branch | Fork alt | neu | check_pr.sh |
+|---|---|---|---|---|
+| 12a | `pr/coupling-schemes` | `62cb4a2a` | `6928283c` | 10/10 OK, sorry 0 |
+| 12b | `pr/six-j` | `d9b8967f` | `2e739ee3` (2 Commits, auf 6928283c) | 10/10 OK, sorry 0 |
+
+- Berichte `~/physlib_ci/REVIEW_rb1962-<branch>.txt`. PR-Texte 12a („Base: master“, Builds on 10 und 09, unabhängig von 11)
+  und 12b (Basis 12a, Builds on 10 und 09). Push wartet auf Daniels Freigabe (nach dem nächsten Merge eines offenen PRs).
+  13, 14, rational-Branches nicht angefasst.
