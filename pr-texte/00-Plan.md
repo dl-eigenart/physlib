@@ -26,6 +26,9 @@ Umsetzung (Stand 26.10.):
 - Takt: Cron-Job der Claude-Sitzung (Minute 13 und 43). Nur sitzungsgebunden, erlischt mit der Sitzung bzw. nach 7 Tagen;
   in einer neuen Sitzung neu anlegen.
 
+**Reihenfolge (Daniel, 26.10.):** Die PRs zu E2 (`hydrogen-pauli-degeneracy`) und E3 (`hydrogen-bound-states-split`
+bzw. die Teil-PRs `hydrogen-e3-1` … `hydrogen-e3-4`, Plan in `stand-e3-split.md`) werden erst **nach** 12a/12b eröffnet.
+
 ## Abhängigkeiten
 
 ```
