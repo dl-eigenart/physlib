@@ -75,3 +75,10 @@ Teil; Einleitung und Kopfzeilen je Teil neu. Text 20 bleibt als Fassung für den
 - **20c:** Einleitung (Paraphrase); Angabe „uses only `PolyBounded.lean`“ in der Kopfzeile (aus den Importen).
 - **20d:** Satz zu essentieller Selbstadjungiertheit (Note 1); „at least `(n + 1)²` … exactly is not shown“ (Note 2);
   Einleitung (Paraphrase); Größe (741 Zeilen, über dem Ziel).
+
+## Entscheidung Daniel (2026-10-26 17:22): Teil 4 bleibt ungeteilt (Variante 3)
+- `hydrogen-e3-4` (`BoundStatesAdjoint.lean`, 741 Zeilen) wird nicht weiter geschnitten.
+- Begründung: #1910 (742 Zeilen) und #1911 (792 Zeilen) wurden in dieser Größe gemergt; ein Schnitt in der Datei würde den
+  geprüften Lean-Code verändern.
+- Rückfall, falls ein Reviewer es verlangt: Variante 1 (§A + §B in eine Datei, §C + §D in eine zweite; s. o.).
+- Damit bleibt es bei den vier Teilen 20a–20d wie umgesetzt.

@@ -28,6 +28,9 @@ Umsetzung (Stand 26.10.):
 
 **Reihenfolge (Daniel, 26.10.):** Die PRs zu E2 (`hydrogen-pauli-degeneracy`) und E3 (`hydrogen-bound-states-split`
 bzw. die Teil-PRs `hydrogen-e3-1` … `hydrogen-e3-4`, Plan in `stand-e3-split.md`) werden erst **nach** 12a/12b eröffnet.
+E3 in vier Teilen an Dateigrenzen (20a–20d); Teil 4 (`BoundStatesAdjoint.lean`, 741 Zeilen) bleibt ungeteilt
+(Daniel, 26.10., Variante 3: #1910/#1911 in ähnlicher Größe gemergt, kein Eingriff in geprüften Code); Rückfall bei
+Reviewer-Wunsch: Variante 1 (§A+§B / §C+§D).
 
 ## Abhängigkeiten
 
