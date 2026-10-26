@@ -14,6 +14,18 @@ Vor PR 03 auf agents-pc bauen und linten. Vor jedem weiteren PR die Linter auf d
 
 Jeder PR fügt eine Datei bzw. ein Konzept hinzu. Die Branches liegen auf `dl-eigenart/physlib`.
 
+## Daueranweisungen
+
+**Daniel, 26.10.2026 (wörtlich):** Hat ein offener PR von dl-eigenart auf leanprover-community/physlib einen Merge-Konflikt, der ausschließlich in der Importliste von PhyslibAlpha.lean (oder Physlib.lean) liegt, darfst du ihn ohne Rückfrage auf origin/master umsetzen (alle Importe übernehmen, alphabetisch), check_pr.sh laufen lassen und, wenn alles grün ist und die Lean-Dateien Byte für Byte unverändert sind, mit --force-with-lease pushen. Danach im Protokoll vermerken und mir kurz melden. Alles andere (Codeänderungen, Build-Fehler auf neuem master wie bei #1932, Konflikte in anderen Dateien, Kommentare von Reviewern) legst du mir vor und pushst nicht. Lege dafür einen Hintergrund-Check an, der alle 30 Minuten den mergeable_state der offenen PRs von dl-eigenart abfragt und sich bei dirty meldet. Keine Kommentare auf GitHub, die schreibe ich.
+
+Umsetzung (Stand 26.10.):
+- Abfrage: `~/physlib_ci/scripts1911/pr_mergeable.sh` (GitHub-REST ohne Anmeldung, `gh` ist auf agents-pc nicht installiert;
+  Ausgabe `<nr> <mergeable_state> <branch> <titel>`, Exit 2 bei dirty, Protokoll `~/physlib_ci/pr_mergeable.log`).
+- Umsetzen: `~/physlib_ci/scripts1911/move.sh <branch> <alte-basis> <neue-basis>` (cherry-pick, Importvereinigung über
+  `resolve_imports.py`, streicht `Claude-Session:`), danach `check_stack.sh` (ruft `check_pr.sh`).
+- Takt: Cron-Job der Claude-Sitzung (Minute 13 und 43). Nur sitzungsgebunden, erlischt mit der Sitzung bzw. nach 7 Tagen;
+  in einer neuen Sitzung neu anlegen.
+
 ## Abhängigkeiten
 
 ```

@@ -950,3 +950,12 @@ Offen: Push (wartet auf „ja“); Basis des Branches ist alt — vor dem PR auf
 | `hydrogen-bound-states-split` (E3) | `cc13db99` | `7430cfca` | 10/10 OK, sorry 0 | ja, Lease gegen cc13db99 |
 
 Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
+
+## hydrogen-pauli nach dem Merge von 06 umgesetzt und gepusht, E2 nachgezogen (2026-10-26 12:05)
+- origin/master `2ccd1951`. `hydrogen-pauli` (15): Konflikt nur in der Importliste (`FineStructure` neben `PauliSpectrum`).
+  `4b8eee87` → **`8e530748`**, `PauliSpectrum.lean` unverändert, check_pr.sh (`REVIEW_rb1949-hydrogen-pauli.txt`) 10/10 OK, sorry 0.
+  **Gepusht** (freigegeben), `--force-with-lease` gegen 4b8eee87, ls-remote bestätigt. Sicherung `backup/hydrogen-pauli-pre-1949-rebase`.
+- `hydrogen-pauli-degeneracy` (E2) auf das neue hydrogen-pauli: `d7506bf8` → **`37065db6`**, Datei unverändert, check_pr.sh
+  (`REVIEW_rb1949-hydrogen-pauli-degeneracy.txt`) 10/10 OK, sorry 0. Nicht gepusht. Sicherung `backup/hydrogen-pauli-degeneracy-pre-1949-rebase`.
+- Daueranweisung zu Import-Konflikten in `00-Plan.md` eingetragen; Hintergrund-Check eingerichtet. Erster Lauf 12:06:
+  E4 clean, 10 clean, 15 unstable (CI nach Push), 16 clean.
