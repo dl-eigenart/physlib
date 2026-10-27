@@ -1002,3 +1002,7 @@ Berichte `~/physlib_ci/REVIEW_rb1949-<branch>.txt`.
   check_file_imports, pseudo_lint (Physlib/QuantumInfo, Alpha), theorem_lint (Physlib/QuantumInfo, Alpha), api_map_lint,
   forMathlib_lint, auxillary_script_test – alle OK. Bisher kein PR-Text; neu `21-hydrogen-pauli-degeneracy.md`
   (aus dem Diff des Commits; Abhängigkeiten 15 und die sl2-PR mit `BivariateBasis.lean`, beide gemergt). Nicht gepusht.
+
+## E4 gemergt (2026-10-27, festgestellt 10:18 im Hintergrund-Check)
+- `hydrogen-radial-completeness` als Squash `cb74f21d` auf origin/master (08:23 UTC). Offen und `clean`: 11 (`pr/wigner-3j`), 16 (lrl).
+- Die Branches `hydrogen-e3-1..4` und `hydrogen-pauli-degeneracy` basieren noch auf `7823e144`; nicht angefasst (keine offenen PRs).
