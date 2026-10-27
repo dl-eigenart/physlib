@@ -184,3 +184,121 @@ gesparten Zeilen messen; (c) nur nach Rücksprache mit gloges.
   §4), und in den Stellen gewinnt man Lesbarkeit (keine gezielte Klammerung `comp_assoc (𝐱 _) (𝐱 _) _` mehr), nicht Zeilen.
 - Prüfung: check_pr.sh (`REVIEW_opalg-v2.txt`, jetzt mit `build_roots`) 11/11 OK, `ci_physlib.sh`
   (`REVIEW_opalg-v2-physlib.txt`) 11/11 OK, sorry 0.
+
+## Stufe c: aesop-Regelsatz (Bestandsaufnahme und Entwurf, 2026-10-27; kein Code im Repo)
+
+Anlass: gloges auf Zulip (27.10.): „build up an aesop ruleset to organize expressions, e.g. xs left of ps, a^dag left
+of a, collect coefficients out front, move brackets. This could even be a separate aesop tactic like aesop_graph.“
+Grundlage: Hauptkopie auf `opalg-commute-v2` (= master `3bfc7af8` + `559bd061`), Mathlib/aesop aus `.lake/packages`.
+
+### 1. Wie Mathlib eigene Regelsätze baut (Fundstellen geprüft)
+Muster immer: (a) eigene Init-Datei nur mit `declare_aesop_rule_sets [Name]`, (b) Regeln per
+`attribute [aesop <Phase> <Builder> (rule_sets := [Name])]` bzw. `add_aesop_rules`, (c) `macro`, das `aesop` mit
+`(rule_sets := [Name, …])` und `config` aufruft. Grund für (a), wörtlich im Docstring der Init-Dateien: „Aesop rule sets
+only become visible once the file in which they're declared is imported, so we must put this declaration into its own file.“
+
+| Taktik | Init (Deklaration) | Regeln | Makro / Konfiguration |
+|---|---|---|---|
+| `aesop_graph` | `Mathlib/Combinatorics/SimpleGraph/Init.lean:20` `declare_aesop_rule_sets [SimpleGraph]` | `SimpleGraph/Basic.lean:45 f.` `attribute [aesop norm (rule_sets := [SimpleGraph])] symm_def`, `irrefl_def` | `Basic.lean:58` `macro (name := aesop_graph)`: `aesop $c* (config := { introsTransparency? := some .default, terminal := true }) (rule_sets := [SimpleGraph])`; dazu `aesop_graph?` und `:77` `aesop_graph_nonterminal` (`warnOnNonterminal := false`, Docstring: „Use this only for exploration! Nonterminal Aesop is even worse than nonterminal `simp`.“) |
+| `continuity` | `Mathlib/Tactic/Continuity/Init.lean:19` `[Continuous]` | `Continuity.lean:17` `attribute [aesop (rule_sets := [Continuous]) unfold norm] Function.comp`; `:24` Attribut-Makro `macro "continuity" : attr => aesop safe apply (rule_sets := [Continuous])` | `:38` `aesop (config := { terminal := true }) (rule_sets := [Continuous])` |
+| `bound` | `Mathlib/Tactic/Bound/Init.lean:19` `[Bound]` | `Bound.lean:191/198` `attribute [aesop unsafe 10% tactic (rule_sets := [Bound])] boundNormNum` bzw. `boundLinarith`; eigenes Attribut `@[bound]` in `Bound/Attribute.lean` | `:205` `boundConfig := { enableSimp := false, terminal := true }`, `:247` `aesop (rule_sets := [Bound, -default]) (config := Bound.boundConfig)` |
+| **`commutes` (QuantumInfo!)** | `QuantumInfo/ForMathlib/Tactic/Commutes/Attribute.lean:20` `declare_aesop_rule_sets [Commutes] (default := false)` | `Commutes.lean:67 ff.` `aesop safe apply`/`unsafe apply 5%`/`add_aesop_rules safe tactic`/`aesop simp` für `Commute`-Abschlusslemmata | `:49` `syntax "commutes"`, `aesop (config := { introsTransparency? := some .reducible, terminal := true, useSimpAll := false, useDefaultSimpSet := false }) (rule_sets := [Commutes, -default])`; 203 Zeilen, 16 Verwendungen in QuantumInfo |
+
+Weitere: `Finset/Attr.lean:21` `[finsetNonempty] (default := true)`, `Tactic/SetLike.lean:25 f.`, `Measurability/Init.lean:20`,
+`CategoryTheory/Category/Init.lean:22`. Nebenbefund: `commutes` beweist Ziele `Commute A B` – genau die Argumente, die
+`comp_left_comm_of_commute` braucht; Physlib importiert QuantumInfo schon (z. B. `StatisticalMechanics/…/ThermoQuantities.lean`).
+
+### 2. Eignet sich aesop zum Umordnen/Normalisieren?
+- aesop ist eine **Beweissuche** (README: Suchbaum, safe/unsafe-Regeln, „stopping if the root goal has been proved“).
+  Umschreiben passiert ausschließlich in der **Normphase**: README (Suchschleife): „Run `simp` on all hypotheses and the
+  target, using the global simp set … plus Aesop's `simp` rules“, eingerahmt von `norm`-Regeln mit negativer/positiver
+  Strafe; `maxNormIterations := 100` (`Aesop/Options/Public.lean:65`). `safe`/`unsafe`-Regeln verzweigen bzw. wenden
+  Lemmata an (`apply`, `cases`, Taktiken) – zum Sortieren eines Terms tragen sie nichts bei.
+- Nicht-terminal: `terminal := false` (Voreinstellung, `Public.lean:113`) liefert „the goals remaining after safe rules were
+  applied“ („safe prefix“, `:66–75`), mit Warnung (`warnOnNonterminal`, `:118`). Mathlib rät davon ab (Zitat oben).
+- **Probe bestätigt das:** `aesop?` auf das Beispiel unten liefert als Skript `simp_all only [Ring.lie_def, mul_def,
+  comp_assoc, momentum_comp_position_eq, comp_sub, momentum_comp_position_comp, comp_smul, comp_id]` + `module` – die
+  ganze Arbeit ist ein `simp only`; aesop steuert nur den Abschluss bei. Die Gegenprobe mit `simp only [dieselben Regeln]`
+  + `module` schließt dieselben Ziele.
+- Folgerung: Für „organize expressions“ ist das passende Werkzeug ein **eigenes simp-Set** (`register_simp_attr`, Beispiele
+  `Mathlib/Tactic/Attr/Register.lean:26 ff.` `functor_norm`, `monad_norm`, `parity_simps`, `rclike_simps`; eigene Datei wegen
+  Reihenfolge wie bei aesop) bzw. für Sonderfälle eine **simproc**. aesop lohnt als dünne Hülle `aesop_op` = Normalisieren +
+  Abschluss (`module`/`abel`/`ring_nf`), analog `commutes`; eine nicht-terminale Variante nur zum Erkunden.
+
+### 3. Was physlib schon hat
+- **Normalordnung/Wick (QFT):** `FieldSpecification.normalOrderRel` (`QFT/PerturbationTheory/FieldSpecification/NormalOrder.lean:30`,
+  Erzeuger vor Vernichtern über `CreateAnnihilate.normalOrder`, `CreateAnnihilate.lean:42`), `normalOrderSign :=
+  Wick.koszulSign …` (`:54`), `normalOrderList`, `FieldOpFreeAlgebra.normalOrderF` (`FieldOpFreeAlgebra/NormalOrder.lean:46`,
+  Notation `𝓝ᶠ(a)`) als **lineare Abbildung, per `Basis.constr` auf Listen definiert**. Sortiert wird also kombinatorisch
+  (Einfügesortieren auf `List`, Vorzeichen per Koszul), nicht per Umschreiben – kein Vorbild für eine Taktik, aber die
+  Zielordnung „cr links von an“ ist dort festgelegt. Zeitordnung analog (`TimeOrder.lean`, `insertionSortMinPos`).
+- **Leiteroperatoren:** `HarmonicOscillator/LadderOperators.lean` `loweringCLM`/`raisingCLM` (:75/:80),
+  `lowering_commutation_raising : ⁅aᵢ, aⱼ†⁆ = δᵢⱼ • id` (:103), `lowering_commutation_lowering`, `raising_commutation_raising`
+  (:120/:135), `raising_commutation_lowering` (:151); `NumberOperator.lean:122` `lowering_comp_raising : aᵢ ∘ aᵢ† = Nᵢ + 𝟙`
+  (nur gleicher Index, über `numberCLM`). **Kein** Lemma `aᵢ ∘L aⱼ† = aⱼ† ∘L aᵢ + δᵢⱼ • id` – müsste ergänzt werden
+  (eine Zeile über `comp_eq_comp_add_commute`). PhyslibAlpha: `LadderSystem` (`Mathematics/LadderSystem/Basic.lean:150`,
+  abstrakt auf `Module.End`, `comm_a_ac` usw.).
+- **x, p, L (Commutation.lean, AngularMomentum.lean):** in Zielrichtung „x links von p“ vorhanden:
+  `momentum_comp_position_eq : 𝐩 j ∘L 𝐱 i = 𝐱 i ∘L 𝐩 j - (I*ℏ) • δ[i,j] • id` (Commutation.lean:172),
+  `momentum_comp_radiusRegPow_eq : 𝐩 i ∘L 𝐫₀ ε s = 𝐫₀ ε s ∘L 𝐩 i - (s*I*ℏ) • 𝐫₀ ε (s-2) ∘L 𝐱 i` (:211),
+  `momentum_comp_angularMomentum_eq` (AngularMomentum.lean:345), dazu die K1-Vertauschungen (`position_comp_commute`,
+  `momentum_comp_commute`, `position_comp_radiusRegPow_commute`, …) und `positionDotMomentum_commutation_position`.
+  Es fehlen die **Fassungen im Kontext** `𝐩 j ∘L (𝐱 i ∘L Z) = 𝐱 i ∘L (𝐩 j ∘L Z) - … • Z` (simp findet `𝐩 ∘ 𝐱` in rechts
+  geklammerten Produkten sonst nur am Ende) – genau dafür sind `comp_left_comm_of_commute` (Vertauschungen) bzw. je ein
+  Einzeiler (Korrekturterme) da.
+- **Terminierung:** Ordnung der Erzeuger `𝐫₀ < 𝐱 < 𝐩` (bzw. `a† < a`), Produkte rechts geklammert. Maß je Monom:
+  (Grad, Zahl der Fehlstände `p` vor `x`), lexikographisch, über die Multimenge der Monome. `p∘x → x∘p - c·δ·id` senkt die
+  Fehlstände des Hauptterms um 1 und erzeugt einen Term mit Grad −2; `p∘𝐫₀^s → 𝐫₀^s∘p - c·𝐫₀^(s-2)∘x` senkt die
+  Fehlstände (Korrekturterm: gleicher Grad, `p` durch `x` ersetzt, weniger Fehlstände); `a∘a† → a†∘a + δ` analog (Wick).
+  Multimengenordnung über einer wohlfundierten Ordnung ist wohlfundiert ⇒ terminiert ([CITATION_NEEDED: Wohlfundiertheit der Multimengenordnung; ggf. Mathlib-Lemma suchen]). Gleichartige
+  Faktoren (`x/x`, `p/p`, `𝐫₀/x`) sortiert simp mit **Permutationslemmata** nur, wenn das Ergebnis in der internen
+  Termordnung kleiner ist – terminiert, aber die Reihenfolge der Indizes ist nicht steuerbar (für Gleichheitsziele egal,
+  da beide Seiten gleich normalisiert werden). Gefahr: `L` (`𝐋 i j = 𝐱 i ∘ 𝐩 j - 𝐱 j ∘ 𝐩 i`) – entweder auflösen
+  (`angularMomentumCLM` als Regel, Grad wächst einmalig) oder `L` als eigenen Erzeuger mit eigenen Regeln; **nicht beides**,
+  sonst Schleife. Antisymmetrie `𝐋 j i = -𝐋 i j` nur gerichtet (nach Index) als Regel.
+
+### 4. Probe (Scratch außerhalb des Repos, danach gelöscht)
+Zwei Dateien unter dem Sitzungs-Scratchpad (`OpAesop/Init.lean` mit `declare_aesop_rule_sets [OpOrder]`, kompiliert mit
+`lean --root` und `LEAN_PATH` der Hauptkopie; `OpAesop/Test.lean`). Regelsatz (alle `aesop norm simp (rule_sets := [OpOrder])`):
+R1 `comp_assoc`; R2 `add_comp comp_add sub_comp comp_sub smul_comp comp_smul comp_id id_comp`, `Ring.lie_def mul_def`;
+R3 `momentum_comp_position_eq` + Kontextfassung `momentum_comp_position_comp` (neu, 1 Zeile); R4 `position_comp_commute`,
+`momentum_comp_commute` + Kontextfassungen über `comp_left_comm_of_commute` (neu, je 1 Zeile); R5 `dotProduct comp_finsetSum
+finsetSum_comp Finset.sum_sub_distrib Finset.sum_add_distrib`; R6 `KroneckerDelta.sum_smul` + Skalare aus Summen (neu).
+Makro `aesop_op := aesop (rule_sets := [OpOrder, -default]) (add safe (by module)) (config := { terminal := true,
+useDefaultSimpSet := false })`. Ergebnisse (alle ≈ 2 s für die ganze Datei):
+
+| Probe | Ziel | Ergebnis |
+|---|---|---|
+| 1 | `𝐩 j ∘L 𝐱 i ∘L 𝐩 k = X` (nicht-terminal) | normalisiert zu `𝐱 i ∘ 𝐩 j ∘ 𝐩 k - (I*ℏ) • δ[i,j] • 𝐩 k` ✔ |
+| 2 | Commutation.lean:181 `⁅𝐱 i, 𝐩 j ∘L 𝐩 k⁆ = (I*ℏ) • (δ[i,k] • 𝐩 j + δ[i,j] • 𝐩 k)` | ohne `module`: bleibt als lineare Restgleichung stehen; mit `module` ✔ |
+| 3 | Commutation.lean:186 `⁅𝐱 i, 𝐩 ⬝ᵥ 𝐩⁆ = (2*I*ℏ) • 𝐩 i` | erst mit R5+R6 ✔ |
+| 4 | `𝐱 i ∘ 𝐱 j ∘ 𝐩 k ∘ 𝐱 i = 𝐱 j ∘ 𝐱 i ∘ 𝐱 i ∘ 𝐩 k - (I*ℏ) • δ[i,k] • (𝐱 j ∘ 𝐱 i)` | erst mit den Kontextfassungen von R4 ✔ |
+| 5 | LRL-Muster `𝐱 i ∘ (𝐱 j ∘ Z) = 𝐱 j ∘ (𝐱 i ∘ Z)` | ✔ |
+| 7 | `(𝐱 ⬝ᵥ 𝐩) ∘L 𝐱 i = 𝐱 i ∘L (𝐱 ⬝ᵥ 𝐩) - (I*ℏ) • 𝐱 i` (vgl. `positionDotMomentum_commutation_position`) | ✔ |
+| Gegenprobe | Probe 3 als `simp only [R1–R6]; module` ohne aesop | ✔ |
+
+### 5. Entwurf (Daniel entscheidet; nichts umgesetzt)
+- **Kern als simp-Set, aesop als Hülle.** Name z. B. Attribut `op_norm` (`register_simp_attr op_norm`) und Taktik
+  `op_norm` = `simp only [op_norm]` (normalisieren, nicht-terminal erlaubt wie `simp only`) sowie `aesop_op` = Normalisieren
+  + Abschluss (`module`, ersatzweise `abel`), terminal, nach dem Muster von `commutes`/`aesop_graph`.
+- **Dateien:** `Physlib/QuantumMechanics/Operators/OpNorm/Attr.lean` (nur `register_simp_attr` bzw.
+  `declare_aesop_rule_sets [OpNorm] (default := false)`), `…/OpNorm/Basic.lean` (Makros, R1/R2/R5/R6 für allgemeine
+  `M →L[R] M`), Regeln R3/R4 als `@[op_norm]` direkt an den bestehenden Lemmata in `Commutation.lean`/`AngularMomentum.lean`
+  bzw. `LadderOperators.lean`, Kontextfassungen dort daneben. Test-Datei mit den Proben 1–7 + LRL-Zielen (z. B. `hA`,
+  `sum_LppL`, `hxp`/`hr` aus #1932).
+- **Regeln:** R1–R6 wie in der Probe; Leiter: `aᵢ ∘ aⱼ† → aⱼ† ∘ aᵢ + δ • id` (neu) + Kontextfassung, `aᵢ/aⱼ` und
+  `aᵢ†/aⱼ†` als Permutationen; Radius: `momentum_comp_radiusRegPow_eq` + Kontextfassung, `position_comp_radiusRegPow_commute`,
+  `radiusRegPowCLM_comp_eq`; `L` zunächst **auflösen** statt eigener Erzeuger.
+- **Umfang:** Attr + Basic ≈ 40–60 Zeilen, Kontextfassungen ≈ 2 Zeilen je Paar (x/p, x/r, p/r, a/a†: ≈ 10–20 Zeilen),
+  Tests ≈ 50–80 Zeilen; Anwendung auf LRL/AngularMomentum getrennt messen (wie in v2).
+- **Risiken:** (i) Termordnung der Permutationslemmata nicht steuerbar → Normalform nicht „schön“, nur kanonisch;
+  (ii) Grad- und Laufzeitwachstum bei langen Produkten (LRL hat Summen über Produkte mit 4–5 Faktoren; Ausmultiplizieren
+  kann groß werden); (iii) `module` scheitert, wenn Koeffizienten nicht-triviale Körperrechnung brauchen (`ℏ`, `ε.1 ^ 2`,
+  `√2`) → dann `ring_nf`/`field_simp` nötig, Abschluss unsicher; (iv) Schleifen bei unvorsichtiger Regelwahl (L auflösen und
+  zugleich `L` als Ziel, Antisymmetrie ungerichtet); (v) Pflege: jede neue Operatorart braucht Kontextfassungen;
+  (vi) nicht-terminale Nutzung ist in Mathlib verpönt – `op_norm` als `simp only`-Set ist dafür der saubere Weg;
+  (vii) Review: Meta-Anteil klein (nur Makros), aber neue Konvention für ganz `QuantumMechanics/Operators`.
+- **Empfehlung:** erst `op_norm` als simp-Set mit R1–R4 für x/p (kleiner PR, misst Gewinn an Commutation/LRL), dann
+  Leiter und Radius; `aesop_op` als Hülle erst, wenn der Abschluss (`module`) an den echten Zielen zuverlässig greift.
+  Als Rückmeldung an gloges (Daniel formuliert selbst): Probe zeigt, dass die Arbeit in der simp-Normphase steckt; aesop
+  bringt nur den Abschluss; Vorbild `commutes` in QuantumInfo existiert bereits.
