@@ -154,6 +154,7 @@ public import Physlib.Mathematics.Calculus.Wirtinger.Hessian
 public import Physlib.Mathematics.Distribution.PowMul
 public import Physlib.Mathematics.Distribution.TemperedDistribution
 public import Physlib.Mathematics.ForMathlib.ComplexLinear
+public import Physlib.Mathematics.ForMathlib.ContinuousLinearMap.Commute
 public import Physlib.Mathematics.ForMathlib.DataStructures.Matrix.LieTrace
 public import Physlib.Mathematics.ForMathlib.FDerivCurry
 public import Physlib.Mathematics.ForMathlib.Fin

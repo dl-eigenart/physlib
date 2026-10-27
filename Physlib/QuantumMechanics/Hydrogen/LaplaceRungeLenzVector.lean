@@ -5,6 +5,7 @@ Authors: Gregory J. Loges
 -/
 module
 
+public import Physlib.Mathematics.ForMathlib.ContinuousLinearMap.Commute
 public import Physlib.QuantumMechanics.Hydrogen.Basic
 public import Physlib.QuantumMechanics.Operators.AngularMomentum
 /-!
@@ -484,8 +485,7 @@ private lemma sum_LppL (d : ℕ) :
           - (𝐱 j ∘L 𝐩 k ∘L 𝐩 k ∘L 𝐩 i - 𝐱 k ∘L 𝐩 j ∘L 𝐩 k ∘L 𝐩 i)) ∘L 𝐋 i j := by
         simp_rw [angularMomentumCLM, sub_comp, comp_assoc]
       _ = (𝐱 i ∘L 𝐩 j ∘L 𝐩 k ∘L 𝐩 k - 𝐱 j ∘L 𝐩 i ∘L 𝐩 k ∘L 𝐩 k) ∘L 𝐋 i j := by
-        simp_rw [momentum_comp_commute k, ← comp_assoc (𝐩 _), momentum_comp_commute k,
-          momentum_comp_commute i j, sub_sub_sub_cancel_right]
+        simp [comp_left_comm_of_commute (momentum_comp_commute _ _), momentum_comp_commute]
       _ = 𝐋 i j ∘L (𝐩 k ∘L 𝐩 k) ∘L 𝐋 i j := by
         simp_rw [← comp_assoc, ← sub_comp, angularMomentumCLM]
   trans (2 : ℂ)⁻¹ • ∑ i, ∑ j, 𝐋 i j ∘L (𝐩 ⬝ᵥ 𝐩) ∘L 𝐋 i j
