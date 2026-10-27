@@ -144,3 +144,43 @@ gesparten Zeilen messen; (c) nur nach Rücksprache mit gloges.
   (`REVIEW_opalg-physlib.txt`): `lake build -KCI --iofail`, runPhyslibLinters, check_dup_tags, check_file_imports,
   pseudo_lint und theorem_lint (Physlib, QuantumInfo), api_map_lint, forMathlib_lint, auxillary_script_test – alle OK.
 - PR-Text-Entwurf `19-opalg-commute.md` (mit KI-Offenlegung).
+
+## v2 nach Zulip (2026-10-27), lokal, nicht gepusht
+- Anlass: Daniel schlug auf Zulip vor, die Lemmata nach Mathlib-Vorbild (`Module.End.commute_pow_left_of_commute`,
+  `ContinuousLinearMap.IsIdempotentElem.commute_iff`) in den Typ-Namensraum zu legen und zu verallgemeinern; Joseph
+  Tooby-Smith: „would be good to see what this gains us in a PR“.
+- Branch `opalg-commute-v2` auf origin/master `3bfc7af8`, ein Commit **`559bd061`**; `opalg-commute` (`10fb29af`) bleibt
+  als Backup.
+- Neue Datei `Physlib/Mathematics/ForMathlib/ContinuousLinearMap/Commute.lean` (61 Zeilen inkl. Header/Moduldocstring):
+  `ContinuousLinearMap.comp_left_comm_of_commute` (`Commute A B → A ∘L (B ∘L C) = B ∘L (A ∘L C)`) und
+  `ContinuousLinearMap.comp_right_comm_of_commute` (`Commute B C → (A ∘L B) ∘L C = (A ∘L C) ∘L B`) für `M →L[R] M`.
+  Voraussetzungen `[Semiring R] [TopologicalSpace M] [AddCommMonoid M] [Module R M]` = die von
+  `ContinuousLinearMap.mul_def`; damit ist `M →L[R] M` ein Monoid und `Commute.left_comm`/`right_comm` (brauchen nur
+  `Semigroup`) greifen (per `#check`/`#synth` geprüft). Import nur Mathlib (`forMathlib_lint` OK).
+- Brückenlemma `commute_of_commutation_eq_zero` **weggelassen**: Die bestehenden K1-Lemmata (`position_comp_commute i j :
+  𝐱 i ∘L 𝐱 j = 𝐱 j ∘L 𝐱 i` usw.) sind definitional schon `Commute (𝐱 i) (𝐱 j)` und werden direkt als Argument
+  angenommen, auch mit Platzhaltern in `rw`/`simp_rw`/`simp` (geprüft). Wo nur `⁅A,B⁆ = 0` vorliegt, reicht
+  `commute_iff_lie_eq.mpr`.
+- Import der neuen Datei in `LaplaceRungeLenzVector.lean` (dem einzigen Verwender), nicht in `Commutation.lean`.
+
+### Gewinn je Stelle (Zeilen des Beweisschritts vorher → nachher)
+
+| Stelle (master `3bfc7af8`) | Klasse | vorher | nachher | Befund |
+|---|---|---|---|---|
+| K1-Lemmata (7×, Commutation.lean:104/112/134/143, AngularMomentum.lean:322/329/354) | K1 | 1 | 1 | `(commute_iff_lie_eq.mpr …).eq` ebenfalls 1 Zeile, passt nicht auf die Aussagezeile; **unverändert** |
+| LRL:450–451 `sum_LppL`, Sortieren der `𝐩` | K2 | 2 | **1** | `simp [comp_left_comm_of_commute (momentum_comp_commute _ _), momentum_comp_commute]` ersetzt 4 gezielte Umschreibungen inkl. `← comp_assoc (𝐩 _)` und `sub_sub_sub_cancel_right`; **übernommen** |
+| LRL:234–237 `hA` | K2 | 4 | 4 | `comp_left_comm_of_commute` statt `← comp_assoc … comp_assoc` und `← comp_assoc (𝐱 _) (𝐱 _) _` kompiliert, Inhalt ≈ 313 Zeichen passt nicht in 3 Zeilen; `simp`-Form scheitert; **unverändert** |
+| LRL:509–510 `sum_rxrx` | K2 | 2 | 2 | kompiliert (eine `comp_finsetSum`/`comp_assoc`-Runde weniger), aber nicht kürzer; **unverändert** |
+| AngularMomentum.lean:319–320 | K2 | 2 | 2 | kompiliert ohne `comp_neg`, `← comp_assoc`; nicht kürzer; **unverändert** |
+| LRL:456–457 `sum_LppL` (Schluss) | K2 | 2 | – | `simp`-Form mit `(momentumSqr_comp_angularMomentum_commute _ _).symm` scheitert; **unverändert** |
+| LRL:435, 428 (`sum_ppL`, `sum_pLp`), 461, 478 f., 487, 445 | K2 | je 1–2 | – | `← comp_assoc` dient dort nur der Klammerung bzw. der Satz ist schon 1 Zeile; nicht versucht/kein Gewinn möglich |
+
+### Gesamtbilanz
+- Beweise: −1 Zeile (eine Stelle, LRL:450 f.).
+- Neu: +61 Zeilen (Datei), +1 Import in `Physlib.lean`, +1 Import in LRL.
+- Netto **+62 Zeilen**. Auf master ersetzt das Werkzeug also kaum etwas: Die meisten `← comp_assoc` dienen der Klammerung,
+  die Umordnungen stecken in langen `simp_rw`-Ketten, in denen der längere Lemmaname die gesparten Schritte auffrisst.
+- Der eigentliche Nutzen liegt in #1932: `hxp`/`hr` (je 4 Zeilen) werden zu je einem Term bzw. entfallen (Probe 26.10.,
+  §4), und in den Stellen gewinnt man Lesbarkeit (keine gezielte Klammerung `comp_assoc (𝐱 _) (𝐱 _) _` mehr), nicht Zeilen.
+- Prüfung: check_pr.sh (`REVIEW_opalg-v2.txt`, jetzt mit `build_roots`) 11/11 OK, `ci_physlib.sh`
+  (`REVIEW_opalg-v2-physlib.txt`) 11/11 OK, sorry 0.

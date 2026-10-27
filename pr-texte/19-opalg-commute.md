@@ -1,41 +1,44 @@
-# feat(QuantumMechanics): Commute from a vanishing commutator, reordering of commuting operators
+# 19 opalg-commute (v2): Inhaltsvorlage
 
-Branch: `opalg-commute` · Base: master · Depends on: nothing open · Library: **Physlib** (not Alpha)
+Nur Inhaltsvorlage für Daniel (deutsche Stichpunkte); die PR-Beschreibung schreibt Daniel selbst auf Englisch
+(Regel `00-Plan.md`, „Kommunikation“). Vorgängerfassung (englischer Entwurf zu `opalg-commute`, `10fb29af`) in der
+Git-Historie dieser Datei.
 
-This PR is a small first step towards the operator algebra automation asked for in the review of #1932. There, two local `have`s (`hxp`, `hr`) state `A ∘ (B ∘ C) = B ∘ (A ∘ C)` when `⁅A, B⁆ = 0`. Such reorderings are proved throughout the operator files by chains of `← comp_assoc`, `comp_eq_comp_add_commute`, the commutator lemma and `add_zero`.
+Branch: `opalg-commute-v2` (`559bd061`) · Basis: master `3bfc7af8` · hängt von nichts Offenem ab · Bibliothek: Physlib
+(`Mathematics/ForMathlib`)
 
-The commutator `⁅A, B⁆` on `𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)` is Mathlib's ring bracket (`Ring.lie_def : ⁅x, y⁆ = x * y - y * x`), and `A * B = A ∘L B` holds by `rfl` (`ContinuousLinearMap.mul_def`). Mathlib's `commute_iff_lie_eq` therefore applies directly, and `Commute.left_comm` / `Commute.right_comm` give the reorderings. They cannot be used with `rw` or `simp` on terms written with `∘L`, because `*` and `∘L` agree only up to definitional unfolding. This PR adds the bridge and the two reordering lemmas in `∘L` form.
+## Titelvorschlag (sinngemäß)
+feat(Mathematics): Umordnen kommutierender stetiger linearer Abbildungen in Kompositionen
 
-## Main results
+## Worum es geht
+- Antwort auf Josephs Frage im Zulip-Thread, was die Lemmata bringen: Der PR zeigt es an master selbst.
+- Nach Mathlib-Vorbild im Typ-Namensraum und allgemein für `M →L[R] M` statt nur für Operatoren auf Schwartz-Räumen.
+- Grund für die Lemmata: Auf `M →L[R] M` ist `f * g = f ∘L g` nur per `rfl` (`ContinuousLinearMap.mul_def`), daher
+  finden `rw`/`simp` mit `Commute.left_comm`/`right_comm` das Muster in `∘L`-Termen nicht. Die zwei Lemmata sind die
+  `∘L`-Fassung.
 
-- `commute_of_commutation_eq_zero`: `⁅A, B⁆ = 0 → Commute A B`.
-- `Commute.comp_left_comm`: if `A` and `B` commute, then `A ∘ (B ∘ C) = B ∘ (A ∘ C)`.
-- `Commute.comp_right_comm`: if `B` and `C` commute, then `(A ∘ B) ∘ C = (A ∘ C) ∘ B`.
+## Inhalt
+- `ContinuousLinearMap.comp_left_comm_of_commute`: aus `Commute A B` folgt `A ∘L (B ∘L C) = B ∘L (A ∘L C)`.
+- `ContinuousLinearMap.comp_right_comm_of_commute`: aus `Commute B C` folgt `(A ∘L B) ∘L C = (A ∘L C) ∘L B`.
+- Voraussetzungen wie bei `mul_def`: `[Semiring R] [TopologicalSpace M] [AddCommMonoid M] [Module R M]`.
+- Neue Datei `Physlib/Mathematics/ForMathlib/ContinuousLinearMap/Commute.lean`, importiert nur Mathlib, also
+  unmittelbar für Mathlib geeignet.
 
-With these, `hxp` from #1932 becomes `(commute_of_commutation_eq_zero (angularMomentum_commutation_positionDotMomentum a b)).comp_left_comm Z`, and the reordering can be passed to `rw` or `simp only` directly.
+## Gewinn (ehrlich, Zahlen aus `stand-opalg.md`)
+- Kein eigenes Brückenlemma nötig: Die vorhandenen `a_comp_b_commute`-Lemmata sind definitional schon `Commute a b` und
+  lassen sich direkt einsetzen, z. B. `comp_left_comm_of_commute (momentum_comp_commute _ _)`; sonst
+  `commute_iff_lie_eq.mpr`.
+- Auf master wird genau eine Stelle kürzer: `sum_LppL` in `LaplaceRungeLenzVector.lean`, Sortieren der Impulse,
+  2 Zeilen → 1 (`simp` mit den beiden Permutationslemmata statt vier gezielter Umschreibungen).
+- An drei weiteren Stellen funktioniert es auch (hA in `positionCompMomentumSqr_comm_radiusRegInvCompPosition_add`,
+  `sum_rxrx`, `angularMomentum_commutation_radiusRegPow`), wird aber nicht kürzer; unverändert gelassen.
+- Bilanz: +61 Zeilen neue Datei, +2 Importe, −1 Zeile Beweis.
+- Ehrliche Einordnung für den Text: Auf master ist der Gewinn klein; der Hauptnutzen ist Lesbarkeit (keine gezielte
+  Klammerung wie `← comp_assoc (𝐱 _) (𝐱 _) _`) und #1932 (`hxp`, `hr` werden zu je einem Term). Ggf. Joseph fragen, ob
+  das reicht oder ob der PR erst zusammen mit/nach #1932 sinnvoll ist.
 
-## Reviewer map
-
-1. `Physlib/QuantumMechanics/Operators/Commutation.lean` §A General: three lemmas after `comp_eq_comp_sub_commute`, each a one-line term proof from `commute_iff_lie_eq`, `Commute.left_comm` and `Commute.right_comm`. The overview in the module docstring mentions them.
-
-## Declarations
-
-### `Physlib/QuantumMechanics/Operators/Commutation.lean`
-
-| Declaration | Kind | Description |
-|---|---|---|
-| `commute_of_commutation_eq_zero` | lemma | Operators whose commutator vanishes commute, in the sense of `Commute`. |
-| `Commute.comp_left_comm` | lemma | `Commute A B → A ∘L (B ∘L C) = B ∘L (A ∘L C)`. |
-| `Commute.comp_right_comm` | lemma | `Commute B C → (A ∘L B) ∘L C = (A ∘L C) ∘L B`. |
-
-## Notes
-
-- No existing proof is changed. `hxp` and `hr` in `LaplaceRungeLenzVector.lean` are simplified in a follow-up commit after #1932 is merged.
-- Naming: the two reordering lemmas live in the `Commute` namespace so that dot notation `h.comp_left_comm` works, although they are stated only for operators on Schwartz maps. If `ContinuousLinearMap.comp_left_comm_of_commute` (or similar) is preferred, they can be renamed.
-- `commute_of_commutation_eq_zero` is `commute_iff_lie_eq.mpr`; it is added under a physlib name for discoverability, next to `comp_eq_comp_add_commute`. PhyslibAlpha has an analogous `commute_of_lie_eq_zero` for `Module.End` in `Sl2/BivariateBasis.lean`.
-- Not tagged `@[simp]`: as permutation lemmas they are meant as explicit `simp` arguments.
-
----
-*Draft for the human author. Check every line before posting (AI-POLICY.md §1.7). This PR touches files in `Physlib`, where review is stricter than in `PhyslibAlpha`.*
-
-AI use: Claude (Anthropic) wrote the Lean code and this description; I have checked both.
+## Hinweise für den Text
+- Nicht `@[simp]`: Permutationslemmata, gedacht als explizite `simp`-Argumente.
+- Alte Fassung (`opalg-commute`) hatte `Commute.comp_left_comm` im `Commute`-Namensraum nur für Schwartz-Operatoren und
+  ein Brückenlemma; beides entfällt.
+- KI-Offenlegung (AI-POLICY.md §1.7) in Daniels eigenen Worten; Physlib-Review ist strenger als PhyslibAlpha.
