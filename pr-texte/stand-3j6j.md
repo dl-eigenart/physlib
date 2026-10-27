@@ -469,3 +469,16 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
 - Berichte `~/physlib_ci/REVIEW_rb1962-<branch>.txt`. PR-Texte 12a („Base: master“, Builds on 10 und 09, unabhängig von 11)
   und 12b (Basis 12a, Builds on 10 und 09). Push wartet auf Daniels Freigabe (nach dem nächsten Merge eines offenen PRs).
   13, 14, rational-Branches nicht angefasst.
+
+## 12a und 12b auf master 3bfc7af8 (nach #1963/#1964), gepusht und eröffnet (2026-10-27)
+- Umsetzung per Skript (`rebase1964.sh`): `pr/coupling-schemes` **`38402a08`**, `pr/six-j` **`11094981`** (auf 38402a08);
+  Sicherungen `backup/coupling-schemes-pre-1964-rebase` (`6928283c`), `backup/six-j-pre-1964-rebase` (`2e739ee3`).
+- check_stack.sh (`REVIEW_rb1964-<branch>.txt`): zunächst je 9/10, `theorem_lint` FEHLER wegen veralteter `.olean`
+  (StandardModel/Basic, Dateiumzug #1968). Nach Löschen von `.lake/build/{lib/lean,ir}/Physlib/Particles/StandardModel`
+  und vollem `lake build Physlib QuantumInfo PhyslibAlpha` je **10/10 OK**, sorry 0; Gegenprobe master 3bfc7af8 theorem_lint grün.
+  Seitdem baut `check_pr.sh` vor `theorem_lint` die vollen Wurzeln (`build_roots`).
+- Push zum Fork mit `--force-with-lease` (gegen `62cb4a2a` bzw. `d9b8967f`); erster Versuch abgelehnt (Token ohne
+  `workflow`-Scope, `.github/workflows/build.yml` aus Upstream), nach Daniels „Sync fork“ (Fork-master 3bfc7af8) ok,
+  ls-remote bestätigt.
+- **Daniel hat eröffnet: 12a = #1970, 12b = #1971 (blocked-by-PR #1970).** Cron-Check fragt #1932, #1970, #1971 ab.
+- Zusage an Philippe (6j-PRs offen) siehe `00-Plan.md`: 12a/12b offen, 14 noch nicht.

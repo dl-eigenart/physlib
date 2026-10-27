@@ -60,10 +60,10 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | nach #1909 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
 | **offen: #1910** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
 | **offen: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
-| nach #1911 | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
-| nach 10 | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
-| nach 10 | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
-| nach 12a | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | 12a |
+| **gemergt: #1962** | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
+| **gemergt: #1964** | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
+| **offen: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
+| **offen: #1971** (blocked-by #1970) | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | 12a |
 | nach 11+12b | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | 11, 12b |
 | nach 11+12b | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 590 | 11, 12b |
 
