@@ -23,6 +23,9 @@ Umsetzung (Stand 26.10.):
   Ausgabe `<nr> <mergeable_state> <branch> <titel>`, Exit 2 bei dirty, Protokoll `~/physlib_ci/pr_mergeable.log`).
 - Umsetzen: `~/physlib_ci/scripts1911/move.sh <branch> <alte-basis> <neue-basis>` (cherry-pick, Importvereinigung über
   `resolve_imports.py`, streicht `Claude-Session:`), danach `check_stack.sh` (ruft `check_pr.sh`).
+- `check_pr.sh` (ab 27.10.): vor `theorem_lint` Schritt `build_roots` = `lake build Physlib QuantumInfo PhyslibAlpha`
+  (Fehler = FEHLER im Report). Anlass: nach #1968 sah `theorem_lint` veraltete `.olean` (StandardModel/Basic) und
+  meldete auf 12a/12b fälschlich FEHLER; mit vollem Build 10/10 OK.
 - Takt: Cron-Job der Claude-Sitzung (Minute 13 und 43). Nur sitzungsgebunden, erlischt mit der Sitzung bzw. nach 7 Tagen;
   in einer neuen Sitzung neu anlegen.
 
