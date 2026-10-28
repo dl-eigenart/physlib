@@ -501,3 +501,5 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   ls-remote bestätigt; kein workflow-Scope-Problem. Keine PRs eröffnet.
 - PR-Texte 13/14: Kopfzeile „Base: `pr/six-j` (#1971), stacked · blocked-by-PR #1971“, 11/12a/10 als gemergt. Nach dem
   Merge von 12b: `move.sh <branch> c47116d4 origin/master`, dann `-blocked-by-PR`.
+- **28.10.: Daniel hat 13 eröffnet: #1980** (`pr/wigner-eckart-cg` `ea6490bd`, blocked-by-PR #1971). 14 noch nicht eröffnet.
+  Cron-Check fragt #1932, #1971, #1980 ab.
