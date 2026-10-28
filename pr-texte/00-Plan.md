@@ -93,6 +93,8 @@ Danach die Pflichtlinter wie bei den früheren PRs (Skripte in `teil11-6j-wasser
 
 **Regel (Daniel, 26.10.2026, wörtlich):** "Lean-Community-Richtlinien (leanprover-community.github.io/community_guidelines.html): Please do not use an LLM when writing comments on github or Zulip. LLM-artige Nachrichten werden gelöscht, Sperre möglich. Ein Moderator hat Daniel am 26.10. auf Zulip darauf hingewiesen. Deshalb: Kommentare auf Zulip und GitHub schreibt Daniel selbst auf Englisch. Claude liefert dafür nur kurze ausformulierte Vorschläge auf DEUTSCH, die Daniel selbst ins Englische bringt; keine englischen Texte für Kommentare. PR-Beschreibungen: die Entwürfe in pr-texte/ sind nur Inhaltsvorlage, Daniel formuliert die Beschreibung selbst."
 
+**Label awaiting-author (Daniel, 28.10.):** Ein Reviewer setzt das Label per Kommentar `awaiting-author`; der Autor entfernt es nach der Umsetzung mit einem Kommentar `-awaiting-author` in eigener Zeile. Bei #1932 am 28.10. so geschehen: Label weg, gloges als Reviewer angefragt.
+
 
 **21.10., 20:45:** #1910 (08) und #1911 (09) offen. Stapel 10–14 auf das neue `pr/clebsch-gordan`
 (auf master `a945101`) umgesetzt, inkl. der neuen Symmetrie-Commits auf `pr/wigner-3j` und
