@@ -503,3 +503,7 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   Merge von 12b: `move.sh <branch> c47116d4 origin/master`, dann `-blocked-by-PR`.
 - **28.10.: Daniel hat 13 eröffnet: #1980** (`pr/wigner-eckart-cg` `ea6490bd`, blocked-by-PR #1971). 14 noch nicht eröffnet.
   Cron-Check fragt #1932, #1971, #1980 ab.
+- **28.10.: Daniel hat 14 eröffnet: #1981** (`pr/six-j-symmetry` `455ec989`, blocked-by-PR #1971). Offen: #1932, #1971,
+  #1980, #1981. **Auftrag nach dem Merge von #1971:** #1980 und #1981 per `move.sh <branch> c47116d4 origin/master`
+  umsetzen (vorher Sicherungen `backup/<branch>-pre-1971-rebase`), check_pr.sh + ci_physlib.sh, Daniel vorlegen;
+  **Push nur nach seinem Ja.**
