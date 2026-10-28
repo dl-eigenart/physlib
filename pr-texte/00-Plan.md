@@ -62,10 +62,10 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **offen: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
 | **gemergt: #1962** | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
 | **gemergt: #1964** | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
-| **offen: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
-| **offen: #1971** (blocked-by #1970) | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | 12a |
-| nach 11+12b | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | 11, 12b |
-| nach 11+12b | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 590 | 11, 12b |
+| **gemergt: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
+| **offen: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
+| gestapelt auf 12b | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | 12b (#1971) |
+| gestapelt auf 12b | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | 12b (#1971) |
 
 
 Wichtig: 01 und 02 hängen **nicht** an #1876 und können sofort eingereicht werden. Damit laufen

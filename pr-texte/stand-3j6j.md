@@ -482,3 +482,22 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   ls-remote bestätigt.
 - **Daniel hat eröffnet: 12a = #1970, 12b = #1971 (blocked-by-PR #1970).** Cron-Check fragt #1932, #1970, #1971 ab.
 - Zusage an Philippe (6j-PRs offen) siehe `00-Plan.md`: 12a/12b offen, 14 noch nicht.
+
+## Nach dem Merge von 12a (2026-10-28): 12b auf master, 13/14 gestapelt auf 12b, gepusht
+- 12a gemergt (Squash `183c8a6c`); origin/master `848dca44`; `CouplingSchemes.lean` auf master byte-gleich mit 38402a08.
+- 12b: Sicherung `backup/six-j-pre-1970-rebase` (`11094981`), `move.sh pr/six-j 38402a08 origin/master` → **`c47116d4`**
+  (nur der 12b-Commit, `SixJ.lean` byteidentisch, Blob `c099e723`). check_pr.sh (`REVIEW_rb1970-six-j.txt`, mit `build_roots`)
+  11/11, ci_physlib.sh 11/11, sorry 0. **Gepusht** mit `--force-with-lease` gegen `11094981`.
+- 13/14 lagen noch auf dem alten Stapel (10, 11 ×3, 12a, 12b alt `e53501b7`) auf master `9b583cb6`; alle mitgeschleppten
+  Lean-Dateien waren schon byte-gleich mit master bzw. neuem 12b. Sicherungen `backup/wigner-eckart-cg-pre-1970-rebase`
+  (`059c243a`), `backup/six-j-symmetry-pre-1970-rebase` (`43799477`); `move.sh <branch> e53501b7 pr/six-j`:
+
+| PR | Branch | vorher | neu | Lean-Datei | Prüfung |
+|---|---|---|---|---|---|
+| 13 | `pr/wigner-eckart-cg` | `059c243a` | **`ea6490bd`** (1 Commit auf c47116d4) | `WignerEckartNormalized.lean` byteidentisch (`bf2f1e98`), +221 | 11/11 + 11/11, sorry 0 |
+| 14 | `pr/six-j-symmetry` | `43799477` | **`455ec989`** (2 Commits auf c47116d4) | `SixJSymmetry.lean` byteidentisch (`9d0f2d73`), +697 | 11/11 + 11/11, sorry 0 |
+
+- Berichte `~/physlib_ci/REVIEW_rb1970-<branch>.txt` und `…-physlib.txt`. **Gepusht** mit Lease gegen 059c243a/43799477,
+  ls-remote bestätigt; kein workflow-Scope-Problem. Keine PRs eröffnet.
+- PR-Texte 13/14: Kopfzeile „Base: `pr/six-j` (#1971), stacked · blocked-by-PR #1971“, 11/12a/10 als gemergt. Nach dem
+  Merge von 12b: `move.sh <branch> c47116d4 origin/master`, dann `-blocked-by-PR`.
