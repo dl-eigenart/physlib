@@ -68,7 +68,7 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **gemergt: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
 | **gemergt: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
 | **offen: #1980** (auf master, -blocked-by-PR) | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
-| **offen: #1981** (auf master, -blocked-by-PR) | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
+| **gemergt: #1981** | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
 | **offen: #1990** | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | nichts |
 
 
