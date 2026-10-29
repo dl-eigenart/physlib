@@ -521,3 +521,6 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
 
 - Berichte `REVIEW_rb1971b-<branch>.txt` / `…-physlib.txt`. **Push wartet auf Daniels Ja** (Lease ea6490bd / 455ec989;
   ggf. workflow-Scope → Sync fork). Danach `-blocked-by-PR` (Daniel).
+- **29.10.: gepusht** (Daniels Ja): `pr/wigner-eckart-cg` `ea6490bd` → **`2fd27deb`**, `pr/six-j-symmetry` `455ec989` →
+  **`0828d673`** (Lease, ls-remote bestätigt, kein workflow-Problem). Daniel hat bei #1980/#1981 `-blocked-by-PR`
+  kommentiert (Label weg). Offen: #1980, #1981, #1990.
