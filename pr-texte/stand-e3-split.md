@@ -1,7 +1,7 @@
 # E3 aufteilen (2026-10-26)
 
 Auftrag Daniel 26.10.: `hydrogen-bound-states-split` (5 Dateien, 2151 Zeilen) in Teil-PRs von etwa 300–600 Zeilen, als Stapel.
-Reihenfolge laut `00-Plan.md`: E2- und E3-PRs erst nach 12a/12b eröffnen. Nichts gepusht. **27.10.: 12a/12b eröffnet (#1970, #1971), Bedingung erfüllt.**
+Reihenfolge laut `00-Plan.md`: E2- und E3-PRs erst nach 12a/12b eröffnen. Nichts gepusht. **27.10.: 12a/12b eröffnet (#1970, #1971), Bedingung erfüllt.** **29.10.: neue Bedingung (Daniel): erst nach dem Merge von #1980, #1981 und #1990 eröffnen.**
 
 ## Abhängigkeiten der Dateien (aus den Importen)
 

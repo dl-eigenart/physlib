@@ -35,6 +35,9 @@ E3 in vier Teilen an Dateigrenzen (20a–20d); Teil 4 (`BoundStatesAdjoint.lean`
 (Daniel, 26.10., Variante 3: #1910/#1911 in ähnlicher Größe gemergt, kein Eingriff in geprüften Code); Rückfall bei
 Reviewer-Wunsch: Variante 1 (§A+§B / §C+§D).
 
+**Reihenfolge, neu (Daniel, 29.10.):** E2 und der E3-Stapel werden erst eröffnet, wenn **#1980, #1981 und #1990 alle
+gemergt** sind (ersetzt die Bedingung „nach 12a/12b“ oben).
+
 ## Abhängigkeiten
 
 ```
