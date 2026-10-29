@@ -63,9 +63,9 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **gemergt: #1962** | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
 | **gemergt: #1964** | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
 | **gemergt: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
-| **offen: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
-| **offen: #1980** (blocked-by #1971) | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | 12b (#1971) |
-| **offen: #1981** (blocked-by #1971) | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | 12b (#1971) |
+| **gemergt: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
+| **offen: #1980** (umgesetzt auf master, Push wartet) | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
+| **offen: #1981** (umgesetzt auf master, Push wartet) | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
 
 
 Wichtig: 01 und 02 hängen **nicht** an #1876 und können sofort eingereicht werden. Damit laufen
@@ -116,7 +116,7 @@ lokal auf origin/master `c78d49e5` umgesetzt, geprüft, nicht gepusht (Hashes in
 
 - **gemergt: #1930** Dichter Definitionsbereich des Wasserstoff-Hamiltonians (`hydrogen-dense-domain`, Text 17).
   Danach: Alpha-Stapel `hydrogen-bound-states-split` auf master rebasen (Cherry-Pick der Dichtheit faellt weg).
-- **offen: #1932** L·A = 0 (`lrl-angular-cyclic`, Text 16).
+- **gemergt: #1932** (29.10., `49cf162e`) L·A = 0 (`lrl-angular-cyclic`, Text 16).
 - **offen: #1933** (Alpha) Paulis Herleitung (`hydrogen-pauli`, Text 15).
 - In Arbeit (agents-pc): E4 Vollständigkeit der radialen Lösungen (`hydrogen-radial-completeness`).
 

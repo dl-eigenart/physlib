@@ -507,3 +507,17 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   #1980, #1981. **Auftrag nach dem Merge von #1971:** #1980 und #1981 per `move.sh <branch> c47116d4 origin/master`
   umsetzen (vorher Sicherungen `backup/<branch>-pre-1971-rebase`), check_pr.sh + ci_physlib.sh, Daniel vorlegen;
   **Push nur nach seinem Ja.**
+
+## Nach dem Merge von 12b (2026-10-29): 13/14 auf master, nicht gepusht
+- #1971 gemergt 29.10. 05:19 UTC (Squash `02053e52`, `SixJ.lean` = c47116d4); #1932 gemergt 01:42 UTC (`49cf162e`).
+  origin/master beim Umsetzen **`2fd010eb`** (danach noch #1943, #1973).
+- Sicherungen `backup/wigner-eckart-cg-pre-1971-rebase` (`ea6490bd`), `backup/six-j-symmetry-pre-1971-rebase` (`455ec989`).
+  `move.sh <branch> c47116d4 origin/master` (06:43, auf `02053e52`), dann `move.sh <branch> 02053e52 origin/master` (09:35):
+
+| PR | Branch | Fork | neu (lokal) | Lean-Datei | Prüfung |
+|---|---|---|---|---|---|
+| #1980 (13) | `pr/wigner-eckart-cg` | `ea6490bd` | **`2fd27deb`** (1 Commit) | `WignerEckartNormalized.lean` byteidentisch, +221 | 11/11 + 11/11, sorry 0 |
+| #1981 (14) | `pr/six-j-symmetry` | `455ec989` | **`0828d673`** (2 Commits) | `SixJSymmetry.lean` byteidentisch, +697 | 11/11 + 11/11, sorry 0 |
+
+- Berichte `REVIEW_rb1971b-<branch>.txt` / `…-physlib.txt`. **Push wartet auf Daniels Ja** (Lease ea6490bd / 455ec989;
+  ggf. workflow-Scope → Sync fork). Danach `-blocked-by-PR` (Daniel).

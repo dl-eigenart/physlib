@@ -302,3 +302,22 @@ useDefaultSimpSet := false })`. Ergebnisse (alle ≈ 2 s für die ganze Datei):
   Leiter und Radius; `aesop_op` als Hülle erst, wenn der Abschluss (`module`) an den echten Zielen zuverlässig greift.
   Als Rückmeldung an gloges (Daniel formuliert selbst): Probe zeigt, dass die Arbeit in der simp-Normphase steckt; aesop
   bringt nur den Abschluss; Vorbild `commutes` in QuantumInfo existiert bereits.
+
+## v2 nach dem Merge von #1932 (2026-10-29), lokal, nicht gepusht
+- Sicherung `backup/opalg-commute-v2-pre-1932` (`559bd061`); `move.sh opalg-commute-v2 3bfc7af8 origin/master` →
+  `7d8a8499` (auf master `2fd010eb`, `Commute.lean` byteidentisch); zweiter Commit **`1f2c2d20`**
+  „refactor(QuantumMechanics): reorder commuting operators in angularMomentum_cyclic_lrl“.
+- In `angularMomentum_cyclic_lrl` (LRL, jetzt auf master): die Hilfsaussagen `hxp`, `hr` entfallen; die Umordnung steht in der
+  `simp only`-Liste als `comp_left_comm_of_commute (commute_iff_lie_eq.mpr (angularMomentum_commutation_positionDotMomentum _ _))`
+  und `comp_left_comm_of_commute (angularMomentum_comp_radiusRegPow_commute _ _ _ _)`. Aussage unverändert.
+  (Für `𝐋`/`𝐱 ⬝ᵥ 𝐩` gibt es kein K1-Lemma `a_comp_b_commute`, daher dort `commute_iff_lie_eq.mpr`.)
+
+| Stelle | vorher | nachher | Befund |
+|---|---|---|---|
+| LRL `angularMomentum_cyclic_lrl`: `have hxp` (4) + `have hr` (3) + `simp only` (2) | 9 | **4** | haves inline ersetzt; keine gezielte Klammerung `← comp_assoc, ← comp_assoc` mehr |
+
+### Neue Gesamtbilanz (`opalg-commute-v2`, 2 Commits auf master `2fd010eb`)
+- Beweise: −1 (LRL `sum_LppL`) −5 (`angularMomentum_cyclic_lrl`) = **−6 Zeilen**.
+- Neu: +61 (Datei `Commute.lean`) +1 Import `Physlib.lean` +1 Import LRL = +63.
+- Netto **+57 Zeilen** (`git diff --stat origin/master opalg-commute-v2`: 3 Dateien, +68 −11).
+- Prüfung: check_pr.sh (`REVIEW_opalg-v2b.txt`) 11/11, ci_physlib.sh 11/11, sorry 0. Kein Push, kein PR.
