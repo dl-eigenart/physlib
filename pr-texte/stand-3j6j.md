@@ -526,3 +526,5 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   kommentiert (Label weg). Offen: #1980, #1981, #1990.
 - **29.10.: #1981 (14) gemergt** 14:34 UTC (Squash `2725b6f6`). Offen: #1980 (13), #1990 (opalg). E2/E3 erst nach dem
   Merge von #1980 und #1990 (Regel 29.10., `00-Plan.md`).
+- **30.10.: #1980 (13) gemergt** 05:45 UTC (Squash `06e0b6c9`). Damit ist der sl2-/Drehimpuls-Stapel 01–14 komplett auf
+  master (Wellen-Tabelle in `00-Plan.md` per GitHub-API abgeglichen). Offen nur noch #1990.

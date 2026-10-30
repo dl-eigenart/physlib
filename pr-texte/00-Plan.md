@@ -57,19 +57,23 @@ master ─┬─ 01 spin-orbit ──────────────┐
 |---|---|---|---|---|
 | **gemergt: #1899** | 01 spin-orbit coupling | `pr/spin-orbit` | 189 | nichts |
 | **gemergt: #1900** | 02 generalised Laguerre polynomials | `pr/laguerre` | 383 | nichts |
-| **offen: #1909** | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
-| nach #1909 | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
-| nach #1909 | 05 bound states of the d-dimensional hydrogen atom | `pr/hydrogen-bound-states` | 329 | 03 |
-| nach #1909 | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
-| **offen: #1910** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
-| **offen: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
+| **gemergt: #1909** | 03 radial functions of the hydrogen atom | `pr/hydrogen-radial` | 379 | 02 |
+| **gemergt: #1947** | 04 quantisation of the hydrogen levels | `pr/hydrogen-quantisation` | 614 | 03 |
+| **gemergt: #1948** | 05 bound states of the d-dimensional hydrogen atom | `pr/hydrogen-bound-states` | 329 | 03 |
+| **gemergt: #1949** | 06 fine structure of hydrogen | `pr/fine-structure` | 193 | 01, 03 |
+| **gemergt: #1910** | 08 projection theorem, selection rules, irreducible WE | `pr/projection-selection` | 742 | #1876 |
+| **gemergt: #1911** | 09 normalised basis and Clebsch-Gordan coefficients | `pr/clebsch-gordan` | 792 | #1876 |
 | **gemergt: #1962** | 10 closed formulas for Clebsch-Gordan coefficients | `pr/clebsch-gordan-formula` | 616 | 09 |
 | **gemergt: #1964** | 11 Wigner 3j symbols and the multipole sum rule | `pr/wigner-3j` | 583 | 10 |
 | **gemergt: #1970** | 12a the two coupling schemes of three angular momenta | `pr/coupling-schemes` | 507 | 10 |
 | **gemergt: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
-| **offen: #1980** (auf master, -blocked-by-PR) | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
+| **gemergt: #1980** | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
 | **gemergt: #1981** | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
 | **offen: #1990** | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | nichts |
+
+**30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
+05 #1948, 06 #1949, 08 #1910, 09 #1911, 10 #1962, 11 #1964, 12a #1970, 12b #1971, 13 #1980 (30.10., `06e0b6c9`),
+14 #1981). Offen nur noch #1990 (opalg). Danach E2/E3 (Regel 29.10.).
 
 
 Wichtig: 01 und 02 hängen **nicht** an #1876 und können sofort eingereicht werden. Damit laufen
