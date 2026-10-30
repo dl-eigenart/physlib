@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): Green's identity and regularised radial functions
 
-Branch: `hydrogen-e3-3` (1 commit, 296 + 1 lines) · Base: master after merge of `hydrogen-e3-2` · Depends on: `hydrogen-e3-2` (20b; uses only `PolyBounded.lean` from it) · Library: PhyslibAlpha
+Branch: `hydrogen-e3-3` (1 commit, 296 + 1 lines) · Base: `hydrogen-e3-2` (#1997), stacked · Depends on: #1997 (`hydrogen-e3-2`, 20b; uses only `PolyBounded.lean` from it) · Library: PhyslibAlpha
+
+blocked-by-PR #1997
 
 Third of four stacked PRs (20a–20d).
 

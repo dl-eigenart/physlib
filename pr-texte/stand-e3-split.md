@@ -121,3 +121,5 @@ Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr
 - **30.10.: Daniel hat eröffnet:** **#1995** = E2 `hydrogen-pauli-degeneracy` (`7ad5343b`, Label medium), **#1996** = E3-1
   `hydrogen-e3-1` (`0791ce3d`, Label large). Vorlage 20b: Basis `hydrogen-e3-1` (#1996), `blocked-by-PR #1996` eingesetzt.
   20b–20d noch nicht eröffnet. Cron-Check fragt #1995 und #1996 ab.
+- **30.10.: Daniel hat 20b eröffnet: #1997** (`hydrogen-e3-2` `5513ad57`, blocked-by #1996). Vorlage 20c: Basis `hydrogen-e3-2`
+  (#1997), `blocked-by-PR #1997` eingesetzt. Cron-Check fragt #1995, #1996, #1997 ab.
