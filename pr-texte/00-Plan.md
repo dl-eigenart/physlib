@@ -38,7 +38,9 @@ Reviewer-Wunsch: Variante 1 (§A+§B / §C+§D).
 **Reihenfolge, neu (Daniel, 29.10.):** E2 und der E3-Stapel werden erst eröffnet, wenn **#1980, #1981 und #1990 alle
 gemergt** sind (ersetzt die Bedingung „nach 12a/12b“ oben).
 **30.10. (Daniel): Bedingung erfüllt** (#1980, #1981 gemergt; #1990 geschlossen statt gemergt). E2 und E3 am 30.10. auf
-master `a62866f3` umgesetzt, geprüft, **nicht gepusht** (Tabelle in `stand-e3-split.md`).
+master `a62866f3` umgesetzt und geprüft (Tabelle in `stand-e3-split.md`); **30.10. auf den Fork gepusht** (Daniels Ja):
+`hydrogen-pauli-degeneracy` `e5da5ba6` → `7ad5343b` (Lease), neu `hydrogen-e3-1` `0791ce3d`, `-2` `5513ad57`, `-3` `f777b804`,
+`-4` `57b4272a`; ls-remote bestätigt, kein workflow-Problem. PRs eröffnet Daniel.
 
 ## Abhängigkeiten
 

@@ -99,7 +99,7 @@ Dateilisten alt/neu gleich; Unterschied nur die neuen Importzeilen in `PhyslibAl
 | `hydrogen-e3-4` (20d) | `3b8da2b9` | **`57b4272a`** | e3-3 `f777b804` | +742 (2 Dateien) | 11/11 | 11/11 | 0 | ja |
 
 Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr.sh mit `build_roots`). Push wartet auf Daniel.
-Fork: `hydrogen-pauli-degeneracy` = `e5da5ba6` (Lease); `hydrogen-e3-1`…`-4` noch nicht auf dem Fork.
+**30.10. gepusht** (Daniels Ja): Fork `hydrogen-pauli-degeneracy` = `7ad5343b` (Lease gegen `e5da5ba6`), `hydrogen-e3-1`…`-4` = `0791ce3d`, `5513ad57`, `f777b804`, `57b4272a` (neu); ls-remote bestätigt.
 
 ### Prüfstellen in den PR-Vorlagen 21, 20a–20d (Daniel entscheidet)
 - Zeilenzahlen stimmen mit den neuen Branches überein (21: +131/−9; 20a 547+1; 20b 307+255+2; 20c 296+1; 20d 741+1).
