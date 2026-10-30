@@ -110,6 +110,11 @@ Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr
 - 20a/`Degeneracy.lean` zitiert Axler–Bourdon–Ramey, *Harmonic Function Theory*, doi:10.1007/978-1-4757-8137-3_5:
   CrossRef (30.10.) bestätigt Kapiteltitel „Harmonic Polynomials“, Autoren, Springer, 2001, Reihe GTM; **nicht** aus CrossRef
   belegt: „2nd ed.“, „GTM 137“, „chapter 5“ → vor dem PR an der Quelle prüfen (CLAUDE.md, Zitierregel).
+  **Erledigt 30.10. (Cowork):** Quellen in `~/physlib_ci/literatur/`. `Axler_HFT.pdf` (axler.net/HFT.pdf; Titelseite: Second
+  Edition, ©2001 Springer) bestätigt Chapter 5 „Harmonic Polynomials“ (S. 73) und Proposition 5.8,
+  dim Hₘ(ℝⁿ) = C(n+m−1, n−1) − C(n+m−3, n−1) für m ≥ 2, passend zur Formel in `Degeneracy.lean`;
+  `openlibrary_0387952187.json` (LoC-MARC): 2nd ed., Graduate Texts in Mathematics 137, Springer, New York 2001;
+  `crossref_book.json`: Reihe GTM, 2001. Zitat in 20a/`Degeneracy.lean` damit vollständig belegt, **keine Änderung nötig**.
 - Alle fünf Vorlagen sind noch englische Volltexte mit KI-Offenlegungszeile – laut Regel 26.10. nur Inhaltsvorlage; Daniel
   formuliert Beschreibung und Offenlegung selbst.
 - Reihenfolge/Eröffnung: E2 unabhängig; E3 als Stapel 20a→20d (20c braucht von 20b nur `PolyBounded.lean`).
