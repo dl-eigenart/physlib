@@ -355,3 +355,7 @@ Befunde:
 - **Eigener Branch nur mit der Beweisänderung V2a sinnvoll:** ja – kleiner Physlib-PR (`angularMomentum_cyclic_lrl`, −5 Zeilen,
   keine neue API), beantwortet gloges' Einwand direkt; #1990 dann schließen oder auf diesen Commit reduzieren (Daniel/Zulip).
   Nicht angelegt.
+- **30.10.: #1990 geschlossen, nicht gemergt** (Daniel, nach Review gloges; Begründung auf GitHub und Zulip). Plan:
+  (i) optional kleiner Beweis-PR nur für `angularMomentum_cyclic_lrl` ohne neue Lemmata (V2a oben, −5 Zeilen, auf master
+  `a62866f3` gebaut; Branch noch nicht angelegt); (ii) eigentlicher Schritt `op_norm`/Taktik (Stufe c) erst nach Rückmeldung
+  von gloges. Fork-Branch `opalg-commute-v2` (`1f2c2d20`) und lokale Sicherungen bleiben vorerst stehen.

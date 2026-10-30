@@ -69,11 +69,17 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **gemergt: #1971** | 12b recoupling coefficients and 6j symbols | `pr/six-j` | 447 | nichts (12a gemergt) |
 | **gemergt: #1980** | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
 | **gemergt: #1981** | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
-| **offen: #1990** | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | nichts |
+| **geschlossen: #1990** (nicht gemergt, 30.10.) | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | – |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
 05 #1948, 06 #1949, 08 #1910, 09 #1911, 10 #1962, 11 #1964, 12a #1970, 12b #1971, 13 #1980 (30.10., `06e0b6c9`),
 14 #1981). Offen nur noch #1990 (opalg). Danach E2/E3 (Regel 29.10.).
+
+**30.10.: #1990 geschlossen, nicht gemergt** (Review gloges: Spezialfälle von Mathlibs `Commute.left_comm`/`right_comm`,
+keine Dopplung). Daniel hat auf GitHub und Zulip begründet. Plan: optional kleiner Beweis-PR für `angularMomentum_cyclic_lrl`
+ohne neue Lemmata (Variante V2a, −5 Zeilen, `stand-opalg.md`); eigentlicher Schritt `op_norm`/Taktik (Stufe c) erst nach
+Rückmeldung von gloges. **Offen: keine PRs.** Offene Frage an Daniel: Die Bedingung für E2/E3 (Regel 29.10.) nennt #1990 als
+„gemergt“; gilt sie mit dem Schließen als erfüllt?
 
 
 Wichtig: 01 und 02 hängen **nicht** an #1876 und können sofort eingereicht werden. Damit laufen
