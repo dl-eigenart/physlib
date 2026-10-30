@@ -323,3 +323,35 @@ useDefaultSimpSet := false })`. Ergebnisse (alle ≈ 2 s für die ganze Datei):
 - Prüfung: check_pr.sh (`REVIEW_opalg-v2b.txt`) 11/11, ci_physlib.sh 11/11, sorry 0. Kein Push, kein PR.
 - **29.10.: gepusht** (Daniels Ja) als neuer Fork-Branch `opalg-commute-v2` **`1f2c2d20`**; Daniel hat **#1990** eröffnet.
   Inhaltsvorlage `19-opalg-commute.md` (Stand v2 ohne hxp/hr-Commit; Bilanz jetzt −6 Beweiszeilen, netto +57).
+
+## Review gloges zu #1990 (29./30.10.): nur Prüfung, nichts gepusht, kein Kommentar
+Einwand gloges: „As the proofs immediately show, these are special cases of theorems already in Mathlib for any Semigroup. I
+don't think we should be duplicating results like this.“ Er will auf Zulip einen Plan besprechen.
+
+Probe auf frischem origin/master **`a62866f3`** (losgelöster Checkout in der Hauptkopie, ohne Commit, danach zurückgesetzt):
+ohne die Lemmata aus #1990, nur mit Mathlibs `Commute.left_comm` und `← ContinuousLinearMap.mul_def`.
+
+| Stelle | master | Variante ohne neue Lemmata | baut | #1990 |
+|---|---|---|---|---|
+| `angularMomentum_cyclic_lrl` (hxp 4 + hr 3 + simp 2) | 9 | **V2a: 4** – haves weg; `simp only [H.lrlOperator_eq, comp_sub, comp_add, add_comp, comp_smul, comp_assoc]` und danach `simp only [← mul_def, (commute_iff_lie_eq.mpr (angularMomentum_commutation_positionDotMomentum _ _)).left_comm, Commute.left_comm (angularMomentum_comp_radiusRegPow_commute _ _ _ _)]`, `module` schließt auch in `*`-Form | **ja** | 4 |
+| dto. | 9 | V1: 8 – haves bleiben, Term-Beweise `(commute_iff_lie_eq.mpr …).left_comm Z` bzw. `Commute.left_comm (angularMomentum_comp_radiusRegPow_commute a b ε (-1)) Z` | ja | – |
+| dto. | 9 | V2b: Lambdas mit Typzuschreibung in `∘L`-Form als simp-Argumente | **nein** (simp nutzt sie nicht) | – |
+| `sum_LppL` (Sortieren der `𝐩`) | 2 | L1: `simp [← mul_def, Commute.left_comm (momentum_comp_commute _ _), Commute.eq (momentum_comp_commute _ _)]` | ja | 1 |
+| dto. | 2 | L3: wie L1 als `simp only […, sub_sub_sub_cancel_right]` | ja | 1 |
+| dto. | 2 | L2: `simp [← mul_def, Commute.left_comm (…), momentum_comp_commute]` | nein (`∘L`-Lemma greift nach `← mul_def` nicht mehr) | – |
+
+Befunde:
+- Die `∘L`-Fassung ist nicht nötig, wenn die Umordnung der **letzte** Schritt vor dem Abschluss ist: erst in `∘L` verteilen,
+  dann `← mul_def` und `Commute.left_comm` (Mathlib), `module`/`simp` schließen in `*`-Form. K1-Lemmata (`a_comp_b_commute`,
+  Gleichung in `∘L`) sind definitional `Commute` und gehen als Argument von `Commute.left_comm (…)`, nicht per Punktnotation
+  und nicht per Typzuschreibung `(… : Commute _ _).left_comm`.
+- Grenze: Nach `← mul_def` greifen keine `∘L`-Lemmata mehr (L2); Stellen mit Umordnung **mitten** in einer Kette brauchen
+  entweder die `∘L`-Fassung oder eine `*`-Fassung aller Folgeregeln.
+- **Reichweite auf master (grob):** dieselben Fundstellen wie in v2: `← comp_assoc` 19× in LRL, 2× in AngularMomentum, K1-Lemmata
+  als Argument 11× LRL, 3× AngularMomentum, 1× Commutation; echte Umordnungen (K2) davon ≈ 7–8 Stellen. Messbar kürzer wird es
+  (wie bei #1990) nur bei `angularMomentum_cyclic_lrl` (−5); `sum_LppL` bleibt ohne neues Lemma bei 2 Zeilen (mit #1990: 1);
+  `hA`, `sum_rxrx`, AngularMomentum:319 f. waren schon mit den #1990-Lemmata nicht kürzer.
+- **Bilanz ohne neue Lemmata:** −5 Zeilen Beweis, 0 neue Zeilen (statt netto +57 in #1990).
+- **Eigener Branch nur mit der Beweisänderung V2a sinnvoll:** ja – kleiner Physlib-PR (`angularMomentum_cyclic_lrl`, −5 Zeilen,
+  keine neue API), beantwortet gloges' Einwand direkt; #1990 dann schließen oder auf diesen Commit reduzieren (Daniel/Zulip).
+  Nicht angelegt.
