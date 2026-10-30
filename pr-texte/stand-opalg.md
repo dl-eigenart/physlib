@@ -359,3 +359,64 @@ Befunde:
   (i) optional kleiner Beweis-PR nur für `angularMomentum_cyclic_lrl` ohne neue Lemmata (V2a oben, −5 Zeilen, auf master
   `a62866f3` gebaut; Branch noch nicht angelegt); (ii) eigentlicher Schritt `op_norm`/Taktik (Stufe c) erst nach Rückmeldung
   von gloges. Fork-Branch `opalg-commute-v2` (`1f2c2d20`) und lokale Sicherungen bleiben vorerst stehen.
+
+## Stufe c – Plan 30.10.
+
+**Fazit: `op_norm` lohnt sich derzeit nicht.** An fünf typischen Kommutatorrechnungen auf master schaffen die vorhandenen
+Werkzeuge (`simp only` mit vorhandenen Lemmata, dann `module`) jedes Ziel. Ein eigenes simp-Set würde vor allem die
+`simp only`-Listen abkürzen (geschätzt −1 Zeile je Beweis) und hätte eigene Kosten. Die Normalisierung „x vor p“ war in
+keinem der Beispiele nötig. Die eigentliche Lücke liegt woanders (δ-Skalare, siehe unten), und die Bausteine, die eine Taktik
+bräuchte (Fassungen „im Kontext“), wären Einzeiler über vorhandene Lemmata, also nach der Regel vom 30.10. ein Warnsignal.
+Nebenbefund mit echtem Gewinn ohne neue Lemmata: `angularMomentum_commutation_angularMomentum` 10 → 5 Zeilen (T4c).
+
+### 1. Bestandsaufnahme (Fundstellen geprüft, Mathlib aus `.lake/packages`)
+| Werkzeug | Fundstelle | Befund |
+|---|---|---|
+| `noncomm_ring` | `Mathlib/Tactic/NoncommRing.lean` (Doc: „just a `simp only [some lemmas]` followed by `abel`“) | kennt keine Kommutatorrelationen; T1 scheitert |
+| Lie-simp-Lemmata | `Mathlib/Algebra/Lie/Basic.lean:144–227, 311–317`: `add_lie`, `lie_add`, `smul_lie`, `lie_smul`, `lie_zero`, `zero_lie`, `lie_self`, `lie_skew`, `neg_lie`, `lie_neg`, `sub_lie`, `lie_sub`, `nsmul_lie`, `lie_lie` (alle `@[simp]`), `sum_lie`, `lie_sum` | alle nutzbar; Mathlibs `leibniz_lie` (:117) ist die **Jacobi**-Form, physlibs `QuantumMechanics.leibniz_lie` die Produktregel (gleicher Name, anderer Inhalt) |
+| Produktregel `⁅a*b, c⁆` im assoziativen Ring | grep in `Mathlib/Algebra`, `RingTheory`: nicht gefunden (nur `LieRinehartAlgebra/Defs.lean:33` für Lie-Rinehart) | Lücke in Mathlib; physlib füllt sie mit `leibniz_lie`/`lie_leibniz` (Commutation.lean §A, nur für `∘L` auf Schwartz-Operatoren) |
+| `Ring.lie_def`, `commute_iff_lie_eq`, `Commute.lie_eq` | `Mathlib/Algebra/Ring/Commute.lean:253–260` | Brücke Kommutator ↔ `Commute` vorhanden |
+| `Commute`-API | `Commute.left_comm`/`right_comm` (`Group/Commute/Defs.lean`), `Commute.sum_right` (`BigOperators/Ring/Finset.lean:70`), `smul_right`, `neg_right` u. a. | vorhanden; mit `← mul_def` an `∘L`-Terme anwendbar (Probe zu #1990) |
+| `abel`, `module` | `Mathlib/Tactic/Abel.lean`, `Module.lean` | schließen die linearen Restgleichungen in allen Proben (T1–T5) |
+| aesop-Regelsätze | `aesop_graph`, `continuity`, `bound` (Abschnitt „Stufe c: aesop-Regelsatz“ oben) | Beweissuche, nicht Normalisierung |
+| QuantumInfo `commutes` | `QuantumInfo/ForMathlib/Tactic/Commutes.lean:49` | beweist Ziele `Commute A B`, ordnet nicht um |
+| physlib | `@[simp]`-Lemmata: Commutation.lean 5, AngularMomentum.lean 6, LRL 2, LadderOperators 0; `_commutation_`-Lemmata 13/9/4/10; `momentum_comp_position_eq` (Commutation.lean:172), `lowering_commutation_raising` (LadderOperators.lean:103) | Regeln in Zielrichtung vorhanden, nur als Gleichung am Ende eines Produkts |
+
+### 2. Proben (Scratch-Datei außerhalb des Repos, Umgebung = master `a62866f3`; danach gelöscht)
+Das Ziellemma selbst jeweils mit `-lemma` aus simp ausgeschlossen bzw. die Aussage als `example` nachgestellt.
+
+| Probe | Ziel (master) | master | vorhandene Werkzeuge | baut |
+|---|---|---|---|---|
+| T1a | `⁅𝐱 i, 𝐩 ⬝ᵥ 𝐩⁆ = (2*I*ℏ) • 𝐩 i` (Commutation.lean:186) | 2 | `noncomm_ring` | nein |
+| T1b/c | dto. | 2 | `simp [dotProduct, mul_def, lie_sum, lie_leibniz, position_commutation_momentum, …]` (+ `module`) | nein: simp macht `δ • id` zu `↑δ * id`, danach `∑ x, … ∘ ↑δ[i,x]`, `KroneckerDelta.sum_smul` greift nicht |
+| T1d | dto. | 2 | `simp only [dotProduct, mul_def, lie_sum, lie_leibniz, position_commutation_momentum, comp_smul, smul_comp, comp_id, id_comp, Finset.sum_add_distrib, ← Finset.smul_sum, KroneckerDelta.sum_smul]` + `module` | ja, 3 Zeilen |
+| T2 | `⁅𝐋 i j, 𝐩 k⁆` (AngularMomentum.lean:351) | 3 | `simp` + `module`: nein (δ-Cast); `simp only [angularMomentumCLM, sub_lie, leibniz_lie, …, smul_comp, id_comp]` + `module` | ja, 3 |
+| T3 | `⁅𝐋 i j, 𝐩 ⬝ᵥ 𝐩⁆ = 0` (AngularMomentum.lean:362) | 3 | `simp only [… , KroneckerDelta.sum_smul]` + `module` | ja, 4 |
+| T4 | `⁅𝐋 i j, 𝐋 k l⁆` (AngularMomentum.lean:389) | **10** (`ext`, `natCast_apply`, `ring`) | T4c: `nth_rw 2 [angularMomentumCLM]`, `simp only [angularMomentum_commutation_position, angularMomentum_commutation_momentum, lie_sub, lie_leibniz, comp_smul, smul_comp, comp_sub, sub_comp]`, `simp only [angularMomentumCLM, smul_sub, comp_sub, sub_comp]`, `module` | **ja, 5** (T4b mit sofortigem Auflösen von `𝐋`: nein) |
+| T5 | LRL:254 `positionCompMomentumSqr_comm_momentum_add` (privat, nachgestellt) | 2 | `simp only [leibniz_lie, position_commutation_momentum, momentumSqr_commutation_momentum, ← lie_skew (𝐩 i), comp_zero, smul_comp, id_comp, symm j i]` + `module` | ja, 3 |
+
+### 3. Lücke und Bewertung
+- **Umordnen „x vor p“:** in T1–T5 nicht nötig; die Kommutatorrechnungen laufen über `lie_leibniz`/`leibniz_lie` und die
+  Kommutatorlemmata, ohne Produkte zu sortieren. Sortieren braucht es in LRL (`xL_Lx_eq`, `sum_ppL`, `sum_LppL`, hA); dort ist
+  nach den Messungen vom 27.10. (v2) und 30.10. (Review) der Gewinn klein, und die Kontextfassungen
+  (`𝐩 j ∘L (𝐱 i ∘L Z) = …`) wären Einzeiler über `momentum_comp_position_eq` bzw. `Commute.left_comm` → Warnsignal.
+- **δ-Skalare:** `simp` mit dem Standard-Set wandelt `δ[i,j] • id` in `↑δ[i,j] * id` (Nat-Cast im Operatorring) um; das blockiert
+  `KroneckerDelta.sum_smul` und erzwingt in master `ext`+`natCast_apply` (T4) bzw. `simp only`. Das ist ein Normalform-Problem
+  der δ-Darstellung, nicht der Operatorreihenfolge; es lässt sich mit `simp only` umgehen (T1d–T5).
+- **`op_norm` als simp-Set** (`register_simp_attr`) für die Standardliste (`dotProduct, mul_def, lie_sum, sum_lie, lie_leibniz,
+  leibniz_lie, comp_smul, smul_comp, comp_add/sub, add/sub_comp, comp_id, id_comp, Finset.sum_*, KroneckerDelta.sum_smul`):
+  Gewinn grob −1 Zeile je Beweis (die Listen werden kürzer, `module` bleibt), Kosten: Attributdatei + Markierungen, Lemmata in
+  falscher Richtung (`← Finset.smul_sum`) brauchen eigene Umkehrlemmata (wieder Einzeiler). Bei 5 Beispielen netto ≈ 0.
+- **Abgrenzung zu `noncomm_ring`:** `noncomm_ring` normalisiert nur Ringausdrücke ohne Zusatzwissen; ein `op_norm` müsste die
+  Kommutatorrelationen als gerichtete Regeln mitbringen (Terminierung wie in „Stufe c: aesop-Regelsatz“ begründet). Lohnt
+  erst, wenn viele neue Rechnungen mit langen Sortierketten anstehen (z. B. höhere Ordnungen, Leiteroperator-Normalordnung).
+
+### 4. Empfehlung (Daniel entscheidet)
+1. Kein `op_norm`-PR jetzt.
+2. Optional reiner Beweis-PR ohne neue Lemmata (Physlib): `angularMomentum_commutation_angularMomentum` 10 → 5 (T4c) und
+   `angularMomentum_cyclic_lrl` 9 → 4 (V2a aus „Review gloges zu #1990“), zusammen −10 Zeilen. Vor einem PR: Linter/CI.
+3. Rückmeldung an gloges inhaltlich (Daniel formuliert selbst): vorhandene Werkzeuge reichen in den Proben; Hindernis sind
+   δ-Skalare im Standard-simp, nicht die Reihenfolge; eine Taktik erst bei Bedarf.
+
+**Einzeiler-Funde über vorhandene Lemmata:** keine neuen Deklarationen vorgeschlagen. Die für eine Taktik nötigen
+Kontextfassungen wären Einzeiler (über `momentum_comp_position_eq` bzw. `Commute.left_comm`), deshalb nicht empfohlen.
