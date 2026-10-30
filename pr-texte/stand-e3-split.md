@@ -118,3 +118,6 @@ Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr
 - Alle fünf Vorlagen sind noch englische Volltexte mit KI-Offenlegungszeile – laut Regel 26.10. nur Inhaltsvorlage; Daniel
   formuliert Beschreibung und Offenlegung selbst.
 - Reihenfolge/Eröffnung: E2 unabhängig; E3 als Stapel 20a→20d (20c braucht von 20b nur `PolyBounded.lean`).
+- **30.10.: Daniel hat eröffnet:** **#1995** = E2 `hydrogen-pauli-degeneracy` (`7ad5343b`, Label medium), **#1996** = E3-1
+  `hydrogen-e3-1` (`0791ce3d`, Label large). Vorlage 20b: Basis `hydrogen-e3-1` (#1996), `blocked-by-PR #1996` eingesetzt.
+  20b–20d noch nicht eröffnet. Cron-Check fragt #1995 und #1996 ab.

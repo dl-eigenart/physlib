@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): the hydrogen bound states in L²
 
-Branch: `hydrogen-e3-2` (2 commits, 307 + 255 + 2 lines) · Base: master after merge of `hydrogen-e3-1` · Depends on: `hydrogen-e3-1` (20a) · Library: PhyslibAlpha
+Branch: `hydrogen-e3-2` (2 commits, 307 + 255 + 2 lines) · Base: `hydrogen-e3-1` (#1996), stacked · Depends on: #1996 (`hydrogen-e3-1`, 20a) · Library: PhyslibAlpha
+
+blocked-by-PR #1996
 
 Second of four stacked PRs (20a–20d).
 

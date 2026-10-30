@@ -74,6 +74,11 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **gemergt: #1980** | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
 | **gemergt: #1981** | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
 | **geschlossen: #1990** (nicht gemergt, 30.10.) | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | – |
+| **offen: #1995** (medium) | 21 degeneracy of the Bohr levels from Pauli's two su(2) (E2) | `hydrogen-pauli-degeneracy` | +131 −9 | nichts |
+| **offen: #1996** (large) | 20a degeneracy of the hydrogen bound states (E3-1) | `hydrogen-e3-1` | 548 | nichts |
+| auf Fork, gestapelt | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | 20a (#1996) |
+| auf Fork, gestapelt | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b |
+| auf Fork, gestapelt | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
 05 #1948, 06 #1949, 08 #1910, 09 #1911, 10 #1962, 11 #1964, 12a #1970, 12b #1971, 13 #1980 (30.10., `06e0b6c9`),
