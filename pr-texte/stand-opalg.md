@@ -427,3 +427,4 @@ Kontextfassungen wären Einzeiler (über `momentum_comp_position_eq` bzw. `Commu
   lokal, nicht gepusht; Inhaltsvorlage `22-proof-angular-golf.md`. (d) keine Antwort an gloges.
 - **30.10.: `proof-angular-golf` (`e1841802`) auf den Fork gepusht** (Daniels Ja, per Cowork, ls-remote bestätigt). PR eröffnet Daniel.
 - **30.10.: Daniel hat `proof-angular-golf` als #1998 eröffnet** (`e1841802`). Cron-Check fragt #1995, #1996, #1997, #1998 ab.
+- **30.10.: #1998 gemergt** 17:32 UTC (Squash `5402a9ab`). Fällt damit aus der Cron-Abfrage (nur offene PRs).
