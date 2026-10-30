@@ -390,13 +390,9 @@ lemma angularMomentum_commutation_angularMomentum : ⁅𝐋 i j, 𝐋 k l⁆ =
     (I * ℏ) • (δ[i,k] • 𝐋 j l - δ[i,l] • 𝐋 j k - δ[j,k] • 𝐋 i l + δ[j,l] • 𝐋 i k) := by
   nth_rw 2 [angularMomentumCLM]
   simp only [angularMomentum_commutation_position, angularMomentum_commutation_momentum,
-    lie_sub, lie_leibniz, comp_smul, smul_comp, comp_sub, sub_comp, ← smul_add, ← smul_sub]
-  dsimp [angularMomentumCLM]
-  ext
-  simp only [nsmul_eq_mul, smul_apply, sub_apply, add_apply, mul_apply_eq_comp, comp_apply,
-    natCast_apply, positionCLM_apply, momentumCLM_apply, neg_mul, mul_neg, smul_neg,
-    sub_neg_eq_add, smul_eq_mul, smul_add]
-  ring
+    lie_sub, lie_leibniz, comp_smul, smul_comp, comp_sub, sub_comp]
+  simp only [angularMomentumCLM, smul_sub]
+  module
 
 @[simp]
 lemma angularMomentumSqr_commutation_angularMomentum : ⁅𝐋²[d], 𝐋 i j⁆ = 0 := by

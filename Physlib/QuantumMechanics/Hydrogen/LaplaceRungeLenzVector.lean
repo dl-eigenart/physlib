@@ -138,19 +138,14 @@ lemma angularMomentumSqr_commutation_lrlSqr (ε : ℝˣ) :
   fewer than three dimensions. -/
 lemma angularMomentum_cyclic_lrl (ε : ℝˣ) (i j k : Fin d) :
     𝐋 i j ∘L H.lrlOperator ε k + 𝐋 j k ∘L H.lrlOperator ε i + 𝐋 k i ∘L H.lrlOperator ε j = 0 := by
-  have hxp (a b : Fin d) (Z : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)) :
-      𝐋 a b ∘L ((𝐱[d] ⬝ᵥ 𝐩) ∘L Z) = (𝐱 ⬝ᵥ 𝐩) ∘L (𝐋 a b ∘L Z) := by
-    rw [← comp_assoc, ← comp_assoc, comp_eq_comp_add_commute (𝐋 a b),
-      angularMomentum_commutation_positionDotMomentum, add_zero]
-  have hr (a b : Fin d) (Z : 𝓢(Space d, ℂ) →L[ℂ] 𝓢(Space d, ℂ)) :
-      𝐋 a b ∘L (𝐫₀ ε (-1) ∘L Z) = 𝐫₀ ε (-1) ∘L (𝐋 a b ∘L Z) := by
-    rw [← comp_assoc, ← comp_assoc, angularMomentum_comp_radiusRegPow_commute]
   calc _ = (𝐋 i j ∘L 𝐱 k + 𝐋 j k ∘L 𝐱 i + 𝐋 k i ∘L 𝐱 j) ∘L (𝐩 ⬝ᵥ 𝐩)
         - (𝐱 ⬝ᵥ 𝐩) ∘L (𝐋 i j ∘L 𝐩 k + 𝐋 j k ∘L 𝐩 i + 𝐋 k i ∘L 𝐩 j)
         + (2⁻¹ * I * ℏ * (d - 1) : ℂ) • (𝐋 i j ∘L 𝐩 k + 𝐋 j k ∘L 𝐩 i + 𝐋 k i ∘L 𝐩 j)
         - (H.m * H.k) • (𝐫₀ ε (-1) ∘L (𝐋 i j ∘L 𝐱 k + 𝐋 j k ∘L 𝐱 i + 𝐋 k i ∘L 𝐱 j)) := by
-        simp only [H.lrlOperator_eq, comp_sub, comp_add, add_comp, comp_smul, comp_assoc, hxp,
-          hr]
+        simp only [H.lrlOperator_eq, comp_sub, comp_add, add_comp, comp_smul, comp_assoc]
+        simp only [← mul_def, (commute_iff_lie_eq.mpr
+          (angularMomentum_commutation_positionDotMomentum _ _)).left_comm,
+          Commute.left_comm (angularMomentum_comp_radiusRegPow_commute _ _ _ _)]
         module
     _ = 0 := by
         rw [angularMomentum_cyclic_position, angularMomentum_cyclic_momentum]
