@@ -425,3 +425,4 @@ Kontextfassungen wären Einzeiler (über `momentum_comp_position_eq` bzw. `Commu
   9 → 5 (T4c, ohne die zwei unbenutzten simp-Argumente; frühere Angabe „10 → 5“ zählte eine Zeile zu viel),
   `angularMomentum_cyclic_lrl` 9 → 4 (V2a); +7 −16, netto −9; check_pr.sh 11/11, ci_physlib.sh 11/11, sorry 0;
   lokal, nicht gepusht; Inhaltsvorlage `22-proof-angular-golf.md`. (d) keine Antwort an gloges.
+- **30.10.: `proof-angular-golf` (`e1841802`) auf den Fork gepusht** (Daniels Ja, per Cowork, ls-remote bestätigt). PR eröffnet Daniel.
