@@ -82,3 +82,34 @@ Teil; Einleitung und Kopfzeilen je Teil neu. Text 20 bleibt als Fassung für den
   geprüften Lean-Code verändern.
 - Rückfall, falls ein Reviewer es verlangt: Variante 1 (§A + §B in eine Datei, §C + §D in eine zweite; s. o.).
 - Damit bleibt es bei den vier Teilen 20a–20d wie umgesetzt.
+
+## E2 und E3 auf master `a62866f3` umgesetzt (2026-10-30), nicht gepusht
+Freigabe Daniel 30.10. (Bedingung #1980/#1981 gemergt, #1990 geschlossen gilt als erfüllt). Alte Basen gegen merge-base geprüft
+(e2, e3-1: `7823e144`; e3-2: `7343e99f`; e3-3: `35edadc9`; e3-4: `7a9bbff7` = jeweils alter Kopf des Vorgängers).
+Sicherungen `backup/<branch>-pre-20261030` (= alte Köpfe). `move.sh` ohne Konflikte außerhalb der Importliste.
+Byte-Gleichheit: für jede Lean-Datei des Branches außer `PhyslibAlpha.lean`/`Physlib.lean` Blob alter Kopf = Blob neuer Kopf,
+Dateilisten alt/neu gleich; Unterschied nur die neuen Importzeilen in `PhyslibAlpha.lean`.
+
+| Branch | alt | **neu** | Basis | Zeilen gegen Basis | check_pr | CI | sorry | byteidentisch |
+|---|---|---|---|---|---|---|---|---|
+| `hydrogen-pauli-degeneracy` (E2, 21) | `e5da5ba6` | **`7ad5343b`** | master `a62866f3` | +131 −9 (1 Datei, `PauliSpectrum.lean`) | 11/11 | 11/11 | 0 | ja |
+| `hydrogen-e3-1` (20a) | `7343e99f` | **`0791ce3d`** | master `a62866f3` | +548 (2 Dateien) | 11/11 | 11/11 | 0 | ja |
+| `hydrogen-e3-2` (20b) | `35edadc9` | **`5513ad57`** (2 Commits) | e3-1 `0791ce3d` | +564 (3 Dateien) | 11/11 | 11/11 | 0 | ja |
+| `hydrogen-e3-3` (20c) | `7a9bbff7` | **`f777b804`** | e3-2 `5513ad57` | +297 (2 Dateien) | 11/11 | 11/11 | 0 | ja |
+| `hydrogen-e3-4` (20d) | `3b8da2b9` | **`57b4272a`** | e3-3 `f777b804` | +742 (2 Dateien) | 11/11 | 11/11 | 0 | ja |
+
+Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr.sh mit `build_roots`). Push wartet auf Daniel.
+Fork: `hydrogen-pauli-degeneracy` = `e5da5ba6` (Lease); `hydrogen-e3-1`…`-4` noch nicht auf dem Fork.
+
+### Prüfstellen in den PR-Vorlagen 21, 20a–20d (Daniel entscheidet)
+- Zeilenzahlen stimmen mit den neuen Branches überein (21: +131/−9; 20a 547+1; 20b 307+255+2; 20c 296+1; 20d 741+1).
+- Verlinkte PRs per GitHub-API geprüft, alle gemergt: #1818 (TomOleDiem, 16.10.), #1933, #1948, #1930, #1963.
+- 20b–20d: Kopfzeile „Base: master after merge of `hydrogen-e3-N`“ – beim Eröffnen gestapelt; `blocked-by-PR #<20a/20b/20c>`
+  in eigener Zeile und die PR-Nummern der Vorgänger eintragen (gibt es erst nach dem Eröffnen).
+- 21 verweist auf `BoundStatesAdjoint.lean` „(separate PR)“ – nach dem Eröffnen von 20d durch die PR-Nummer ersetzen?
+- 20a/`Degeneracy.lean` zitiert Axler–Bourdon–Ramey, *Harmonic Function Theory*, doi:10.1007/978-1-4757-8137-3_5:
+  CrossRef (30.10.) bestätigt Kapiteltitel „Harmonic Polynomials“, Autoren, Springer, 2001, Reihe GTM; **nicht** aus CrossRef
+  belegt: „2nd ed.“, „GTM 137“, „chapter 5“ → vor dem PR an der Quelle prüfen (CLAUDE.md, Zitierregel).
+- Alle fünf Vorlagen sind noch englische Volltexte mit KI-Offenlegungszeile – laut Regel 26.10. nur Inhaltsvorlage; Daniel
+  formuliert Beschreibung und Offenlegung selbst.
+- Reihenfolge/Eröffnung: E2 unabhängig; E3 als Stapel 20a→20d (20c braucht von 20b nur `PolyBounded.lean`).

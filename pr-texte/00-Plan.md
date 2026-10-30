@@ -37,6 +37,8 @@ Reviewer-Wunsch: Variante 1 (§A+§B / §C+§D).
 
 **Reihenfolge, neu (Daniel, 29.10.):** E2 und der E3-Stapel werden erst eröffnet, wenn **#1980, #1981 und #1990 alle
 gemergt** sind (ersetzt die Bedingung „nach 12a/12b“ oben).
+**30.10. (Daniel): Bedingung erfüllt** (#1980, #1981 gemergt; #1990 geschlossen statt gemergt). E2 und E3 am 30.10. auf
+master `a62866f3` umgesetzt, geprüft, **nicht gepusht** (Tabelle in `stand-e3-split.md`).
 
 ## Abhängigkeiten
 
@@ -78,8 +80,7 @@ master ─┬─ 01 spin-orbit ──────────────┐
 **30.10.: #1990 geschlossen, nicht gemergt** (Review gloges: Spezialfälle von Mathlibs `Commute.left_comm`/`right_comm`,
 keine Dopplung). Daniel hat auf GitHub und Zulip begründet. Plan: optional kleiner Beweis-PR für `angularMomentum_cyclic_lrl`
 ohne neue Lemmata (Variante V2a, −5 Zeilen, `stand-opalg.md`); eigentlicher Schritt `op_norm`/Taktik (Stufe c) erst nach
-Rückmeldung von gloges. **Offen: keine PRs.** Offene Frage an Daniel: Die Bedingung für E2/E3 (Regel 29.10.) nennt #1990 als
-„gemergt“; gilt sie mit dem Schließen als erfüllt?
+Rückmeldung von gloges. **Offen: keine PRs.** Bedingung für E2/E3: laut Daniel (30.10.) erfüllt.
 
 
 Wichtig: 01 und 02 hängen **nicht** an #1876 und können sofort eingereicht werden. Damit laufen
