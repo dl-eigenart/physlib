@@ -426,3 +426,4 @@ Kontextfassungen wären Einzeiler (über `momentum_comp_position_eq` bzw. `Commu
   `angularMomentum_cyclic_lrl` 9 → 4 (V2a); +7 −16, netto −9; check_pr.sh 11/11, ci_physlib.sh 11/11, sorry 0;
   lokal, nicht gepusht; Inhaltsvorlage `22-proof-angular-golf.md`. (d) keine Antwort an gloges.
 - **30.10.: `proof-angular-golf` (`e1841802`) auf den Fork gepusht** (Daniels Ja, per Cowork, ls-remote bestätigt). PR eröffnet Daniel.
+- **30.10.: Daniel hat `proof-angular-golf` als #1998 eröffnet** (`e1841802`). Cron-Check fragt #1995, #1996, #1997, #1998 ab.
