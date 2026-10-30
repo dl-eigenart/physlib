@@ -79,6 +79,7 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **offen: #1997** (blocked-by #1996) | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | 20a (#1996) |
 | auf Fork, gestapelt | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b (#1997) |
 | auf Fork, gestapelt | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c |
+| lokal (nicht gepusht) | 22 shorter proofs: angularMomentum_commutation_angularMomentum, angularMomentum_cyclic_lrl (Physlib) | `proof-angular-golf` | +7 −16 | nichts |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
 05 #1948, 06 #1949, 08 #1910, 09 #1911, 10 #1962, 11 #1964, 12a #1970, 12b #1971, 13 #1980 (30.10., `06e0b6c9`),

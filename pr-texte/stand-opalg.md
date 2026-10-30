@@ -420,3 +420,8 @@ Das Ziellemma selbst jeweils mit `-lemma` aus simp ausgeschlossen bzw. die Aussa
 
 **Einzeiler-Funde über vorhandene Lemmata:** keine neuen Deklarationen vorgeschlagen. Die für eine Taktik nötigen
 Kontextfassungen wären Einzeiler (über `momentum_comp_position_eq` bzw. `Commute.left_comm`), deshalb nicht empfohlen.
+- **30.10. Entscheidungen Daniel:** (a) kein `op_norm`-PR; (b) reiner Beweis-PR ohne neue Lemmata umgesetzt: Branch
+  `proof-angular-golf` **`e1841802`** auf master `a62866f3` (Physlib): `angularMomentum_commutation_angularMomentum` Beweis
+  9 → 5 (T4c, ohne die zwei unbenutzten simp-Argumente; frühere Angabe „10 → 5“ zählte eine Zeile zu viel),
+  `angularMomentum_cyclic_lrl` 9 → 4 (V2a); +7 −16, netto −9; check_pr.sh 11/11, ci_physlib.sh 11/11, sorry 0;
+  lokal, nicht gepusht; Inhaltsvorlage `22-proof-angular-golf.md`. (d) keine Antwort an gloges.

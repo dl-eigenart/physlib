@@ -586,3 +586,5 @@ und `sixSum` als `Finset`-Summe auf master definieren; dann entfielen die Kopien
 PR B `rational-6j` (`SixJRational.lean`, 325 Z.) gestapelt auf A. Nach den Streichungen ≈ 265 + 315. Optional Abschnitt E
 (Kernel-Checks, ≈ 45 Z. in A) in einen eigenen Test-PR. `racah-6j` (76 Z., `sorry`) bleibt WIP, kein PR.
 Code-Branches lokal, nicht gepusht; keine Lean-Datei geändert.
+- **30.10. Entscheidung Daniel:** `rational-3j6j` (`eb3c7d36`) und `rational-6j` (`20d72682`) bleiben wie sie sind – keine
+  Streichungen (auch nicht `negOnePowQ`, `cast_threeJRSumQ`, `sq_cgCoefficient`), keine Zulip-Frage. Lokal, nicht gepusht.
