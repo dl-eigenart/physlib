@@ -528,3 +528,61 @@ Berichte `~/physlib_ci/REVIEW_rb1911-<branch>.txt`. PR-Texte: 10 Kopfzeile „Ba
   Merge von #1980 und #1990 (Regel 29.10., `00-Plan.md`).
 - **30.10.: #1980 (13) gemergt** 05:45 UTC (Squash `06e0b6c9`). Damit ist der sl2-/Drehimpuls-Stapel 01–14 komplett auf
   master (Wellen-Tabelle in `00-Plan.md` per GitHub-API abgeglichen). Offen nur noch #1990.
+
+## Vorhandenes zuerst 30.10. (rational-3j6j, rational-6j; racah-6j am Rand) – nur Prüfung, nichts gepusht
+
+**Umsetzung auf origin/master `a62866f3`** (Sicherungen `backup/rational-3j6j-pre-20261030` = `5eaf449f`,
+`backup/rational-6j-pre-20261030` = `f98c7128`). Alle mitgeschleppten Dateien des alten Stapels (10–14, Stand `43799477`)
+vorher gegen master geprüft: byte-gleich. `move.sh rational-3j6j 43799477 origin/master` → **`eb3c7d36`**,
+`move.sh rational-6j 5eaf449f rational-3j6j` → **`20d72682`**; keine Konflikte außerhalb der Importliste, Lean-Dateien
+byteidentisch. check_pr.sh (mit `build_roots`) + ci_physlib.sh je 11/11 + 11/11, sorry 0 (`REVIEW_rb1030-rational-*.txt`).
+
+**Echter Neuinhalt:** `rational-3j6j`: `Wigner3jRational.lean` +285 (+1 Import); `rational-6j`: `SixJRational.lean` +324
+(+1 Import). `racah-6j` (`9163d8bd`, WIP, nicht umgesetzt): `SixJRacah.lean` +76, `sixJSumQ_eq_racahSumQ` mit `sorry`.
+
+**Suche:** Mathlib (`.lake/packages/mathlib`): keine Wigner-/Racah-/Clebsch-Gordan-/6j-Symbole (grep). physlib master: keine
+ℚ-Fassungen, kein `decide +kernel` für diese Größen; die reellen Gegenstücke `invFact`, `sixTerm`, `sixSum` (`finsum`),
+`threeJR` stehen in `Wigner3j.lean:90–169`, `threeJ`, `sixJTerm`, `sixJSym` in `SixJSymmetry.lean:99–233`. Zweck der neuen
+Dateien laut Moduldocstring: berechenbare ℚ-Werte, damit Identitäten mit `decide +kernel` geprüft werden können; die reellen
+Symbole sind wegen `√` und `finsum` nicht auswertbar. Proben auf `rational-6j` (Scratch-Datei, gelöscht).
+
+| Deklaration | Fund | Bewertung | Vorschlag |
+|---|---|---|---|
+| `invFactQ`, `cast_invFactQ` | ℚ-Kopie von `invFact` (`Wigner3j.lean:90`) | Spezialfall (Kopie für Berechenbarkeit) | behalten oder `invFact` über beliebigen Körper verallgemeinern (master-Änderung) |
+| `negOnePowQ`, `cast_negOnePowQ` (6 Z.) | `(-1 : ℚ) ^ (z : ℤ)` (zpow); Mathlib `Int.negOnePow` (`Algebra/Ring/NegOnePow.lean:28`) | **Duplikat**: `decide +kernel` rechnet `(-1 : ℚ) ^ (3 : ℤ) = -1` und `∑ z ∈ Icc 0 5, (-1 : ℚ) ^ z = 0` direkt (Probe) | streichen, `(-1 : ℚ) ^ z` verwenden; Cast über `Rat.cast_zpow`/`push_cast` |
+| `sixTermQ`, `cast_sixTermQ` (**Einzeiler** `simp only`) | ℚ-Kopie von `sixTerm` | Spezialfall | behalten (Brücke), Einzeiler melden |
+| `sixSumQ`, `cast_sixSumQ` (14 Z.) | `sixSum` (`finsum`), Muster `finsum_eq_sum_of_support_subset` wie `Wigner3j.lean:436` | neu (Finset-Form) | behalten |
+| `threeJRRadQ`, `threeJRSumQ`, `threeJRSqQ`, `threeJRSgnSqQ` | keine | neu | behalten |
+| `cast_threeJRRadQ` (**Einzeiler** `simp only`) | – | Cast-Brücke | behalten, Einzeiler melden |
+| `cast_threeJRSumQ` (**Einzeiler** `cast_sixSumQ _ _ _ _ _ _`) | `cast_sixSumQ` | **Spezialfall**; Probe: `rw [threeJRSumQ, cast_sixSumQ]` ersetzt ihn; 1 Verwendung | streichen, an der Verwendungsstelle `rw [threeJRSumQ, cast_sixSumQ]` |
+| `threeJR_eq_rat` (**Einzeiler** `rw`) | Definition `threeJR` + zwei Casts | triviale Umschreibung; 3 Verwendungen | inline möglich, Daniel entscheidet |
+| `threeJRRadQ_nonneg`, `facPairQ_nonneg`, `triangleSqQ_nonneg`, `sixJRadQ_nonneg` (je 2 Z.) | `positivity` (Probe: `unfold …; positivity` schließt `facPairQ`, `triangleSqQ`) | trivial | behalten oder inline `positivity`; `facPairQ_nonneg` hat 1 Verwendung |
+| `facPairQ_neg` (**Einzeiler** `rw`) | – | trivial; 1 Verwendung | inline möglich |
+| `cast_threeJRSqQ`, `cast_threeJRSgnSqQ`, `threeJSqQ`, `threeJSgnSqQ`, `cast_threeJSqQ`, `cast_threeJSgnSqQ` | keine | neu (Kern) | behalten |
+| `threeJ_eq_sign_mul_sqrt`, `sixJSym_eq_sign_mul_sqrt` (je 8 Z.) | keine | neu (Hauptaussagen) | behalten |
+| `sq_cgCoefficient` (4 Z.) | Korollar aus `cgCoefficient_eq_wigner3j` (`Wigner3j.lean:520`), `wigner3j_eq_threeJ`, `cast_threeJSqQ` | Spezialfall; **0 Verwendungen** (auch nicht in racah-6j) | streichen oder bewusst als Ergebnis behalten |
+| `triangleSqQ`, `facPairQ`, `threeJNumQ`, `threeJRRadQ_reggeJ`, `threeJ_eq_sqrt_mul` | keine | neu (Zerlegung des Radikanden) | behalten; `threeJRRadQ_reggeJ`, `threeJ_eq_sqrt_mul` je 1 Verwendung |
+| `sixJRadQ`, `sixJTermQ`, `sixJVec`, `sixJSumQ`, `adm_of_sixJTermQ_ne_zero`, `sixJSumQ_eq_sum_sixJBox` (33 Z.), `sixJTerm_eq_sqrt_mul` (55 Z.), `sixJSym_eq_sqrt_mul_sixJSumQ` | keine; Hilfsschritte nutzen Mathlib (`Real.sqrt_mul`, von `exact?` als `Real.sqrt_mul hx y` bestätigt) | neu (Kern 6j) | behalten |
+| `sixJSqQ`, `sixJSgnSqQ`, `cast_sixJSqQ`, `cast_sixJSgnSqQ` | keine | neu | behalten |
+| Abschnitte E (`example … := by decide +kernel`) | prüfen bewiesene Identitäten (Orthogonalität, Symmetrien aus `SixJSymmetry`) numerisch | keine neue Mathematik (Tests) | Daniel/Reviewer: als Tests behalten oder kürzen |
+
+**Einzeiler über vorhandene Lemmata (gemeldet):** `cast_threeJRSumQ` (= `cast_sixSumQ`), `threeJR_eq_rat` (`rw` über die
+Definition), `cast_sixTermQ`, `cast_threeJRRadQ` (je `simp only` mit Cast-Lemmata), `facPairQ_neg` (`rw`).
+`negOnePowQ` + `cast_negOnePowQ` doppeln zpow.
+
+**Mögliche Einsparung:** `negOnePowQ`/`cast_negOnePowQ` (≈ 10 Z. inkl. Doc), `cast_threeJRSumQ` (≈ 4), `sq_cgCoefficient`
+(≈ 13), optional Inlining von `threeJR_eq_rat`, `facPairQ_neg`, `facPairQ_nonneg` (≈ 8) → ≈ 25–35 Zeilen von 609.
+Nicht getestet: der Ersatz in allen Verwendungsstellen (würde Codeänderung bedeuten; nicht beauftragt).
+
+**Grundsatzfrage (Daniel/Reviewer):** Die ℚ-Kopien (`invFactQ`, `sixTermQ`, `sixSumQ` mit Cast-Lemmata) existieren nur,
+weil die master-Definitionen über `ℝ` und mit `finsum` stehen. Alternative: `invFact`/`sixTerm` über einen beliebigen Körper
+und `sixSum` als `Finset`-Summe auf master definieren; dann entfielen die Kopien und die Cast-Lemmata würden zu einem
+`map`-Lemma. Das wäre ein Eingriff in gemergten Code (eigener PR, Rücksprache mit Reviewern).
+
+**Literatur:** `Wigner3jRational.lean` zitiert Edmonds (1957), §3.7; `SixJRational.lean` DLMF §34.2, §34.4. Nicht belegt
+(Edmonds liegt laut Notiz oben nicht vor) → vor einem PR an der Quelle prüfen (CLAUDE.md).
+
+**Aufteilung in PRs (unter ~300–500 Zeilen):** schon gegeben: PR A `rational-3j6j` (`Wigner3jRational.lean`, 286 Z.),
+PR B `rational-6j` (`SixJRational.lean`, 325 Z.) gestapelt auf A. Nach den Streichungen ≈ 265 + 315. Optional Abschnitt E
+(Kernel-Checks, ≈ 45 Z. in A) in einen eigenen Test-PR. `racah-6j` (76 Z., `sorry`) bleibt WIP, kein PR.
+Code-Branches lokal, nicht gepusht; keine Lean-Datei geändert.
