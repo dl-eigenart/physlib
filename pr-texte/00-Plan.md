@@ -94,6 +94,14 @@ zu 11; nach dem Merge von 11 und 12b auf master rebasen, dann sind sie weg.
 Die frühere `SixJ.lean` (905 Zeilen) ist auf 12a `CouplingSchemes.lean` (Abschnitte A–D) und
 12b `SixJ.lean` (Rekopplung und 6j) aufgeteilt. Der Lean-Code ist unverändert.
 
+## Regeln
+
+**Vorhandenes zuerst (Daniel, 30.10.2026):** Vor jedem neuen Lemma und jeder neuen Definition zuerst prüfen, ob es die
+Aussage schon gibt (`exact?`/`apply?`, Loogle, grep in `.lake/packages/mathlib` und in physlib) und ob vorhandene API den
+Zweck schon erfüllt – den Weg bis zum Ende testen, nicht nur die Aussage. **Ein Beweis mit nur einer Zeile über ein
+vorhandenes Lemma ist ein Warnsignal** und muss Daniel vor jedem PR ausdrücklich gemeldet werden.
+Anlass: #1990 (gloges: Spezialfälle von Mathlib; „human review must include checking existing libraries“).
+
 ## Vor jedem PR auf agents-pc
 
 ```
