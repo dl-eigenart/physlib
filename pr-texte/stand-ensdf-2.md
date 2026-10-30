@@ -778,3 +778,26 @@ Evaluatoren_Kommentar (ja/leer), Stichworte, Kommentar_A2A4, Kommentare_zum_Gamm
   inconsistent, discrepan, doubtful, contradict, not adopted, …): 5 Treffer, alle T4-Dipol-A4:
   129Xe 411.5 [isotropic], 143Eu 798.89 [contradict], 196Pb 357.8 [suggest], 206Pb 1778.9 [incorrect],
   212At 478.6 [suggest]. Stichwortsuche ist grob; Treffer ohne Markierung können trotzdem kommentiert sein.
+
+## A2/A4 gegen δ – Absicherung, Kurzfassung (30.10.2026; Details `~/ensdf/a2a4_absicherung.md`)
+- V0 (`volllauf3_t4a.py`) ist innerhalb des Einzelübergangsmodells maximal nachsichtig: konvexe Hülle aller P_m = P_−m ≥ 0,
+  q₂, q₄ unabhängig in [0,1]. „Unvereinbar“ heißt falsches Vorzeichen **oder** zu großes |A_k| am selben (ρ₂, ρ₄); dazu
+  kommen δ-Raster (801) und ein Rundungsgrenzfall (¹²⁵Ba 168,6 keV bei genau 3,000σ, daher 153 statt 154).
+- F_k (einschließlich des Mischterms) gegen die Rose-Brink-R_k-Tabelle (Abschrift in PyGammaRAD, Commit 76e8f4a4) über
+  R_k = (−1)^{L₁−L₂+k}F_k: 1.380 Einträge, davon 460 mit L₁ ≠ L₂, 0 Abweichungen; die benutzten 28 CG und 1.380 Racah-W stimmen
+  mit Lean `threeJSgnSqQ`/`sixJSgnSqQ` überein. ρ_k(J,m): 492 Einträge, 0 Abweichungen.
+- Konvention: Der Code entspricht Guidelines Anhang B Gl. (3) (Steffen); ENSDF übernimmt Krane–Steffen (Guidelines PDF-S. 91);
+  Rose–Brink mit δ_RB = −δ_S ist damit konsistent. Das δ-Vorzeichen ist gedeckt bis auf die Treue der Abschrift; eine
+  Primärtabelle in Steffen-Konvention (Frauenfelder–Steffen, Yamazaki, Krane–Steffen–Wheeler) fehlt (Paywall, OSTI nicht
+  erreichbar).
+- Sensitivität (Gauß nach Hurst Gl. (21), σ/J ∈ [0,2; 0,5] bzw. [0,1; 1,0]): T4-δ 14/14, T4-Vorzeichen 3/3, rein bei 3σ
+  153/153 bleiben unvereinbar (robust). T4-δ ist auch mit umgedrehtem Mischterm unvereinbar, also unabhängig von der Konvention.
+  T4-Vorzeichen (³¹P 2362, ³⁵Cl 882,3, ⁵⁹Ni 1750,5) wird bei umgedrehtem Mischterm vereinbar und hängt damit an der Konvention;
+  ⁵⁹Ni ist unter Gauß-Ausrichtung mit beiden Vorzeichen unvereinbar.
+- Modellabhängig (in V0 vereinbar, unter Gauß bei 3σ unvereinbar): Hinweis gemischt 14 (V1) bzw. 9 (V2) von 63, Hinweis rein
+  31 bzw. 14 von 109.
+- Offen: Zuordnung NNDC-Mail Teil 2a (13 Dipol-A4) und Teil 2b (8 δ), Liste der Records fehlt; V1/V2 über alle 5.027 Messungen.
+- Nachtrag NNDC-Mail Teil 2 (Liste Daniel 30.10.): alle 13 aus 2a stehen unter den T4-Dipol-A4, alle 8 aus 2b unter den T4-δ;
+  alle 21 sind in V0/V1/V2 unvereinbar, die 8 aus 2b auch mit umgedrehtem Mischterm. A₄ = 0 bei reinem L = 1 gilt auch für
+  γγ (Guidelines S. 53 Gl. (1), S. 54 Gl. (2)/(3); F₄(1 1 J J′) = 0 nach Hurst Gl. (7), Code und Rose-Brink-Tabelle). Tabelle:
+  `~/ensdf/a2a4_absicherung.md` Abschnitt 4.1.
