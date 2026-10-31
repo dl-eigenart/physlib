@@ -139,7 +139,7 @@ Risiken:
 
 Branch `9j-1` auf `origin/master` c5a908ba, Commit d6261d98
 „feat(PhyslibAlpha): the 9j symbols and their transposition symmetry“.
-Neue Datei `PhyslibAlpha/QuantumMechanics/AngularMomentum/NineJ.lean` (114 Zeilen) und ein Import
+Neue Datei `PhyslibAlpha/QuantumMechanics/AngularMomentum/NineJ.lean` (117 Zeilen) und ein Import
 in `PhyslibAlpha.lean`. 0 sorry.
 
 Inhalt:
