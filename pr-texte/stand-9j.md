@@ -167,5 +167,14 @@ codespell: alle OK.
 Referenzen in der Moduldoku: DLMF §34.6/§34.7 (URL, heruntergeladen) und Varshalovich et al.,
 World Scientific (1988), Kap. 10. Die bibliographischen Angaben stehen im Impressum des PDFs.
 
-Offen: Daniels Ja zu Push und PR. Danach 9j-2 (Werte mit einem Argument 0), aber vorher mit
+**Umbau 31.10. (Cowork-Vorschlag, Daniel wird gefragt):** `sixJSym_shift` und `sixJSym_flip₁₃`
+sind als eigene Lemmata gestrichen (AGENTS.md: keine trivialen Umschreibungen; Anlass #1990).
+`nineJSym_transpose` verwendet jetzt direkt eine `rw`-Kette aus `sixJSym_flip₁₂`, `sixJSym_swap₂₃`
+und `sixJSym_swap₁₂` (9 Schritte) und dann `ring`. Neuer Stand: Commit b66ea52f (amend, lokal),
+`NineJ.lean` 106 Zeilen. Lemmata: `sixJSym_eq_zero_of_lt`, `nineJSym`, `nineJSym_eq_sum`,
+`nineJSym_transpose`. Beim ersten Lauf nach dem Umbau schlug `alpha_python` fehl (eine
+Moduldoku-Zeile über 100 Zeichen); korrigiert. Danach `check_pr.sh` 11/11 OK und
+`ci_physlib.sh` 11/11 OK, 0 sorry.
+
+Offen: Push und PR warten. Es sind schon PRs offen (Obergrenze laut Cowork); Daniel entscheidet. Danach 9j-2 (Werte mit einem Argument 0), aber vorher mit
 Kevorkian abstimmen, weil es sich mit der Racah-Formel überschneiden kann.

@@ -28,6 +28,11 @@ Umsetzung (Stand 26.10.):
   meldete auf 12a/12b fälschlich FEHLER; mit vollem Build 10/10 OK.
 - Takt: Cron-Job der Claude-Sitzung (Minute 13 und 43). Nur sitzungsgebunden, erlischt mit der Sitzung bzw. nach 7 Tagen;
   in einer neuen Sitzung neu anlegen.
+- 31.10.: Die PR-Liste kommt nicht aus einer festen Liste. `pr_mergeable.sh` holt sie seit jeher dynamisch über die
+  GitHub-Suche (`is:pr is:open author:dl-eigenart`), neue PRs sind also automatisch dabei. #1998 fehlte in der Meldung,
+  weil er am 30.10. gemergt wurde (API: closed, merged_at 2026-10-30T17:32:02Z). Der Cron-Prompt ist neu angelegt
+  (Job `083e12e2`, Minute 13/43): Hinweis auf die dynamische Liste, Exit 1 wird gemeldet, und der veraltete
+  ZUSATZ zu #1971 (erledigt) ist gestrichen.
 
 **Reihenfolge (Daniel, 26.10.):** Die PRs zu E2 (`hydrogen-pauli-degeneracy`) und E3 (`hydrogen-bound-states-split`
 bzw. die Teil-PRs `hydrogen-e3-1` … `hydrogen-e3-4`, Plan in `stand-e3-split.md`) werden erst **nach** 12a/12b eröffnet.
