@@ -135,4 +135,37 @@ Risiken:
 
 ## Phase 2
 
-(Zwischenstände folgen.)
+### 9j-1 (31.10., lokal, nicht gepusht)
+
+Branch `9j-1` auf `origin/master` c5a908ba, Commit d6261d98
+„feat(PhyslibAlpha): the 9j symbols and their transposition symmetry“.
+Neue Datei `PhyslibAlpha/QuantumMechanics/AngularMomentum/NineJ.lean` (114 Zeilen) und ein Import
+in `PhyslibAlpha.lean`. 0 sorry.
+
+Inhalt:
+- `sixJSym_eq_zero_of_lt`: Ist für die Triade (j₁ j₅ j₆) j₁ + j₅ < j₆, dann ist das 6j gleich 0
+  (jeder Summand enthält `threeJ j₁ j₅ j₆ … = 0`, über `threeJ_of_not`).
+- `nineJSym`: Definition nach DLMF 34.6.2, doppelte Einheiten, Summe über `range (j₁₁ + j₃₃ + 1)`.
+- `nineJSym_eq_sum`: Für jede größere Schranke N > j₁₁ + j₃₃ bleibt der Wert gleich.
+- `sixJSym_shift`: {j₃ j₄ j₅; j₆ j₁ j₂} = {j₁ j₂ j₃; j₄ j₅ j₆}.
+- `sixJSym_flip₁₃`: {j₄ j₂ j₆; j₁ j₅ j₃} = {j₁ j₂ j₃; j₄ j₅ j₆}.
+- `nineJSym_transpose`: Summand für Summand, über die beiden Hilfslemmata.
+
+**Einzeiler über vorhandene Lemmata (Meldung nach Regel „Vorhandenes zuerst“):**
+- `sixJSym_shift` ist eine Verkettung `flip₁₂ ∘ swap₂₃ ∘ swap₁₂`, `sixJSym_flip₁₃` eine Verkettung
+  `swap₂₃ ∘ flip₁₂ ∘ swap₂₃`. Beide sind auch Spezialfälle von `sixJSymEdge_comp_map`. Daniel
+  entscheidet: als eigene Lemmata behalten (sie werden in `nineJSym_transpose` gebraucht und
+  lassen sich direkt mit `rw` verwenden) oder inline in den Beweis.
+- `nineJSym_transpose` selbst hat drei `rw` und `ring`. Inhaltlich ist es neu, eine
+  Transpositionssymmetrie für 9j gab es bisher nicht.
+
+Checks (`check_pr.sh 9j-1`): build_modules, build_alpha, runPhyslibAlphaLinters, build_roots,
+theorem_lint, module_doc_lint, alphaFileImports, noAlphaImports, lint_style, alpha_python,
+codespell: alle OK.
+`scripts1911/ci_physlib.sh 9j-1`: alle 11 Schritte OK.
+
+Referenzen in der Moduldoku: DLMF §34.6/§34.7 (URL, heruntergeladen) und Varshalovich et al.,
+World Scientific (1988), Kap. 10. Die bibliographischen Angaben stehen im Impressum des PDFs.
+
+Offen: Daniels Ja zu Push und PR. Danach 9j-2 (Werte mit einem Argument 0), aber vorher mit
+Kevorkian abstimmen, weil es sich mit der Racah-Formel überschneiden kann.
