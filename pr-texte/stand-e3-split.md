@@ -123,3 +123,14 @@ Berichte `~/physlib_ci/REVIEW_rb1030-<branch>.txt` / `…-physlib.txt` (check_pr
   20b–20d noch nicht eröffnet. Cron-Check fragt #1995 und #1996 ab.
 - **30.10.: Daniel hat 20b eröffnet: #1997** (`hydrogen-e3-2` `5513ad57`, blocked-by #1996). Vorlage 20c: Basis `hydrogen-e3-2`
   (#1997), `blocked-by-PR #1997` eingesetzt. Cron-Check fragt #1995, #1996, #1997 ab.
+
+## 31.10. abends: Importkonflikt bei #1997 (Daueranweisung)
+
+Nach dem Merge von #1995 (0dc7085b) und #1996 (a8823c76) meldete der 21:43-Check #1997 als dirty. Der Konflikt lag
+nur in der Importliste von `PhyslibAlpha.lean`. Der Squash von #1996 ist inhaltlich identisch mit dem Stapel-Commit
+0791ce3d (leerer Diff). Sicherung: `backup/hydrogen-e3-2-pre-1996-rebase` = 5513ad57. Umgesetzt mit
+`move.sh hydrogen-e3-2 0791ce3d origin/master`, Ergebnis 7c57deb9 (2 Commits). `BoundStatesL2.lean` und
+`PolyBounded.lean` sind byteidentisch (gleiche Blobs). Der Diff gegen master besteht aus den beiden Dateien und zwei
+Importzeilen. `check_stack.sh`: 11/11 OK, 0 sorry. Mit `--force-with-lease` auf fork gepusht (5513ad57 → 7c57deb9),
+danach Zustand unstable (CI läuft). Die lokalen Branches `hydrogen-e3-3`/`-4` liegen noch auf der alten Basis und
+müssen vor ihrem PR ebenso umgesetzt werden.
