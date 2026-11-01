@@ -238,3 +238,4 @@ QuantumInfo, also über ℂ und mit `Qubit × Qubit`, (3) Hadamard-Variante `CNO
   eröffnet ihn später mit blocked-by #2006.
 - PR-Check: `pr_mergeable.sh` holt die offenen PRs dynamisch über die API und listet #2006 schon (Lauf 01.11.
   abends: unstable, CI läuft). Am Skript und am Cron musste nichts geändert werden.
+- **#2007 offen**: Daniel hat PR 2 eröffnet (`cg-circuit-half-half`, 6f630bd0, blocked-by #2006). Der PR-Check erfasst ihn automatisch über die dynamische API-Suche.

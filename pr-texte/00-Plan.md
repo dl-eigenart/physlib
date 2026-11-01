@@ -86,7 +86,7 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | Fork `57b4272a` alt; lokal umgesetzt `eb49e857` (01.11., nicht gepusht) | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c (#2004) |
 | **offen: #2005** (01.11., fork `054b0e65`) | 9j-1 9j symbols and transposition symmetry (Plan in `stand-9j.md`) | `9j-1` | 107 | nichts |
 | **offen: #2006** (01.11., fork `10df2a7f`) | CG-Wert T₋₁ `cgCoefficient_triplet_minus` (Plan in `stand-cg-circuit.md`) | `cg-tminus1` | +22 −2 | nichts |
-| auf fork `6f630bd0`, PR 2 noch nicht eröffnet (blocked-by #2006) | CG-Schaltkreis ½⊗½ `CNOT * CH21 = cgMatrix` | `cg-circuit-half-half` | 101 | #2006 |
+| **offen: #2007** (01.11., fork `6f630bd0`, blocked-by #2006) | CG-Schaltkreis ½⊗½ `CNOT * CH21 = cgMatrix` | `cg-circuit-half-half` | 101 | #2006 |
 | **gemergt: #1998** (30.10. 17:32 UTC, `5402a9ab`) | 22 shorter proofs: angularMomentum_commutation_angularMomentum, angularMomentum_cyclic_lrl (Physlib) | `proof-angular-golf` | +7 −16 | nichts |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
