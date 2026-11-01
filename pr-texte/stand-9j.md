@@ -178,3 +178,12 @@ Moduldoku-Zeile über 100 Zeichen); korrigiert. Danach `check_pr.sh` 11/11 OK un
 
 Offen: Push und PR warten. Es sind schon PRs offen (Obergrenze laut Cowork); Daniel entscheidet. Danach 9j-2 (Werte mit einem Argument 0), aber vorher mit
 Kevorkian abstimmen, weil es sich mit der Racah-Formel überschneiden kann.
+
+### 01.11.: 9j-1 auf neues master (#1995/#1996 gemergt)
+
+| Branch | alt | neu | Basis | Zeilen | check_pr.sh | ci_physlib.sh | sorry |
+|---|---|---|---|---|---|---|---|
+| 9j-1 | b66ea52f (auf c5a908ba) | 054b0e65 | origin/master a8823c76 | NineJ.lean 106 (+1 Import) | 11/11 OK | 11/11 OK | 0 |
+
+Umgesetzt mit `move.sh 9j-1 c5a908ba origin/master`, ohne Konflikt. `NineJ.lean` ist blobgleich, die Importzeile
+dieselbe. Sicherung: `backup/9j-1-pre-1996-merge`. Nicht gepusht.

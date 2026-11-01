@@ -134,3 +134,17 @@ nur in der Importliste von `PhyslibAlpha.lean`. Der Squash von #1996 ist inhaltl
 Importzeilen. `check_stack.sh`: 11/11 OK, 0 sorry. Mit `--force-with-lease` auf fork gepusht (5513ad57 → 7c57deb9),
 danach Zustand unstable (CI läuft). Die lokalen Branches `hydrogen-e3-3`/`-4` liegen noch auf der alten Basis und
 müssen vor ihrem PR ebenso umgesetzt werden.
+
+## 01.11.: Stapel e3-2 … e3-4 auf master nach #1995/#1996 (Auftrag Daniel, ohne Push)
+
+Neuer master: `a8823c76` (#1996), davor `0dc7085b` (#1995). Sicherungen: `backup/hydrogen-e3-{2,3,4}-pre-1996-merge`.
+e3-2 war schon am 31.10. abends nach Daueranweisung umgesetzt und gepusht; master hat sich seitdem nicht bewegt.
+e3-3 und e3-4 wurden mit `move.sh` gestapelt (e3-3 von 5513ad57 auf das neue e3-2, e3-4 von f777b804 auf das neue
+e3-3). Es gab nur Importkonflikte. Für jeden Commit sind die geänderten Lean-Dateien blobgleich, und die eigenen
+Importzeilen in `PhyslibAlpha.lean` stimmen mit dem alten Commit überein.
+
+| Branch | alt | neu | Basis neu | Zeilen (eigene Datei) | check_pr.sh | ci_physlib.sh | sorry | Fork |
+|---|---|---|---|---|---|---|---|---|
+| hydrogen-e3-2 (#1997) | 5513ad57 (+dfffd540) | 7c57deb9 (+93224d70) | origin/master a8823c76 | 307 PolyBounded + 255 BoundStatesL2 | 11/11 OK | 11/11 OK | 0 | gepusht 31.10. |
+| hydrogen-e3-3 | f777b804 | 13758a60 | e3-2 7c57deb9 | 296 GreenIdentity | 11/11 OK | 11/11 OK | 0 | **nicht gepusht** (fork noch f777b804) |
+| hydrogen-e3-4 | 57b4272a | eb49e857 | e3-3 13758a60 | 741 BoundStatesAdjoint | 11/11 OK | 11/11 OK | 0 | **nicht gepusht** (fork noch 57b4272a) |

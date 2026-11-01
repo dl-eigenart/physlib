@@ -79,11 +79,12 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **gemergt: #1980** | 13 Wigner-Eckart with Clebsch-Gordan coefficients | `pr/wigner-eckart-cg` | 221 | nichts (12b gemergt) |
 | **gemergt: #1981** | 14 tetrahedral symmetry of the 6j symbols | `pr/six-j-symmetry` | 697 | nichts (12b gemergt) |
 | **geschlossen: #1990** (nicht gemergt, 30.10.) | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | – |
-| **offen: #1995** (medium) | 21 degeneracy of the Bohr levels from Pauli's two su(2) (E2) | `hydrogen-pauli-degeneracy` | +131 −9 | nichts |
-| **offen: #1996** (large) | 20a degeneracy of the hydrogen bound states (E3-1) | `hydrogen-e3-1` | 548 | nichts |
-| **offen: #1997** (blocked-by #1996) | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | 20a (#1996) |
-| auf Fork, gestapelt | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b (#1997) |
-| auf Fork, gestapelt | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c |
+| **gemergt: #1995** (31.10. 15:10 UTC, `0dc7085b`) | 21 degeneracy of the Bohr levels from Pauli's two su(2) (E2) | `hydrogen-pauli-degeneracy` | +131 −9 | nichts |
+| **gemergt: #1996** (31.10. 15:12 UTC, `a8823c76`) | 20a degeneracy of the hydrogen bound states (E3-1) | `hydrogen-e3-1` | 548 | nichts |
+| **offen: #1997** (31.10. auf master umgesetzt, fork `7c57deb9`, clean) | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | nichts (#1996 gemergt) |
+| Fork `f777b804` alt; lokal umgesetzt `13758a60` (01.11., nicht gepusht) | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b (#1997) |
+| Fork `57b4272a` alt; lokal umgesetzt `eb49e857` (01.11., nicht gepusht) | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c |
+| lokal `054b0e65` (01.11., nicht gepusht) | 9j-1 9j symbols and transposition symmetry (Plan in `stand-9j.md`) | `9j-1` | 107 | nichts |
 | **gemergt: #1998** (30.10. 17:32 UTC, `5402a9ab`) | 22 shorter proofs: angularMomentum_commutation_angularMomentum, angularMomentum_cyclic_lrl (Physlib) | `proof-angular-golf` | +7 −16 | nichts |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
