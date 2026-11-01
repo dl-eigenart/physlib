@@ -189,3 +189,5 @@ Umgesetzt mit `move.sh 9j-1 c5a908ba origin/master`, ohne Konflikt. `NineJ.lean`
 dieselbe. Sicherung: `backup/9j-1-pre-1996-merge`. Nicht gepusht.
 
 01.11.: Cowork hat `9j-1` 054b0e65 mit Daniels Ja neu gepusht; fork geprüft, stimmt. Den PR eröffnet Daniel.
+
+01.11.: Daniel hat 9j-1 als **#2005** eröffnet (`9j-1`, 054b0e65).
