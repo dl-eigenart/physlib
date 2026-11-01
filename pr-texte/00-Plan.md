@@ -87,6 +87,9 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **offen: #2005** (01.11., fork `054b0e65`) | 9j-1 9j symbols and transposition symmetry (Plan in `stand-9j.md`) | `9j-1` | 107 | nichts |
 | **offen: #2006** (01.11., fork `10df2a7f`) | CG-Wert T₋₁ `cgCoefficient_triplet_minus` (Plan in `stand-cg-circuit.md`) | `cg-tminus1` | +22 −2 | nichts |
 | **offen: #2007** (01.11., fork `6f630bd0`, blocked-by #2006) | CG-Schaltkreis ½⊗½ `CNOT * CH21 = cgMatrix` | `cg-circuit-half-half` | 101 | #2006 |
+| **offen: #2009** (01.11., fork `0db37cec`) | CG-Werte j ⊗ ½ (`cgCoefficient_add/sub_half_up/down`, Plan in `stand-cg-circuit.md`) | `cg-jhalf-values` | +103 | nichts |
+| **offen: #2010** (01.11., fork `dafef917`) | Ry (c,s) und Multiplexer (`QubitGates.lean`) | `cg-ry` | 100 | nichts |
+| lokal `df5d628e` (nicht gepusht, kein PR) | CG-Schaltkreis j ⊗ ½ (`ClebschGordanCircuitHalf.lean`) | `cg-jhalf-circuit` (lokal mit Merges) | 221 | #2007, #2009, #2010 |
 | **gemergt: #1998** (30.10. 17:32 UTC, `5402a9ab`) | 22 shorter proofs: angularMomentum_commutation_angularMomentum, angularMomentum_cyclic_lrl (Physlib) | `proof-angular-golf` | +7 −16 | nichts |
 
 **30.10.: Stapel 01–14 komplett auf master** (Abgleich GitHub-API 30.10.: 01 #1899, 02 #1900, 03 #1909, 04 #1947,
