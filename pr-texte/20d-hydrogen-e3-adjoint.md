@@ -1,6 +1,8 @@
 # feat(PhyslibAlpha): the hydrogen bound states are eigenvectors of the adjoint Hamiltonian
 
-Branch: `hydrogen-e3-4` (1 commit, 741 + 1 lines) · Base: master after merge of `hydrogen-e3-3` · Depends on: `hydrogen-e3-3` (20c) and through it 20a, 20b · Library: PhyslibAlpha
+Branch: `hydrogen-e3-4` (1 commit, 741 + 1 lines) · Base: master after merge of `hydrogen-e3-3` · Depends on: #2004 (`hydrogen-e3-3`, 20c) and through it 20a, 20b · Library: PhyslibAlpha
+
+blocked-by-PR #2004
 
 Builds on #1930 (the hydrogen Hamiltonian is densely defined), merged. Last of four stacked PRs (20a–20d). Independent of #1963.
 

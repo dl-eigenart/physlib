@@ -151,3 +151,5 @@ Importzeilen in `PhyslibAlpha.lean` stimmen mit dem alten Commit überein.
 
 01.11.: Cowork hat `hydrogen-e3-3` 13758a60 mit Daniels Ja gepusht (Lease gegen f777b804); fork geprüft, stimmt. Den PR eröffnet Daniel.
 `hydrogen-e3-4` liegt auf fork weiter auf 57b4272a, lokal auf eb49e857.
+
+01.11.: Daniel hat 20c als **#2004** eröffnet (`hydrogen-e3-3`, 13758a60, blocked-by #1997). In `20d-hydrogen-e3-adjoint.md` steht jetzt `blocked-by-PR #2004`, Depends on: #2004.
