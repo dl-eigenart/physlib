@@ -146,5 +146,8 @@ Importzeilen in `PhyslibAlpha.lean` stimmen mit dem alten Commit überein.
 | Branch | alt | neu | Basis neu | Zeilen (eigene Datei) | check_pr.sh | ci_physlib.sh | sorry | Fork |
 |---|---|---|---|---|---|---|---|---|
 | hydrogen-e3-2 (#1997) | 5513ad57 (+dfffd540) | 7c57deb9 (+93224d70) | origin/master a8823c76 | 307 PolyBounded + 255 BoundStatesL2 | 11/11 OK | 11/11 OK | 0 | gepusht 31.10. |
-| hydrogen-e3-3 | f777b804 | 13758a60 | e3-2 7c57deb9 | 296 GreenIdentity | 11/11 OK | 11/11 OK | 0 | **nicht gepusht** (fork noch f777b804) |
+| hydrogen-e3-3 | f777b804 | 13758a60 | e3-2 7c57deb9 | 296 GreenIdentity | 11/11 OK | 11/11 OK | 0 | gepusht 01.11. (Cowork, Daniels Ja, Lease gegen f777b804) |
 | hydrogen-e3-4 | 57b4272a | eb49e857 | e3-3 13758a60 | 741 BoundStatesAdjoint | 11/11 OK | 11/11 OK | 0 | **nicht gepusht** (fork noch 57b4272a) |
+
+01.11.: Cowork hat `hydrogen-e3-3` 13758a60 mit Daniels Ja gepusht (Lease gegen f777b804); fork geprüft, stimmt. Den PR eröffnet Daniel.
+`hydrogen-e3-4` liegt auf fork weiter auf 57b4272a, lokal auf eb49e857.
