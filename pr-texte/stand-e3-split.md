@@ -153,3 +153,5 @@ Importzeilen in `PhyslibAlpha.lean` stimmen mit dem alten Commit überein.
 `hydrogen-e3-4` liegt auf fork weiter auf 57b4272a, lokal auf eb49e857.
 
 01.11.: Daniel hat 20c als **#2004** eröffnet (`hydrogen-e3-3`, 13758a60, blocked-by #1997). In `20d-hydrogen-e3-adjoint.md` steht jetzt `blocked-by-PR #2004`, Depends on: #2004.
+
+02.11.: **#1997 gemergt** (11:32 UTC, `0b2aaf09`). Damit ist #2004 (20c) nicht mehr blockiert.

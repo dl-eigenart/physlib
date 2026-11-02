@@ -515,3 +515,5 @@ spin j and a spin 1/2“.
 - **#2009 offen** (`cg-jhalf-values`, 0db37cec), nur von master abhängig.
 - **#2010 offen** (`cg-ry`, dafef917), nur von master abhängig.
 - Beide erfasst der PR-Check automatisch über die dynamische API-Suche.
+
+02.11.: **#2006 gemergt** (11:36 UTC, `e92c18ab`), **#2009 gemergt** (11:51 UTC, `1640f520`). Offen sind #2007 (Blocker #2006 erledigt) und #2010.

@@ -81,13 +81,13 @@ master ─┬─ 01 spin-orbit ──────────────┐
 | **geschlossen: #1990** (nicht gemergt, 30.10.) | 19 reordering commuting continuous linear maps (opalg, Physlib) | `opalg-commute-v2` | 68 | – |
 | **gemergt: #1995** (31.10. 15:10 UTC, `0dc7085b`) | 21 degeneracy of the Bohr levels from Pauli's two su(2) (E2) | `hydrogen-pauli-degeneracy` | +131 −9 | nichts |
 | **gemergt: #1996** (31.10. 15:12 UTC, `a8823c76`) | 20a degeneracy of the hydrogen bound states (E3-1) | `hydrogen-e3-1` | 548 | nichts |
-| **offen: #1997** (31.10. auf master umgesetzt, fork `7c57deb9`, clean) | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | nichts (#1996 gemergt) |
-| **offen: #2004** (01.11., blocked-by #1997; fork `13758a60`) | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b (#1997) |
+| **gemergt: #1997** (02.11. 11:32 UTC, `0b2aaf09`) | 20b hydrogen bound states in L² (E3-2) | `hydrogen-e3-2` | 564 | nichts (#1996 gemergt) |
+| **offen: #2004** (01.11., fork `13758a60`; Blocker #1997 seit 02.11. gemergt) | 20c Green's identity and regularised radial functions (E3-3) | `hydrogen-e3-3` | 297 | 20b (#1997) |
 | Fork `57b4272a` alt; lokal umgesetzt `eb49e857` (01.11., nicht gepusht) | 20d bound states are eigenvectors of the adjoint Hamiltonian (E3-4) | `hydrogen-e3-4` | 742 | 20c (#2004) |
-| **offen: #2005** (01.11., fork `054b0e65`) | 9j-1 9j symbols and transposition symmetry (Plan in `stand-9j.md`) | `9j-1` | 107 | nichts |
-| **offen: #2006** (01.11., fork `10df2a7f`) | CG-Wert T₋₁ `cgCoefficient_triplet_minus` (Plan in `stand-cg-circuit.md`) | `cg-tminus1` | +22 −2 | nichts |
-| **offen: #2007** (01.11., fork `6f630bd0`, blocked-by #2006) | CG-Schaltkreis ½⊗½ `CNOT * CH21 = cgMatrix` | `cg-circuit-half-half` | 101 | #2006 |
-| **offen: #2009** (01.11., fork `0db37cec`) | CG-Werte j ⊗ ½ (`cgCoefficient_add/sub_half_up/down`, Plan in `stand-cg-circuit.md`) | `cg-jhalf-values` | +103 | nichts |
+| **gemergt: #2005** (02.11. 11:34 UTC, `cb9621f1`) | 9j-1 9j symbols and transposition symmetry (Plan in `stand-9j.md`) | `9j-1` | 107 | nichts |
+| **gemergt: #2006** (02.11. 11:36 UTC, `e92c18ab`) | CG-Wert T₋₁ `cgCoefficient_triplet_minus` (Plan in `stand-cg-circuit.md`) | `cg-tminus1` | +22 −2 | nichts |
+| **offen: #2007** (01.11., fork `6f630bd0`; Blocker #2006 seit 02.11. gemergt) | CG-Schaltkreis ½⊗½ `CNOT * CH21 = cgMatrix` | `cg-circuit-half-half` | 101 | #2006 |
+| **gemergt: #2009** (02.11. 11:51 UTC, `1640f520`) | CG-Werte j ⊗ ½ (`cgCoefficient_add/sub_half_up/down`, Plan in `stand-cg-circuit.md`) | `cg-jhalf-values` | +103 | nichts |
 | **offen: #2010** (01.11., fork `dafef917`) | Ry (c,s) und Multiplexer (`QubitGates.lean`) | `cg-ry` | 100 | nichts |
 | lokal `df5d628e` (nicht gepusht, kein PR) | CG-Schaltkreis j ⊗ ½ (`ClebschGordanCircuitHalf.lean`) | `cg-jhalf-circuit` (lokal mit Merges) | 221 | #2007, #2009, #2010 |
 | **gemergt: #1998** (30.10. 17:32 UTC, `5402a9ab`) | 22 shorter proofs: angularMomentum_commutation_angularMomentum, angularMomentum_cyclic_lrl (Physlib) | `proof-angular-golf` | +7 −16 | nichts |
