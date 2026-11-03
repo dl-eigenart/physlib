@@ -159,6 +159,7 @@ public import Physlib.Mathematics.ForMathlib.ComplexLinear
 public import Physlib.Mathematics.ForMathlib.Contraction
 public import Physlib.Mathematics.ForMathlib.Cutoff
 public import Physlib.Mathematics.ForMathlib.DataStructures.Matrix.LieTrace
+public import Physlib.Mathematics.ForMathlib.DataStructures.Matrix.UnitaryKronecker
 public import Physlib.Mathematics.ForMathlib.FDerivCurry
 public import Physlib.Mathematics.ForMathlib.Fin
 public import Physlib.Mathematics.ForMathlib.Fin.Involutions
@@ -459,6 +460,7 @@ public import Physlib.QuantumMechanics.PlanckConstant
 public import Physlib.QuantumMechanics.PoschlTeller.Basic
 public import Physlib.QuantumMechanics.PoschlTeller.Scattering
 public import Physlib.QuantumMechanics.QuantumSystem.Basic
+public import Physlib.QuantumMechanics.Qubit.Basic
 public import Physlib.QuantumMechanics.RectangularBarrier.Basic
 public import Physlib.QuantumMechanics.SpaceDQuantumSystem
 public import Physlib.Relativity.Bispinors.Basic

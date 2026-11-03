@@ -67,6 +67,9 @@ MicroHamiltonian.β_eq_deriv_S_U
 adiabatic_relation_log
 adiabatic_relation_UaUbVaVb
 UnitSystem.ext
+Qubit.X_Y_anticomm
+Qubit.Y_Z_anticomm
+Qubit.Z_X_anticomm
 
 [QuantumInfo]
 CPTPMap.emulates_self
@@ -458,9 +461,6 @@ Ket.not_IsEntangled_prod
 Ket.IsProd_iff_mul_eq_mul
 Ket.MES_isEntangled
 transposeTrick
-Qubit.X_Y_anticomm
-Qubit.Y_Z_anticomm
-Qubit.Z_X_anticomm
 
 [PhyslibAlpha]
 ClassicalFieldTheory.Local.isCritical_iff_eulerLagrange_zero

@@ -85,4 +85,3 @@ public import QuantumInfo.States.Mixed.TraceDistance
 public import QuantumInfo.States.Pure.BargmannInvariant
 public import QuantumInfo.States.Pure.BlochSphere
 public import QuantumInfo.States.Pure.Braket
-public import QuantumInfo.States.Pure.Qubit

@@ -5,7 +5,8 @@ Authors: Daniel Leonforte
 -/
 module
 
-public import QuantumInfo.States.Pure.Qubit
+public import Mathlib.LinearAlgebra.Matrix.Reindex
+public import Physlib.QuantumMechanics.Qubit.Basic
 
 /-!
 
@@ -38,7 +39,7 @@ multiplexed gate `multiplex g` on `ι × k` applies `g r` when the register is i
 
 ## iv. References
 
-- The gates and the notation `𝐔[·]` are those of `QuantumInfo.States.Pure.Qubit`.
+- The gates and the notation `𝐔[·]` are those of `Physlib.QuantumMechanics.Qubit.Basic`.
 
 ## A. The rotation `Ry`
 

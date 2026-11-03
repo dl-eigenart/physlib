@@ -76,16 +76,16 @@ the finite dimensional Hilbert space of a two-element type. [TODO]
 
 ## Lean References
 
-1. QuantumInfo/States/Pure/Qubit.lean — `Qubit`
+1. Physlib/QuantumMechanics/Qubit/Basic.lean — `Qubit`
 2. QuantumInfo/States/Pure/Braket.lean — `Ket`, `Bra`, `FunLike (Ket d) d ℂ`,
    `FunLike (Bra d) d ℂ`, `Coe (Ket d) (Bra d)`, `Coe (Bra d) (Ket d)`,
    `FunLike (Bra d) (Ket d) ℂ`, `dot`, `Ket.normalized`, `Ket.basis`, `uniform_superposition`,
    `Braket.dot_self_eq_one`
-3. QuantumInfo/States/Pure/Qubit.lean — `Z`, `X`, `Y`, `H`, `S`, `T`
-4. QuantumInfo/States/Pure/Qubit.lean — `Z_sq`, `X_sq`, `Y_sq`, `H_sq`, `S_sq`, `T_sq`,
+3. Physlib/QuantumMechanics/Qubit/Basic.lean — `Z`, `X`, `Y`, `H`, `S`, `T`
+4. Physlib/QuantumMechanics/Qubit/Basic.lean — `Z_sq`, `X_sq`, `Y_sq`, `H_sq`, `S_sq`, `T_sq`,
    `X_Y_anticomm`, `Y_Z_anticomm`, `Z_X_anticomm`, `H_mul_X_eq_Z_mul_H`, `H_mul_Z_eq_X_mul_H`,
    `S_Z_comm`, `T_Z_comm`, `S_T_comm`
-5. QuantumInfo/States/Pure/Qubit.lean — `controllize`, `CNOT`, `CNOT_matrix`,
+5. Physlib/QuantumMechanics/Qubit/Basic.lean — `controllize`, `CNOT`, `CNOT_matrix`,
    `controllize_apply_one_one`, `controllize_mul`, `controllize_one`, `controllize_mul_inv`,
    `X_controllize_X`
 6. QuantumInfo/States/Pure/Braket.lean — `Ket.prod`, `Ket.IsProd`, `Ket.IsEntangled`, `Ket.MES`,

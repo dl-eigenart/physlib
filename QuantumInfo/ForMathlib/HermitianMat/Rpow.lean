@@ -288,14 +288,14 @@ lemma rpow_kron
   obtain ⟨V, b, hb, hB⟩ : ∃ V : 𝐔[d₂], ∃ b : d₂ → ℝ, (∀ j, 0 ≤ b j) ∧ B = conj V.val (diagonal ℂ b) := by
     rw [zero_le_iff] at hB
     exact ⟨_, _, hB.eigenvalues_nonneg, eq_conj_diagonal B⟩
-  have h_kron_r_pow : (A ⊗ₖ B) ^ r = conj (Matrix.unitary_kron U V).val ((diagonal ℂ a ⊗ₖ diagonal ℂ b) ^ r) := by
+  have h_kron_r_pow : (A ⊗ₖ B) ^ r = conj (Matrix.unitaryKron U V).val ((diagonal ℂ a ⊗ₖ diagonal ℂ b) ^ r) := by
     subst hB hA
-    rw [← rpow_conj_unitary, Matrix.unitary_kron, conj_kron]
+    rw [← rpow_conj_unitary, Matrix.unitaryKron, conj_kron]
   rw [h_kron_r_pow]
   subst A B
   have h_kron_r_pow_diag : (diagonal ℂ a ⊗ₖ diagonal ℂ b) ^ r = ((diagonal ℂ a) ^ r) ⊗ₖ ((diagonal ℂ b) ^ r) := by
     exact rpow_kron_diagonal a b r ha hb
-  rw [h_kron_r_pow_diag, Matrix.unitary_kron]
+  rw [h_kron_r_pow_diag, Matrix.unitaryKron]
   rw [rpow_conj_unitary, rpow_conj_unitary, ← conj_kron]
 
 attribute [fun_prop] ContinuousAt.rpow ContinuousOn.rpow

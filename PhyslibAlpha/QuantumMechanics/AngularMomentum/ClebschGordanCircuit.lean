@@ -5,8 +5,8 @@ Authors: Daniel Leonforte
 -/
 module
 
+public import Physlib.QuantumMechanics.Qubit.Basic
 public import PhyslibAlpha.QuantumMechanics.AngularMomentum.ClebschGordanCoefficients
-public import QuantumInfo.States.Pure.Qubit
 
 /-!
 
@@ -44,7 +44,7 @@ controlled by the second (`CH21`), then the CNOT gate with the first qubit as co
 ## iv. References
 
 - The Clebsch–Gordan coefficients and their phase convention are those of
-  `ClebschGordanCoefficients`; the gates are those of `QuantumInfo.States.Pure.Qubit`.
+  `ClebschGordanCoefficients`; the gates are those of `Physlib.QuantumMechanics.Qubit.Basic`.
 
 ## A. The Clebsch–Gordan matrix and the circuit
 
